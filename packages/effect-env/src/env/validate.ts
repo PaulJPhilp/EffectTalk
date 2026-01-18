@@ -66,12 +66,10 @@ export const validate = <E>(
       let currentKey: string | null = null;
       const errorDetails: string[] = [];
 
-      for (let i = 0; i < errorLines.length; i++) {
-        const line = errorLines[i];
-
+      for (const line of errorLines) {
         // Check if this line contains a key reference like ["API_KEY"]
         const keyMatch = line.match(/\["([^"]+)"\]/);
-        if (keyMatch) {
+        if (keyMatch && keyMatch[1]) {
           currentKey = keyMatch[1];
           errorDetails.length = 0; // Reset details for new key
           continue;

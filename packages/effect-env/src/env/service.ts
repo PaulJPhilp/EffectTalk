@@ -105,7 +105,7 @@ export const makeEnv = <E>(
         return new EnvError({
           message: `${message}: ${snippet}`,
           key,
-          cause: error instanceof Error ? error : undefined,
+          ...(error instanceof Error ? { cause: error } : {}),
         });
       })
     );

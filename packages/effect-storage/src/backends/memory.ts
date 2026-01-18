@@ -50,7 +50,7 @@ export const createMemoryBackend = <TContent, TMeta>(
                 message: `Failed to validate content: ${String(parseError)}`,
                 id,
                 field: "content",
-                cause: parseError instanceof Error ? parseError : undefined,
+                ...((parseError instanceof Error) ? { cause: parseError } : {}),
               })
           )
         );
@@ -65,7 +65,7 @@ export const createMemoryBackend = <TContent, TMeta>(
                 message: `Failed to validate metadata: ${String(parseError)}`,
                 id,
                 field: "metadata",
-                cause: parseError instanceof Error ? parseError : undefined,
+                ...((parseError instanceof Error) ? { cause: parseError } : {}),
               })
           )
         );

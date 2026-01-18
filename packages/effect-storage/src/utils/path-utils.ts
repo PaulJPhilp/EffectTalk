@@ -157,7 +157,7 @@ export const ensureDirectory = (
               message: `Failed to create directory: ${String(err)}`,
               operation: "ensureDirectory",
               path: dirPath,
-              cause: err instanceof Error ? err : undefined,
+              ...((err instanceof Error) ? { cause: err } : {}),
             })
         )
       )
@@ -168,7 +168,7 @@ export const ensureDirectory = (
           message: `Failed to access directory: ${String(err)}`,
           operation: "ensureDirectory",
           path: dirPath,
-          cause: err instanceof Error ? err : undefined,
+          ...((err instanceof Error) ? { cause: err } : {}),
         })
     ),
     Effect.asVoid
@@ -197,7 +197,7 @@ export const extractIdsFromDirectory = (
             message: `Failed to read directory: ${String(err)}`,
             operation: "extractIdsFromDirectory",
             path: basePath,
-            cause: err instanceof Error ? err : undefined,
+            ...((err instanceof Error) ? { cause: err } : {}),
           })
       )
     );
@@ -223,7 +223,7 @@ export const extractIdsFromDirectory = (
               message: `Failed to read subdirectory: ${String(err)}`,
               operation: "extractIdsFromDirectory",
               path: subPath,
-              cause: err instanceof Error ? err : undefined,
+              ...((err instanceof Error) ? { cause: err } : {}),
             })
         )
       );

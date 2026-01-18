@@ -57,7 +57,7 @@ export const createEnvInternal = <Server, Client>({
         Effect.catchAll((error) => {
           const envError = new EnvError({
             message: `Server validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`,
-            cause: error instanceof Error ? error : undefined,
+            ...(error instanceof Error ? { cause: error } : {}),
           });
           if (skipValidation && onValidationError) {
             onValidationError(envError);
@@ -72,7 +72,7 @@ export const createEnvInternal = <Server, Client>({
         Effect.catchAll((error) => {
           const envError = new EnvError({
             message: `Client validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`,
-            cause: error instanceof Error ? error : undefined,
+            ...(error instanceof Error ? { cause: error } : {}),
           });
           if (skipValidation && onValidationError) {
             onValidationError(envError);
@@ -196,7 +196,7 @@ export const createSimpleEnv = <T>(
         Effect.catchAll((error) => {
           const envError = new EnvError({
             message: `Validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`,
-            cause: error instanceof Error ? error : undefined,
+            ...(error instanceof Error ? { cause: error } : {}),
           });
           if (skipValidation && onValidationError) {
             onValidationError(envError);
