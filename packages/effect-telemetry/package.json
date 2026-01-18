@@ -1,6 +1,6 @@
 {
   "name": "effect-telemetry",
-  "version": "1.0.0",
+  "version": "0.5.0-beta",
   "description": "OpenTelemetry integration for Effect applications with automatic instrumentation",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "effect-pdf",
-  "version": "1.0.0",
+  "version": "0.5.0-beta",
   "description": "A library for working with PDFs using Effect",
   "type": "module",
   "main": "./dist/index.js",

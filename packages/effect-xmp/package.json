@@ -1,6 +1,6 @@
 {
   "name": "effect-xmp",
-  "version": "0.6.1",
+  "version": "0.5.0-beta",
   "description": "A package for parsing XMP metadata from files using Effect",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "effecttalk",
-  "version": "0.0.0",
+  "version": "0.5.0-beta",
   "private": true,
   "description": "EffectTalk: Unified Effect-native monorepo for AI agent infrastructure and data foundation",
   "type": "module",
@@ -28,7 +28,7 @@
     "changeset:add": "changeset add",
     "changeset:status": "changeset status --verbose",
     "publish": "changeset publish",
-    "version": "changeset version"
+    "version": "0.5.0-beta"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.7",

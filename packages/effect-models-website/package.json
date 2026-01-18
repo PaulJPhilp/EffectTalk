@@ -1,6 +1,6 @@
 {
   "name": "effect-models-website",
-  "version": "0.6.1",
+  "version": "0.5.0-beta",
   "description": "Web application for effect-models",
   "type": "module",
   "private": true,

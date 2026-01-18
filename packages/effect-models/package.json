@@ -1,6 +1,6 @@
 {
   "name": "effect-models",
-  "version": "1.0.0",
+  "version": "0.5.0-beta",
   "description": "Type-safe Effect services for LLM model providers (OpenRouter, HuggingFace, etc.)",
   "type": "module",
   "main": "./dist/index.js",
