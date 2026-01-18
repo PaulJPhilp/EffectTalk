@@ -2,785 +2,799 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Trinity Monorepo Overview
+## EffectTalk Monorepo Overview
 
-Trinity is a **two-project monorepo** implementing a layered architecture for AI agent development and experimentation. Each project has a distinct responsibility and architectural role:
+**EffectTalk** is a unified, Effect-native monorepo for building AI-powered applications. It combines agent infrastructure and data foundation into 28 coordinated packages with strict architectural boundaries.
 
 ```
-Trinity (Root)
-├── McLuhan           Agent Infrastructure Layer (AI orchestration, memory, TUI)
-└── Hume              Data Foundation Layer (Format parsing, validation, transformation)
+EffectTalk (Root)
+├── Layer 2: McLuhan (5 packages)      Agent Infrastructure
+│   ├── effect-supermemory             Long-term memory & semantic search
+│   ├── effect-ai-sdk                  Multi-provider LLM integration
+│   ├── effect-cli-tui                 Terminal UI & interactive prompts
+│   ├── effect-actor                   State machine orchestration
+│   └── effect-cockpit                 Agent dashboard & monitoring
+│
+├── Layer 1: Hume (23 packages)        Data Foundation
+│   ├── Resources                      JSON, YAML, Regex, Env, Schema utilities
+│   ├── Content                        Format parsing (XML, CSV, MDX, HTML, PDF, etc.)
+│   ├── Services                       External integrations (Git, Artifacts, Telemetry)
+│   └── AI Integration                 Models, Prompts, Templates
+│
+└── Shared                             Root config, scripts, validation
 ```
 
-**Design Principle:** Strict downward dependencies only. McLuhan → Hume (no circular deps).
-
-## Project Status
-
-- **McLuhan** - Mature: 4 core packages fully implemented (effect-supermemory, effect-ai-sdk, effect-cli-tui, effect-actor)
-- **Hume** - Active development: 17 packages with three-layer architecture (resources, content capabilities, service providers)
-- **Kuhn** - Reserved directory for future expansion (currently empty)
-
-## Quick Project Navigation
-
-When working with Trinity, use this guide to determine which project to modify:
-
-**Use McLuhan when:**
-- Implementing AI agent orchestration, state machines, or workflows
-- Working with agent memory, long-term persistence, or semantic search
-- Building CLI/TUI applications, interactive prompts, or terminal UI
-- Adding AI provider integrations or LLM operations
-- Working with packages: `effect-supermemory`, `effect-ai-sdk`, `effect-cli-tui`, `effect-actor`
-
-**Use Hume when:**
-- Implementing data parsing, validation, or transformation
-- Adding support for new file formats (JSON, YAML, CSV, XML, etc.)
-- Building prompt management, templating, or configuration systems
-- Working with external data sources or services
-- Working with packages: format libraries (`effect-json`, `effect-yaml`, etc.), AI integrations (`effect-models`, `effect-prompt`), or utilities (`effect-env`, `effect-regex`)
-
-**Check both projects when:**
-- Adding a new AI agent feature that requires memory, UI, and data transformation
-- Implementing end-to-end workflows that span multiple layers
-- Updating shared patterns or architectural standards
-
-## Inter-Project Dependencies
-
-**Dependency Direction: McLuhan → Hume (downward only)**
-
-- McLuhan packages can import from Hume packages via workspace protocol
-- Hume packages **must never** import from McLuhan packages
-- This ensures the data foundation (Hume) remains independent and reusable
-
-**Example:**
-```json
-// ✅ ALLOWED in McLuhan/packages/effect-cli-tui/package.json
-{
-  "dependencies": {
-    "effect-supermemory": "workspace:*",
-    "effect-json": "workspace:*"
-  }
-}
-
-// ❌ FORBIDDEN in Hume/packages/effect-json/package.json
-{
-  "dependencies": {
-    "effect-supermemory": "workspace:*"  // Would break downward-only rule
-  }
-}
-```
+**Design Principle:** Strict downward dependencies only. Layer 2 (McLuhan) → Layer 1 (Hume). No reverse dependencies.
 
 ## Essential Commands
 
-All projects use **Bun** as the package manager with consistent command patterns.
+All packages use **Bun** as the package manager. Commands run from the **root directory**.
 
-### Root-Level Operations
+### Build, Test, Lint (All Packages)
 
 ```bash
-# Install all dependencies across all projects
+# Install dependencies
 bun install
 
-# Build/test/lint all projects
-cd McLuhan && bun run build
-cd Hume && bun run build
+# Build all 28 packages
+bun run build
 
-# Type checking across all projects
-cd McLuhan && bun run typecheck
-cd Hume && bun run typecheck
+# Type checking with strict mode
+bun run typecheck
 
-# Full CI/verification for all projects
-cd McLuhan && bun run verify          # Runs format, lint, typecheck, build, test
+# Run all tests
+bun run test
+
+# Watch mode (test files as you edit)
+bun run test:watch
+
+# Coverage reporting
+bun run test:coverage
+bun run test:coverage:aggregate
+bun run test:coverage:check
+
+# Code quality (Biome with Ultracite preset)
+bun run lint                  # Check code quality
+bun run format                # Check formatting
+bun run format:fix            # Auto-fix formatting issues
+
+# Full verification pipeline (runs before commits)
+bun run verify                # format → lint → typecheck → build → test
 ```
 
-### Working with Individual Projects
+### Working with Individual Packages
 
-**McLuhan (Monorepo of 4 packages):**
 ```bash
-cd McLuhan
-
-# Work with specific package
-bun run --filter effect-supermemory build
-bun run --filter effect-ai-sdk test
-bun run --filter effect-actor test:watch
-
-# All packages
-bun run build            # Build all
-bun run test             # Test all
-bun run lint             # Lint all
-bun run verify           # Full verification (format, lint, typecheck, build, test)
-```
-
-**Hume (Monorepo of 17 packages):**
-```bash
-cd Hume
-
-# Work with specific package
+# Build specific package
 bun run --filter effect-json build
-bun run --filter effect-mdx test:watch
+bun run --filter effect-supermemory build
 
-# All packages
-bun run build            # Build all
-bun run test             # Test all
-bun run lint             # Lint all
-bun run smoke:consumer   # Consumer smoke tests
-bun run check:architecture  # Architecture validation
+# Test specific package
+bun run --filter effect-json test
+
+# Watch tests for specific package
+bun run --filter effect-ai-sdk test:watch
+
+# Type check specific package
+bun run --filter effect-prompt typecheck
+
+# Lint/format specific package
+bun run --filter effect-regex lint
+bun run --filter effect-regex format:fix
 ```
 
-## Git Workflow
+### Architecture & Validation
 
-Trinity uses a branch-based development approach. When contributing:
-
-**Branch Naming:**
-- Feature branches: `feature/description-of-feature`
-- Fix branches: `fix/description-of-bug`
-- Update/chore branches: `update/description-of-changes`
-- Example: `update/ai-sdk-providers-v2` (current development branch)
-
-**Commit Messages:**
-Trinity follows conventional commit style. When writing commit messages:
-- Use clear, imperative language: "Add feature", "Fix bug", "Update config"
-- Reference the changes made and their purpose
-- Example: `Implement feature X to enhance user experience and fix bug Y in module Z`
-
-**Before Pushing:**
 ```bash
-# Ensure code quality
-cd McLuhan && bun run verify
-cd Hume && bun run test && bun run lint
+# Verify layer dependencies (McLuhan → Hume only)
+bun run check:architecture
 
-# Check git status
-git status
-
-# Review changes
-git diff
-
-# Create commits
-git add [files]
-git commit -m "Clear description of changes"
+# Consumer smoke tests (compatibility verification)
+bun run smoke:consumer
 ```
 
-**Creating Pull Requests:**
-- Base PRs on the main branch for review
-- Keep commits organized with clear messages
-- Ensure all tests pass before requesting review
-- Provide context about what the changes address and why
+### Running Specific Tests
 
-## Architectural Layers
+```bash
+# Single test file in a package
+bun run --filter effect-json test -- parser.test.ts
 
-### Layer 2: McLuhan - Agent Infrastructure
+# Tests matching pattern
+bun run --filter effect-yaml test -- --include "*.test.ts"
 
-**Purpose:** Core AI agent orchestration, memory management, and CLI/TUI components
-
-**Named after Marshall McLuhan** (media and communication theorist) - emphasizing how information is orchestrated and communicated.
-
-**4 Core Packages (Strict Layering):**
-
-1. **effect-supermemory** (Foundational)
-   - Type-safe Supermemory API client
-   - In-memory and HTTP backends with namespace isolation
-   - Services: MemoriesService, SearchService, ConnectionsService, ToolsService
-   - Base64 encoding for all memory values
-   - No package dependencies
-
-2. **effect-ai-sdk** (Independent Utility)
-   - Vercel AI SDK v5 wrapper (functional library pattern, not Effect.Service)
-   - 8+ AI provider support: OpenAI, Anthropic, Google, Groq, DeepSeek, Perplexity, xAI, Qwen
-   - Operations: text generation, object generation, embeddings, streaming, tool-calling, image generation, audio
-   - No package dependencies
-
-3. **effect-cli-tui** (Depends on supermemory)
-   - Terminal UI components: EffectCLI, TUIHandler
-   - Interactive prompts: prompt(), selectOption(), multiSelect(), confirm(), password()
-   - Display utilities: spinners, tables, boxes, panels with Chalk styling
-   - Effect.Schema for input validation (NOT Zod)
-
-4. **effect-actor** (Independent)
-   - Statechart-based orchestration (xState-inspired)
-   - Effect-native state machine patterns
-   - No package dependencies
-
-**Architecture Pattern:**
-```typescript
-// Mandatory Effect.Service pattern with Effect.fn()
-export class MyService extends Effect.Service<MyService>()(
-  "MyService",
-  {
-    effect: Effect.fn(function* (config: ConfigType) {
-      return {
-        method: (arg) => Effect.sync(() => { /* ... */ }),
-      } satisfies MyServiceApi
-    }),
-  }
-) {}
+# Single test by name (with -t flag)
+bun run --filter effect-regex test -- -t "pattern matching"
 ```
 
-**Dependency Rules:**
-- effect-supermemory → no dependencies (foundation)
-- effect-ai-sdk → no dependencies (independent utility)
-- effect-cli-tui → can depend on effect-supermemory
-- effect-actor → no dependencies (independent)
-- ❌ NO circular dependencies allowed
-- ❌ NO "Live", "Impl", or "Layer" suffixes for services
-- ❌ NO Context.Tag or direct instantiation
+## Project Structure
 
-**Error Handling:**
-All errors use Data.TaggedError with type-safe pattern matching:
-```typescript
-export class MemoryNotFoundError extends Data.TaggedError("MemoryNotFoundError")<{
-  readonly key: string
-}> {}
+```
+packages/
+├── effect-supermemory/        # Long-term memory client for Supermemory API
+├── effect-ai-sdk/             # Vercel AI SDK v5 wrapper (8+ LLM providers)
+├── effect-cli-tui/            # Terminal UI, prompts, interactive components
+├── effect-actor/              # Statechart-based state machine orchestration
+├── effect-cockpit/            # Agent dashboard & monitoring
+│
+├── effect-json/               # Type-safe JSON parsing (canonical reference)
+├── effect-env/                # Environment variable validation
+├── effect-regex/              # Pattern matching & regex utilities
+├── effect-schema-utils/       # Effect.Schema helpers & utilities
+├── effect-yaml/               # YAML parsing & serialization
+├── effect-xml/                # XML parsing & transformation
+├── effect-csv/                # CSV parsing & generation
+├── effect-mdx/                # MDX processing
+├── effect-html/               # HTML parsing & manipulation
+├── effect-pdf/                # PDF extraction & generation
+├── effect-liquid/             # Shopify Liquid template engine
+├── effect-toml/               # TOML configuration parsing
+├── effect-xmp/                # XMP metadata extraction
+├── effect-image/              # Image processing & metadata
+├── effect-prompt/             # Prompt management & templating
+├── effect-models/             # LLM integration (OpenRouter, HuggingFace)
+├── effect-repository/         # Git operations & repository management
+├── effect-artifact/           # Artifact extraction & versioning
+├── effect-attachment/         # File attachment handling
+├── effect-storage/            # File system operations
+├── effect-telemetry/          # Observability & metrics collection
+├── effect-models-website/     # Website integration for models
+└── effect-schema-utils/       # Schema utilities
+│
+scripts/                        # Build scripts & validation utilities
+├── architecture-check.ts      # Verify layer dependencies
+├── check-coverage-threshold.ts
+├── aggregate-coverage.ts
+└── consumer-smoke-test.ts
 
-// Catch with type safety
-.pipe(Effect.catchTag("MemoryNotFoundError", err => { /* err.key available */ }))
+Configuration (Root)
+├── package.json               # Workspace definition & monorepo scripts
+├── tsconfig.json              # Unified TypeScript strict mode
+├── biome.jsonc                # Code quality with Ultracite preset
+├── vitest.config.shared.ts    # Test configuration (85%+ coverage)
+├── bun.lock                   # Bun dependency lock file
+└── CLAUDE.md                  # This file
 ```
 
-**For detailed guidance:** See `McLuhan/CLAUDE.md` (comprehensive patterns and examples)
+## Architecture & Patterns
 
-### Layer 1: Hume - Data Foundation
+### Core Design Principles
 
-**Purpose:** Type-safe data access and transformation forming the empirical foundation
+1. **Strict Layering** — Layer 2 (McLuhan) depends on Layer 1 (Hume). Never reverse.
+2. **Functional Effects** — All async operations use Effect.js for composability and error handling
+3. **Type Safety** — Strict TypeScript with `exactOptionalPropertyTypes: true`
+4. **No Mocking** — Tests use real implementations for accuracy
+5. **Discriminated Errors** — All errors extend `Data.TaggedError` for type-safe pattern matching
+6. **Dependency Injection** — Services use `Effect.Service` pattern with layers
 
-**Named after David Hume** (philosopher emphasizing empiricism and evidence) - data is the foundation of knowledge.
+### Universal Service Pattern
 
-**Three-Layer Architecture:**
-
-**Layer 1: Resources (Zero External Dependencies)**
-- `effect-json` - Type-safe JSON parsing with multiple backends (toon, jsonlines, superjson)
-- `effect-env` - Environment variable validation and management
-- `effect-regex` - Composable pattern matching and validation
-
-**Layer 2: Content Capabilities**
-- Format parsing: `effect-mdx`, `effect-yaml`, `effect-toml`, `effect-xml`, `effect-xmp`, `effect-csv`
-- Template processing: `effect-liquid` (Shopify Liquid template engine)
-- AI integration: `effect-models` (OpenRouter, HuggingFace), `effect-prompt` (prompt management)
-
-**Layer 3: Service Providers (Planned)**
-- Git, PDF, OpenAPI, HTML, Temporal (not yet implemented)
-
-**Core Principles:**
-1. **Empiricism First:** All knowledge comes from data
-2. **Skeptical Validation:** Nothing taken on faith, every input validated
-3. **Causal Relationships:** Errors explicitly linked to causes
-
-**Quality Standards:**
-- 100% test coverage (every line, branch, edge case)
-- Comprehensive documentation with examples
-- Performance benchmarks and optimization
-- API stability with semantic versioning
-- Security audits and vulnerability scanning
-
-**For detailed guidance:** See `Hume/CLAUDE.md` (patterns, conventions, testing strategies)
-
-## Universal Patterns & Conventions
-
-### TypeScript Configuration
-
-**Strict Mode (All Projects):**
-- `strict: true`
-- `exactOptionalPropertyTypes: true`
-- `noUncheckedIndexedAccess: true`
-- `noImplicitOverride: true`
-- Target: ES2022, Module: ESNext
-
-### Effect.Service Pattern (Universal)
-
-All services follow this mandatory structure:
+All services (across both layers) follow this mandatory pattern:
 
 ```typescript
 import { Effect } from "effect"
+import { Data } from "effect"
 
+// 1. Define domain errors
+export class MyError extends Data.TaggedError("MyError")<{
+  readonly message: string
+  readonly cause?: Error
+}> {}
+
+// 2. Define service API interface
 export interface MyServiceApi {
-  readonly method: (arg: string) => Effect.Effect<Result, MyError>
+  readonly operation: (arg: string) => Effect.Effect<Result, MyError, never>
 }
 
+// 3. Implement as Effect.Service with Effect.fn() parameterization
 export class MyService extends Effect.Service<MyService>()(
   "MyService",
   {
     effect: Effect.fn(function* (config: ConfigType) {
+      // Service initialization code runs once at layer construction
       return {
-        method: (arg: string) =>
-          Effect.sync(() => { /* implementation */ })
+        operation: (arg: string) =>
+          Effect.sync(() => {
+            // Implementation here
+            return { result: "value" }
+          })
       } satisfies MyServiceApi
     }),
   }
 ) {}
+
+// 4. Create layers with configuration
+export const MyServiceDefault = MyService.Default({
+  /* configuration */
+})
+
+// 5. Use in programs
+const program = Effect.gen(function* () {
+  const service = yield* MyService
+  return yield* service.operation("input")
+}).pipe(Effect.provide(MyServiceDefault))
 ```
 
 **Key Rules:**
-- ✅ Use `Effect.Service<T>()` with Effect.fn()
-- ✅ Define API contract as `interface` in `api.ts`
-- ✅ Use `satisfies MyServiceApi` for type safety
-- ✅ Return service interface with methods
-- ✅ Empty class body `{}`
-- ❌ Never use `Context.Tag`
+- ✅ Use `Effect.Service<T>()` with `Effect.fn()` for config-driven initialization
+- ✅ Define API contract as `interface` (not `type`)
+- ✅ Use `satisfies MyServiceApi` to ensure type safety
+- ✅ All service class bodies are empty `{}`
+- ❌ Never use `Context.Tag` directly
 - ❌ Never use "Live", "Impl", "Layer" suffixes
-- ❌ Never instantiate with `new`
+- ❌ Never instantiate services with `new`
 
-### Error Handling (Discriminated Unions)
+### Error Handling Pattern
 
 ```typescript
 import { Data } from "effect"
 
+// ✅ Correct - specific, discriminated errors
+export class NotFoundError extends Data.TaggedError("NotFoundError")<{
+  readonly resourceType: string
+  readonly resourceId: string
+}> {}
+
 export class ValidationError extends Data.TaggedError("ValidationError")<{
-  readonly message: string
   readonly field: string
   readonly value: unknown
   readonly cause?: Error
 }> {}
 
-export class NotFoundError extends Data.TaggedError("NotFoundError")<{
-  readonly resourceType: string
-  readonly resourceId: string
-}> {}
+// Type-safe catching
+someEffect.pipe(
+  Effect.catchTag("NotFoundError", (err) => {
+    // err.resourceType and err.resourceId available
+    return fallback
+  }),
+  Effect.catchTag("ValidationError", (err) => {
+    // err.field, err.value available
+    return fallback
+  })
+)
 ```
 
-**Rules:**
+**Error Rules:**
 - ✅ All fields must be `readonly`
 - ✅ Always use `Data.TaggedError("ErrorName")`
 - ✅ Include `cause?: Error` for error chaining
-- ✅ Create specific error types per domain
-- ✅ Use `Effect.catchTag()` for type-safe handling
+- ✅ One error type per domain concern
+- ✅ Use `Effect.catchTag()` for type-safe pattern matching
 
 ### Import Organization
 
 ```typescript
 // 1. Effect core
-import { Effect, Schema, Layer, Data, Ref } from "effect"
+import { Effect, Schema, Layer, Data, Ref, Either } from "effect"
 
-// 2. Effect platform
+// 2. Effect platform (if needed)
 import { FileSystem } from "@effect/platform"
 import { NodeFileSystem } from "@effect/platform-node"
 
 // 3. Third-party libraries
-import matter from "gray-matter"
+import { someLib } from "external-package"
 
-// 4. Workspace packages
-import { jsonBackend } from "effect-json"
+// 4. Workspace packages (other EffectTalk packages)
+import { MyService } from "effect-json"
 
-// 5. Relative imports - Types
-import type { UserConfig } from "./types.js"
+// 5. Relative imports - Types first
+import type { Config } from "./config.js"
 
 // 6. Relative imports - Implementation
-import { MyService } from "./service.js"
+import { implementation } from "./impl.js"
 ```
 
 **Critical Rules:**
-- ✅ Always include `.js` extension in relative imports
-- ✅ Use named imports from effect (no `import * as Effect`)
+- ✅ Always use `.js` extension in relative imports (ESM requirement)
+- ✅ Use named imports from effect (never `import * as Effect`)
 - ✅ Use `import type` for type-only imports
-- ✅ Group by source with blank lines
+- ✅ Group imports by source with blank lines between groups
 
-### File Naming & Structure
-
-**Naming Convention (Biome Ultracite Enforced):**
-- Files: `kebab-case.ts` (all lowercase, hyphens)
-- Classes: Named exports only (no defaults)
-- Tests: `*.test.ts` in `__tests__/` directories
-
-**Package Structure Template:**
-```
-packages/[package-name]/
-├── src/
-│   ├── index.ts           # Public API exports
-│   ├── errors.ts          # Error definitions
-│   ├── types.ts           # Type definitions
-│   ├── service.ts         # Service implementation
-│   └── api.ts             # Service interface
-├── __tests__/
-│   ├── unit/
-│   └── integration/
-├── dist/                  # Compiled output
-├── package.json
-├── tsconfig.json
-└── README.md
-```
-
-### Testing Pattern
-
-**No Mocking - Use Real Implementations:**
+### Testing Pattern (No Mocking)
 
 ```typescript
+import { describe, it, expect } from "vitest"
 import { Effect, Layer } from "effect"
-import { describe, expect, it } from "vitest"
 import { MyService } from "../service.js"
 
 describe("MyService", () => {
-  const TestMyService = Layer.succeed(MyService, {
-    method: (input: string) =>
-      Effect.succeed({ result: "test" })
-  })
+  // Create test layer with real service (no mocks)
+  const testLayer = MyService.Default({ /* test config */ })
 
-  it("should work", async () => {
+  it("performs operation correctly", async () => {
     const program = Effect.gen(function* () {
       const service = yield* MyService
-      return yield* service.method("test")
-    }).pipe(Effect.provide(TestMyService))
+      return yield* service.operation("test-input")
+    }).pipe(Effect.provide(testLayer))
 
     const result = await Effect.runPromise(program)
-    expect(result.result).toBe("test")
+    expect(result).toEqual({ /* expected */ })
+  })
+
+  it("handles errors correctly", async () => {
+    const program = Effect.gen(function* () {
+      const service = yield* MyService
+      return yield* service.failingOperation()
+    }).pipe(
+      Effect.either,
+      Effect.provide(testLayer)
+    )
+
+    const result = await Effect.runPromise(program)
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left._tag).toBe("MyError")
+    }
   })
 })
 ```
 
-## Code Quality Standards
+**Testing Rules:**
+- ✅ Use real service implementations (no mocks or stubs)
+- ✅ Create test layers with `ServiceImpl.Default(testConfig)`
+- ✅ Use `Effect.gen()` for async test logic
+- ✅ Use `yield*` to acquire dependencies and execute effects
+- ✅ Use `Effect.runPromise()` to execute effects in tests
+- ✅ Use `Effect.either()` to capture errors for assertions
 
-**Biome Configuration:**
-- Preset: `ultracite/core` (opinionated zero-config)
-- All projects inherit from root `biome.jsonc`
-- Enforces modern TypeScript, error handling, performance best practices
+## Layer 2: McLuhan (Agent Infrastructure)
 
-**Linting & Formatting:**
-```bash
-cd [Project]
-bun run lint              # Check with Biome
-bun run format:fix        # Auto-fix issues
+**5 core packages with strict dependencies:**
+
+### effect-supermemory (Foundation)
+- Long-term memory API client for Supermemory service
+- Services: MemoriesService, SearchService, ConnectionsService, ToolsService
+- Base64 encoding for all memory values
+- **Dependencies:** None (foundational)
+
+### effect-ai-sdk (Independent Utility)
+- Vercel AI SDK v5 wrapper (functional library, not Effect.Service)
+- 8+ providers: OpenAI, Anthropic, Google, Groq, DeepSeek, Perplexity, xAI, Qwen
+- Operations: text generation, streaming, object generation, embeddings, tool-calling
+- **Dependencies:** None (independent)
+
+### effect-cli-tui (Interactive UI)
+- Terminal UI components: EffectCLI, TUIHandler
+- Interactive prompts: prompt(), selectOption(), multiSelect(), confirm(), password()
+- Display utilities: spinners, tables, boxes, panels
+- Uses Effect.Schema for validation (NOT Zod)
+- **Dependencies:** effect-supermemory, effect-env
+
+### effect-actor (Orchestration)
+- Statechart-based state machines (xState-inspired but Effect-native)
+- Effect-native patterns for state management
+- **Dependencies:** None (independent)
+
+### effect-cockpit (Dashboard)
+- Agent monitoring and control dashboard
+- Integration with other Layer 2 packages
+- **Dependencies:** Other Layer 2 packages
+
+**Dependency Rules (STRICT):**
+- effect-supermemory → no dependencies
+- effect-ai-sdk → no dependencies
+- effect-cli-tui → can depend on effect-supermemory, effect-env
+- effect-actor → no dependencies
+- effect-cockpit → can depend on Layer 2 packages
+- ❌ NO Layer 1 imports in effect-cockpit or any Layer 2 package (except through explicit patterns)
+
+## Layer 1: Hume (Data Foundation)
+
+**23 packages organized by capability:**
+
+### Resources (Zero External Dependencies)
+These are foundational and can only depend on Effect.js:
+- `effect-json` — Type-safe JSON parsing with multiple backends
+- `effect-env` — Environment variable validation and management
+- `effect-regex` — Composable pattern matching and validation
+- `effect-schema-utils` — Effect.Schema helpers and utilities
+
+### Content (Format Processing)
+Parse, validate, and transform structured data:
+- Structured formats: `effect-yaml`, `effect-xml`, `effect-csv`, `effect-toml`
+- Documents: `effect-mdx`, `effect-html`, `effect-pdf`
+- Media: `effect-image`, `effect-xmp`
+- Templates: `effect-liquid` (Shopify Liquid engine)
+
+### AI & Integration
+Work with language models and prompts:
+- `effect-prompt` — Prompt management and templating
+- `effect-models` — LLM integration (OpenRouter, HuggingFace)
+
+### Services (External Integration)
+Interact with external systems:
+- `effect-repository` — Git operations and repository management
+- `effect-artifact` — Artifact extraction and versioning
+- `effect-attachment` — File attachment handling
+- `effect-storage` — File system operations
+- `effect-telemetry` — Observability and metrics collection
+- `effect-models-website` — Website integration for models
+
+**Dependency Rules (STRICT):**
+- Layer 1 packages can only depend on other Layer 1 packages
+- ❌ FORBIDDEN: Any Layer 1 package importing from Layer 2 (McLuhan)
+- Resources layer has zero external dependencies (except Effect.js)
+
+## TypeScript Configuration
+
+**Strict Mode (enforced across all packages):**
+```json
+{
+  "strict": true,
+  "exactOptionalPropertyTypes": true,
+  "noUncheckedIndexedAccess": true,
+  "noImplicitOverride": true,
+  "noImplicitAny": true,
+  "strictNullChecks": true,
+  "strictFunctionTypes": true,
+  "target": "ES2022",
+  "module": "ESNext"
+}
 ```
 
-**Type Checking:**
-- Strict TypeScript validation
-- `bun run typecheck` catches all errors before build
-- Zero `any` without explicit `biome-ignore` comments
+All packages inherit from root `tsconfig.json`. Override carefully and only when necessary.
 
-**Forbidden Patterns:**
-- ❌ Double casts: `as unknown as Type` (type-safety bypass)
-- ❌ Service name suffixes: "Live", "Impl", "Layer"
-- ❌ `Context.Tag` (use Effect.Service instead)
-- ❌ Default exports (use named exports)
-- ❌ Zod for validation (use Effect.Schema)
-- ❌ Direct `process.env` access (use effect-env)
+## Code Quality Standards
 
-## Workspace Dependencies
+### Biome Configuration
+- **Preset:** `ultracite/core` (zero-config, opinionated)
+- **Enforces:** Modern TypeScript, error handling, performance, accessibility
+- All packages inherit from root `biome.jsonc`
 
-Projects use **Bun workspaces** with **workspace protocol**:
+### Linting & Formatting
+```bash
+# Check code quality across all packages
+bun run lint
+
+# Auto-fix formatting and common issues
+bun run format:fix
+```
+
+### Forbidden Patterns
+
+| Pattern | Why | Use Instead |
+|---------|-----|-------------|
+| `as unknown as Type` | Breaks type safety | Fix underlying type mismatch |
+| `Context.Tag` | Outdated pattern | Use `Effect.Service` |
+| Service suffixes: "Live", "Impl", "Layer" | Anti-pattern | Use bare class name |
+| Default exports | Prevents tree-shaking | Use named exports |
+| Zod for validation | Wrong tool for Effect | Use `Effect.Schema` |
+| `process.env` access | Unvalidated environment | Use `effect-env` package |
+| Mocking in tests | Inaccurate tests | Use real implementations |
+| Double casts | Type safety bypass | Refactor to proper types |
+
+## Dependency Management
+
+### Workspace Protocol
+
+All inter-package dependencies use Bun's workspace protocol:
 
 ```json
 {
   "dependencies": {
-    "effect-supermemory": "workspace:*"
+    "effect-json": "workspace:*",
+    "effect-schema-utils": "workspace:*"
   }
 }
 ```
 
-**Rules:**
-- Use `workspace:*` for dependencies on other monorepo packages
-- Enables development-time local resolution and npm publishing independence
-- Check `bun.lock` to understand dependency graph
-
-### How Workspace Resolution Works
-
-**During development:**
-```typescript
-// In effect-cli-tui package.json
-{
-  "dependencies": {
-    "effect-supermemory": "workspace:*"
-  }
-}
-
-// During development, this imports directly from effect-supermemory/src/
-import { MemoriesService } from "effect-supermemory"
-```
-
-**For npm publishing:**
-- When packages are published to npm, `workspace:*` is replaced with the actual published version
-- Each package maintains independent versioning and can be published separately
-- This allows monorepo development while maintaining npm publishing independence
+**How it works:**
+- **During development:** Resolves directly from source (`src/` directory)
+- **At publish time:** Replaced with actual version number on npm
+- **Benefit:** Live development without needing to publish packages
 
 **Checking dependencies:**
 ```bash
 # View dependency tree
 bun pm ls
 
-# See what's in bun.lock (Bun's lockfile)
-cat bun.lock | grep -A 5 "effect-supermemory"
+# Check specific package
+bun pm ls effect-json
+
+# Verify workspace resolution working
+bun run test  # If workspace resolution broken, tests fail immediately
 ```
 
-## Project-Specific CLAUDE.md Files
+## File Organization
 
-For detailed guidance on each project:
+### Package Structure Template
 
-- **`McLuhan/CLAUDE.md`** - Comprehensive architecture patterns, 4-package layering, service implementation templates, error handling patterns, testing strategies
-- **`Hume/CLAUDE.md`** - Data foundation patterns, 3-layer architecture, format library patterns, empirical validation philosophy, comprehensive testing
-
-These files contain copy-paste templates, detailed examples, and canonical patterns for each project.
-
-## Development Workflow
-
-### Common Development Tasks
-
-**Run a single test file:**
-```bash
-cd McLuhan
-bun run --filter effect-supermemory test -- memory-service.test.ts
-
-cd Hume
-bun run --filter effect-json test -- json-parser.test.ts
+```
+packages/effect-name/
+├── src/
+│   ├── index.ts           # Public API re-exports
+│   ├── api.ts             # Service interface definition
+│   ├── service.ts         # Effect.Service implementation
+│   ├── errors.ts          # Data.TaggedError definitions
+│   ├── types.ts           # Type definitions and schemas
+│   └── impl/              # (Optional) Internal implementations
+│
+├── __tests__/
+│   ├── unit/
+│   │   └── service.test.ts
+│   ├── integration/       # (If applicable)
+│   └── fixtures/          # Test data files
+│
+├── dist/                  # Build output (generated)
+├── package.json
+├── tsconfig.json
+├── vitest.config.ts       # (If not using shared config)
+└── README.md
 ```
 
-**Watch tests while developing:**
-```bash
-cd McLuhan
-bun run test:watch
+### Naming Conventions
 
-cd Hume
-bun run test:watch
+- **Files:** `kebab-case.ts` (lowercase with hyphens)
+- **Classes:** PascalCase, named exports only (no default exports)
+- **Interfaces:** PascalCase ending with `Api` or `Ops` (e.g., `MemoriesServiceApi`)
+- **Error classes:** PascalCase ending with `Error` (e.g., `NotFoundError`)
+- **Test files:** `*.test.ts` in `__tests__/` subdirectories
+
+## Git Workflow
+
+### Branch Naming
+- `feature/description-of-feature` — New features
+- `fix/description-of-bug` — Bug fixes
+- `chore/description-of-changes` — Build, docs, deps
+- `refactor/description` — Code reorganization
+
+### Commit Messages (Conventional Commits)
+
+```
+feat: Add semantic search to effect-supermemory
+
+- Implement vector search with RRF algorithm
+- Add SearchService with query options
+- Update MemoriesService with search integration
+
+Closes #123
 ```
 
-**Type-check without building:**
+**Format:** `<type>: <short description>`
+- `feat:` — New feature
+- `fix:` — Bug fix
+- `chore:` — Build, dependencies, documentation
+- `refactor:` — Code restructuring without logic change
+- `perf:` — Performance improvement
+- `test:` — Test additions/fixes
+- `style:` — Formatting only
+- `docs:` — Documentation
+
+### Pre-Commit Verification
+
 ```bash
-cd [Project]
+# Before pushing, run full verification
+bun run verify
+
+# Check what you're committing
+git diff
+git status
+
+# Verify tests pass
+bun run test
+
+# Verify types
 bun run typecheck
 ```
 
-**Fix formatting issues automatically:**
-```bash
-cd [Project]
-bun run format:fix
-```
+## Effect.js Debugging Patterns
 
-### Adding a New Service to McLuhan
+### Effect.fn() vs Effect.gen()
 
-```bash
-cd McLuhan
-# Create new package or service in existing package
-bun run --filter effect-[name] build
-bun run --filter effect-[name] test
-bun run verify           # Full verification
-```
+**Use `Effect.fn()` for:**
+- Service parameterization (initialization code)
+- Config-driven setup
+- Runs once at layer construction time
 
-### Adding a New Package to Hume
-
-```bash
-cd Hume
-# Create new package following structure
-bun run --filter effect-[name] build
-bun run test             # Test all
-bun run check:architecture  # Verify layer rules
-```
-
-## Debugging Effect Programs
-
-### Understanding Effect.fn() vs Effect.gen()
-
-**Effect.fn() - For service parameterization:**
 ```typescript
-// Use Effect.fn for services that need config/initialization
 effect: Effect.fn(function* (config: Config) {
-  // Runs once at layer construction time
-  // config is available in closure
+  // This runs once when layer is created
+  const client = new HttpClient(config.baseUrl)
+
   return {
-    method: (arg) => Effect.sync(() => { /* use config */ })
+    operation: (arg) => Effect.sync(() => client.call(arg))
   }
 })
 ```
 
-**Effect.gen() - For async composition:**
+**Use `Effect.gen()` for:**
+- Async composition (effects depend on other effects)
+- Sequential operations
+- Runs every time effect is executed
+
 ```typescript
-// Use Effect.gen for async operations and coordination
-const myEffect = Effect.gen(function* () {
-  const service = yield* MyService      // Acquire dependency
-  const result = yield* service.method() // Execute operation
+const program = Effect.gen(function* () {
+  const service = yield* MyService        // Acquire service
+  const result = yield* service.method()  // Execute effect
   return result
 })
 ```
 
-### Common Effect Debugging Patterns
+### Common Debugging Patterns
 
-**Logging during effect execution:**
+**Logging during execution:**
 ```typescript
 const program = Effect.gen(function* () {
-  const service = yield* MyService
   yield* Effect.logInfo(`Starting operation`)
-  const result = yield* service.method()
+  const result = yield* someEffect
   yield* Effect.logDebug(`Result: ${JSON.stringify(result)}`)
   return result
 })
 ```
 
-**Catching and inspecting errors:**
+**Type-safe error catching:**
 ```typescript
-const program = Effect.gen(function* () {
-  return yield* someEffect.pipe(
-    Effect.catchTag("MyError", (err) => {
-      // err is typed and all fields available
-      yield* Effect.logError(`Caught error: ${err.message}`)
-      return fallbackValue
-    })
-  )
-})
+const program = someEffect.pipe(
+  Effect.catchTag("MyError", (err) => {
+    // err is typed with all fields available
+    return fallback
+  }),
+  Effect.catchTag("OtherError", (err) => {
+    // Different error, different handling
+    return otherFallback
+  })
+)
 ```
 
-**Running effects in tests:**
+**Adding timeouts to prevent hanging:**
 ```typescript
-// Basic execution
-const result = await Effect.runPromise(myEffect)
-
-// With error handling
-const result = await Effect.runPromise(Effect.either(myEffect))
-if (Either.isLeft(result)) {
-  // Handle error in result.left
-}
-
-// With timeout (prevents hanging tests)
-const result = await Effect.runPromise(
-  myEffect.pipe(Effect.timeoutTo("5 seconds", () => fallback))
+const program = someEffect.pipe(
+  Effect.timeoutFail("5 seconds", () => new TimeoutError())
 )
+```
+
+**Handling effects that might fail:**
+```typescript
+const program = Effect.gen(function* () {
+  const result = yield* Effect.either(mightFailEffect)
+  if (Either.isLeft(result)) {
+    // Handle error
+    return result.left
+  }
+  return result.right
+})
 ```
 
 ## Common Mistakes to Avoid
 
-1. **Circular Dependencies** - McLuhan → Hume only. Never upward.
-2. **Mutable State** - Use `Ref` or `FiberRef`, never bare `let`
-3. **Service Instantiation** - Use dependency injection with layers, never `new MyService()`
-4. **Error Patterns** - Use `Data.TaggedError`, not generic Error
-5. **Validation Library** - Use Effect.Schema, never Zod
-6. **Import Extensions** - Always use `.js` extension for relative imports
-7. **Type Safety** - No double casts, no implicit `any`
-8. **Forgetting to yield in Effect.gen()** - Forgetting `yield*` loses the effect context
-9. **Missing Effect.provide()** - Services need layers provided to execute
-10. **Mixing promises and effects** - Don't use `.then()` on effects; use `Effect.map()` instead
+| Mistake | Problem | Solution |
+|---------|---------|----------|
+| Service imports without `.js` extension | ESM module resolution fails | Use `.js` extension in relative imports |
+| `new MyService(config)` | Service not properly initialized | Use `MyService.Default(config)` |
+| Forgetting `yield*` in Effect.gen | Effect context lost | Always use `yield*` for effects |
+| Missing `Effect.provide()` | Service layer not available at runtime | Always provide layers: `.pipe(Effect.provide(layer))` |
+| Layer 1 package imports Layer 2 | Breaks architecture | Only Layer 2 can import Layer 1 |
+| Using `Context.Tag` directly | Outdated pattern | Use `Effect.Service` |
+| Mixing promises and effects | Loses type safety | Use `Effect.map()`, not `.then()` on effects |
+| Generic `Error` in effects | Lost type information | Use `Data.TaggedError` for specific error types |
+| Using Zod for validation | Wrong validation tool | Use `Effect.Schema` |
+| Accessing `process.env` directly | Unvalidated environment | Use `effect-env` package |
 
-## IDE & Tool Configuration
+## Technology Stack
 
-### Cursor/Copilot AI Assistance
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| Bun | 1.1.33+ | Package manager, runtime, bundler |
+| TypeScript | 5.9+ | Type system (strict mode) |
+| Node.js | 18.18+ | Development runtime |
+| Effect.js | 3.19+ | Functional effects & DI |
+| @effect/schema | Latest | Type-safe validation |
+| @effect/platform | Latest | Platform abstractions |
+| Biome | 2.3.7+ | Linting & formatting (Ultracite) |
+| Vitest | 4.0+ | Testing framework |
+| Vercel AI SDK | 5.0+ | LLM integration (in effect-ai-sdk) |
 
-The Hume project includes a `.cursorrules` file that provides configuration for Cursor and Copilot AI assistants:
+## Key Package References
 
-```
-Hume/.cursorrules - Specific to Hume's Data Foundation patterns and conventions
-```
+**Layer 2 - McLuhan (Agent Infrastructure)**
+- `effect-supermemory` — See `packages/effect-supermemory/CLAUDE.md` for memory patterns
+- `effect-ai-sdk` — Multi-provider LLM wrapper (functional library pattern)
+- `effect-cli-tui` — Interactive CLI and TUI components
+- `effect-actor` — State machine orchestration
+- `effect-cockpit` — Agent dashboard
 
-This file includes:
-- Service implementation templates
-- Error handling patterns
-- Testing patterns specific to Hume packages
-- Common pitfalls and fixes
-- Import organization rules
-- Auto-import preferences
+**Layer 1 - Hume (Data Foundation)**
+- `effect-json` — Canonical reference implementation; see `packages/effect-json/CLAUDE.md`
+- `effect-env` — Environment variable management
+- `effect-regex` — Pattern matching utilities
+- `effect-schema-utils` — Schema refinements and helpers
+- `effect-prompt` — Prompt management and templating
+- `effect-models` — LLM model integration
+- `effect-repository` — Git operations
+- `effect-liquid` — Liquid template engine
+- `effect-telemetry` — Observability and metrics
 
-The root Trinity project should eventually have similar guidance files for McLuhan as it matures.
-
-## Key Files & References
-
-**Root Configuration:**
-- `.vscode/` - Shared IDE settings
-- All projects inherit Biome and TypeScript configuration
-
-**McLuhan:**
-- `packages/effect-supermemory/` - Memory layer
-- `packages/effect-ai-sdk/` - AI operations (functional library)
-- `packages/effect-cli-tui/` - Terminal UI and prompts
-- `packages/effect-actor/` - State machine orchestration
-- `CLAUDE.md` - Comprehensive patterns guide
-
-**Hume:**
-- `packages/effect-json/` - JSON parsing (canonical reference)
-- `packages/effect-env/` - Configuration
-- `packages/effect-mdx/`, `effect-yaml/`, etc. - Format libraries
-- `packages/effect-models/` - LLM integration
-- `packages/effect-prompt/` - Prompt management
-- `CLAUDE.md` - Data foundation patterns
-- `Agents.md` - Complete canonical patterns
-
-## Technology Stack Summary
-
-**Runtime & Build:**
-- Bun 1.1.33+ (package manager, runtime, bundler)
-- TypeScript 5.9.3 (strict mode)
-- Node.js 18.18+
-
-**Core Framework:**
-- Effect.js 3.19.9+ (functional effect system, dependency injection)
-- @effect/schema (type-safe validation)
-- @effect/platform (platform abstractions)
-
-**Tooling:**
-- Biome 2.3.7 (linting, formatting with Ultracite preset)
-- Vitest 4.0.15+ (testing framework)
-
-**Key Dependencies:**
-- Vercel AI SDK v5 (AI provider integration in McLuhan)
-- Supermemory API (long-term memory in McLuhan)
-- Liquid.js (template engine in Hume)
+**See individual package `CLAUDE.md` files for detailed patterns and examples.**
 
 ## Troubleshooting
 
-### Build/Compile Issues
+### Build Fails with Module Resolution Errors
 
-**Error: "Cannot find module 'effect-supermemory'"**
 ```bash
-# Workspace packages not resolving? Run install
+# Clear and reinstall
+rm -rf node_modules bun.lock
 bun install
 
-# Clear cache and reinstall
-rm -rf bun.lock node_modules
-bun install
-```
-
-**Type errors from other packages?**
-```bash
-# Type checking each project separately
-cd McLuhan && bun run typecheck
-cd Hume && bun run typecheck
-
-# Full typecheck
-bun run typecheck  # From root (if available)
-```
-
-### Runtime Issues
-
-**Service layer not finding dependencies?**
-```typescript
-// ❌ Wrong - service not provided
-const result = await Effect.runPromise(myEffect)
-
-// ✅ Correct - provide the service layer
-const program = myEffect.pipe(Effect.provide(MyService.Default))
-const result = await Effect.runPromise(program)
-```
-
-**Workspace packages importing wrong version?**
-```bash
 # Verify workspace resolution
 bun pm ls
 
-# Check specific package
-bun pm ls effect-supermemory
+# Check if specific package builds
+bun run --filter effect-json build
 ```
 
-### Testing Issues
+### TypeScript Errors in IDE
 
-**Tests hanging (no timeout)**
-```typescript
-// Add timeout to prevent hanging tests
+```bash
+# Regenerate type definitions
+bun run build
+
+# Force type checking
+bun run typecheck
+
+# VS Code: Restart TypeScript server (Cmd+Shift+P → "TypeScript: Restart TS Server")
+```
+
+### Tests Not Running or Hanging
+
+```bash
+# Run single test file with verbose output
+bun run --filter effect-json test -- unit.test.ts --reporter=verbose
+
+# Add timeout to prevent hanging
 const result = await Effect.runPromise(
-  myEffect.pipe(Effect.timeoutFail("5 seconds", () => new TestTimeoutError()))
+  myEffect.pipe(Effect.timeoutFail("5 seconds", () => new Error()))
 )
 ```
 
-**Service tests failing with missing dependencies?**
-- Ensure all services are provided via layers in test setup
-- Check that test layers match actual service interfaces
+### Service Dependencies Not Available
 
-## External Documentation
+```typescript
+// ❌ Wrong - service not provided
+const result = await Effect.runPromise(program)
 
-- **Effect.ts:** https://effect.website
-- **Biome:** https://biomejs.dev
-- **Ultracite:** https://github.com/Phylogenic/ultracite
-- **Bun:** https://bun.sh
-- **Vercel AI SDK:** https://ai.vercel.com
+// ✅ Correct - provide all service layers
+const result = await Effect.runPromise(
+  program.pipe(
+    Effect.provide(MyService.Default(config)),
+    Effect.provide(OtherService.Default(config))
+  )
+)
+```
+
+### Architecture Validation Failed
+
+```bash
+# Check dependency rules (Layer 2 → Layer 1 only)
+bun run check:architecture
+
+# See which package violated rules
+bun run lint
+
+# Review package.json in the flagged package
+```
+
+## External Resources
+
+- **Effect.js Documentation:** https://effect.website
+- **Biome Documentation:** https://biomejs.dev
+- **Ultracite Preset:** https://github.com/Phylogenic/ultracite
+- **Bun Documentation:** https://bun.sh
+- **TypeScript Handbook:** https://www.typescriptlang.org/docs
 
 ## Summary
 
-Trinity is a well-architected two-layer monorepo:
+EffectTalk is a unified, architecturally-sound monorepo:
 
-- **McLuhan** - Agent orchestration, memory, and TUI
-- **Hume** - Type-safe data foundation with strict layering
+**Structure:**
+- **Layer 2 (McLuhan):** 5 packages for agent infrastructure (memory, LLMs, CLI, orchestration)
+- **Layer 1 (Hume):** 23 packages for data foundation (parsing, validation, transformation)
+- **Strict downward dependencies:** Layer 2 → Layer 1 only
 
-All projects share:
-- Strict TypeScript (no `any`, exact null checks)
-- Effect.js functional patterns (services, effects, error handling)
-- Biome code quality enforcement
-- Bun workspace dependency management
-- No mocking in tests (real implementations only)
+**Universal Standards:**
+- All services use `Effect.Service` with `Effect.fn()` parameterization
+- All errors use `Data.TaggedError` for type-safe pattern matching
+- Strict TypeScript with `exactOptionalPropertyTypes: true`
+- Biome with Ultracite preset for code quality
+- No mocking in tests; use real implementations
+- Vitest for testing with 85%+ coverage target
 
-**Key Design Principle:** Strict downward dependencies enable independent package development while preventing circular coupling.
+**Key Principle:** Architectural isolation + functional composition = reliable, composable AI applications.
