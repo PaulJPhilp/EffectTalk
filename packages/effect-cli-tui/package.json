@@ -16,11 +16,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PaulJPhilp/effect-cli-tui.git"
+    "url": "git+https://github.com/PaulJPhilp/EffectTalk.git"
   },
-  "homepage": "https://github.com/PaulJPhilp/effect-cli-tui",
+  "homepage": "https://github.com/PaulJPhilp/EffectTalk",
   "bugs": {
-    "url": "https://github.com/PaulJPhilp/effect-cli-tui/issues"
+    "url": "https://github.com/PaulJPhilp/EffectTalk/issues"
   },
   "main": "dist/index.js",
   "module": "dist/index.js",

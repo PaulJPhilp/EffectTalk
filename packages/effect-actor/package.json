@@ -28,11 +28,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/PaulJPhilp/effect-actor.git"
+    "url": "https://github.com/PaulJPhilp/EffectTalk.git"
   },
-  "homepage": "https://github.com/PaulJPhilp/effect-actor#readme",
+  "homepage": "https://github.com/PaulJPhilp/EffectTalk",
   "bugs": {
-    "url": "https://github.com/PaulJPhilp/effect-actor/issues"
+    "url": "https://github.com/PaulJPhilp/EffectTalk/issues"
   },
   "author": "Paul J. Philp",
   "license": "MIT",
