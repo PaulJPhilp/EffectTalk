@@ -49,5 +49,8 @@ bun-debug.log*
 # Husky
 .husky/
 
-# Changeset
+# Changeset (ignore PR files, commit config and examples)
 .changeset/
+!.changeset/config.json
+!.changeset/example.md
+!.changeset/.gitkeep

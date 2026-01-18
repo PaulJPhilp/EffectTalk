@@ -1,0 +1,191 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Format and lint check
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check formatting
+        run: bun run format
+
+      - name: Lint with Biome
+        run: bun run lint
+
+  # Type checking
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Type check all packages
+        run: bun run typecheck
+
+  # Architecture validation
+  architecture:
+    name: Architecture Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check architecture rules
+        run: bun run check:architecture
+
+      - name: Validate test structure
+        run: bun run check:test-structure
+
+      - name: Check dependencies
+        run: bun run check:dependencies
+
+  # Build and test
+  build-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build all packages
+        run: bun run build
+
+      - name: Run all tests
+        run: bun run test
+
+      - name: Generate coverage
+        run: bun run test:coverage:aggregate
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: matrix.node-version == '20.x'
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  # Consumer smoke tests
+  smoke-tests:
+    name: Consumer Smoke Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run consumer smoke tests
+        run: bun run smoke:consumer
+
+  # Changesets validation
+  changeset:
+    name: Changesets Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check for changesets
+        run: |
+          if [ -z "$(find .changeset -maxdepth 1 -type f -name '*.md' ! -name 'config.json' 2>/dev/null)" ]; then
+            echo "No changeset found for changes"
+            echo "Please run 'bun changeset' to create one"
+            # Don't fail on main branch or releases
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              exit 1
+            fi
+          fi
+
+  # Final check - ensure all matrix jobs passed
+  all-checks:
+    name: All Checks Passed
+    runs-on: ubuntu-latest
+    needs: [quality, typecheck, architecture, build-test, smoke-tests, changeset]
+    if: always()
+
+    steps:
+      - name: Check if any job failed
+        run: |
+          if [ "${{ needs.quality.result }}" = "failure" ] || \
+             [ "${{ needs.typecheck.result }}" = "failure" ] || \
+             [ "${{ needs.architecture.result }}" = "failure" ] || \
+             [ "${{ needs.build-test.result }}" = "failure" ] || \
+             [ "${{ needs.smoke-tests.result }}" = "failure" ]; then
+            echo "One or more checks failed"
+            exit 1
+          fi
