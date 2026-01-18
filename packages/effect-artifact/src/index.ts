@@ -11,8 +11,8 @@ export type { TypeDetectionServiceSchema } from "./services/index.js";
 
 // Extraction
 export {
-	extractArtifactsFromResponse,
-	extractArtifactsFromString,
+  extractArtifactsFromResponse,
+  extractArtifactsFromString,
 } from "./extractors/ai-artifact-extractor.js";
 
 // Types & Schemas

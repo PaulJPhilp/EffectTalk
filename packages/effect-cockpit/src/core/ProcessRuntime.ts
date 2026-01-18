@@ -1,6 +1,6 @@
-import { Effect, Stream, Scope } from "effect";
 import { spawn } from "node:child_process";
 import os from "node:os";
+import { Effect, type Scope, Stream } from "effect";
 
 export interface Process {
 	readonly write: (data: string) => Effect.Effect<void>;
@@ -102,5 +102,5 @@ export class ProcessRuntime extends Effect.Service<ProcessRuntime>()(
 					}),
 			} satisfies ProcessRuntimeApi;
 		}),
-	}
+	},
 ) {}

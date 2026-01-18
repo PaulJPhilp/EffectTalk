@@ -284,15 +284,15 @@ switch (command) {
                 timingMs: result.timingMs,
                 warnings: result.warnings,
                 failures: result.failures.map((failure) => ({
-                   caseIndex: failure.caseIndex,
-                   // biome-ignore lint/style/noNonNullAssertion: caseIndex is guaranteed to be valid from testCases
-                   input: testCases[failure.caseIndex]!.input,
-                   expectedMatch: failure.expectedMatch,
-                   actualMatch: failure.matched,
-                   timedOut: failure.timedOut,
-                   durationMs: failure.durationMs,
-                   error: failure.error,
-                 })),
+                  caseIndex: failure.caseIndex,
+                  // biome-ignore lint/style/noNonNullAssertion: caseIndex is guaranteed to be valid from testCases
+                  input: testCases[failure.caseIndex]!.input,
+                  expectedMatch: failure.expectedMatch,
+                  actualMatch: failure.matched,
+                  timedOut: failure.timedOut,
+                  durationMs: failure.durationMs,
+                  error: failure.error,
+                })),
               },
               null,
               2

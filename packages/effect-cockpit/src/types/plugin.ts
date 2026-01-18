@@ -1,5 +1,5 @@
-import type { Block } from "./block.js";
 import type { Effect } from "effect";
+import type { Block } from "./block.js";
 
 export interface Plugin {
 	readonly name: string;

@@ -155,7 +155,9 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
               sizeBytes: data.length,
               createdAt: now,
               updatedAt: now,
-              ...(options?.customMetadata !== undefined && { customMetadata: options.customMetadata }),
+              ...(options?.customMetadata !== undefined && {
+                customMetadata: options.customMetadata,
+              }),
             };
 
             // Write blob data
@@ -380,7 +382,9 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
             return {
               items,
               ...(hasMoreResults && { nextCursor: String(limit) }),
-              ...(metadataList.length > 0 && { totalCount: metadataList.length }),
+              ...(metadataList.length > 0 && {
+                totalCount: metadataList.length,
+              }),
             } satisfies ListResult;
           });
 

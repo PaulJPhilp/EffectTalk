@@ -105,7 +105,9 @@ export const explain = (ast: Ast, options: ExplainOptions): ExplanationNode => {
           description: quantifierDesc,
           pattern: `${qChild.pattern}${quantifierPattern}`,
           children: [qChild],
-          ...(node.lazy && { notes: ["Lazy matching (prefers shorter matches)"] }),
+          ...(node.lazy && {
+            notes: ["Lazy matching (prefers shorter matches)"],
+          }),
         };
       }
 

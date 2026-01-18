@@ -16,15 +16,15 @@ import { Schema } from "effect";
  * legacy or incomplete metadata files.
  */
 export const PromptMetadataSchema = Schema.Struct({
-  name: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.String),
-  created: Schema.optional(Schema.String),
-  updated: Schema.optional(Schema.String),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  author: Schema.optional(Schema.String),
-  extends: Schema.optional(Schema.String),
-  maxTokens: Schema.optional(Schema.Number),
+	name: Schema.optional(Schema.String),
+	description: Schema.optional(Schema.String),
+	version: Schema.optional(Schema.String),
+	created: Schema.optional(Schema.String),
+	updated: Schema.optional(Schema.String),
+	tags: Schema.optional(Schema.Array(Schema.String)),
+	author: Schema.optional(Schema.String),
+	extends: Schema.optional(Schema.String),
+	maxTokens: Schema.optional(Schema.Number),
 });
 
 /**

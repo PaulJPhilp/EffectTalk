@@ -1,7 +1,7 @@
-import { Effect, Scope } from "effect";
-import { BlockService } from "./BlockService.js";
+import { Effect, type Scope } from "effect";
 import { SessionStore } from "../state/SessionStore.js";
-import { ProcessRuntime } from "./ProcessRuntime.js";
+import { BlockService } from "./BlockService.js";
+import type { ProcessRuntime } from "./ProcessRuntime.js";
 import { SlashCommands } from "./SlashCommands.js";
 
 export interface CommandExecutorApi {
@@ -50,5 +50,5 @@ export class CommandExecutor extends Effect.Service<CommandExecutor>()(
 					}),
 			} satisfies CommandExecutorApi;
 		}),
-	}
+	},
 ) {}

@@ -1,7 +1,7 @@
 import { Context, Effect, Layer } from "effect";
 import { Kysely } from "kysely";
-import type { Session } from "../types/session.js";
 import type { Block } from "../types/block.js";
+import type { Session } from "../types/session.js";
 
 export interface DatabaseSchema {
 	sessions: {
@@ -53,7 +53,7 @@ export class Persistence extends Effect.Service<Persistence>()(
 				const { BunSqliteDialect } = yield* Effect.promise(
 					() => import("kysely-bun-sqlite"),
 				);
-				// @ts-ignore: bun-specific
+				// @ts-expect-error: bun-specific
 				const { Database } = yield* Effect.promise(() => import("bun:sqlite"));
 				dialect = new BunSqliteDialect({
 					database: new Database(dbPath),
@@ -277,5 +277,5 @@ export class Persistence extends Effect.Service<Persistence>()(
 					}),
 			} satisfies PersistenceApi;
 		}),
-	}
+	},
 ) {}

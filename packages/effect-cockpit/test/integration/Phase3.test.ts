@@ -1,17 +1,17 @@
-import { Effect, Layer } from "effect";
-import { describe, it, expect, afterAll } from "vitest";
-import path from "node:path";
-import os from "node:os";
 import fs from "node:fs";
-import { SessionStore } from "../../src/state/SessionStore.js";
+import os from "node:os";
+import path from "node:path";
+import { Effect, Layer } from "effect";
+import { afterAll, describe, expect, it } from "vitest";
 import { BlockService } from "../../src/core/BlockService.js";
-import { ProcessRuntime } from "../../src/core/ProcessRuntime.js";
 import { CommandExecutor } from "../../src/core/CommandExecutor.js";
-import { Persistence } from "../../src/state/Persistence.js";
 import { PluginManager } from "../../src/core/PluginManager.js";
-import type { Session } from "../../src/types/session.js";
-import type { Plugin } from "../../src/types/plugin.js";
+import { ProcessRuntime } from "../../src/core/ProcessRuntime.js";
 import { SlashCommands } from "../../src/core/SlashCommands.js";
+import { Persistence } from "../../src/state/Persistence.js";
+import { SessionStore } from "../../src/state/SessionStore.js";
+import type { Plugin } from "../../src/types/plugin.js";
+import type { Session } from "../../src/types/session.js";
 
 const TEST_DB_PATH = path.join(
 	os.tmpdir(),

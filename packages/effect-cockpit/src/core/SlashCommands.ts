@@ -1,6 +1,6 @@
 import { Effect, Ref } from "effect";
-import { SessionStore } from "../state/SessionStore.js";
 import { Persistence } from "../state/Persistence.js";
+import { SessionStore } from "../state/SessionStore.js";
 
 export interface SlashCommand {
 	readonly name: string;
@@ -95,5 +95,5 @@ export class SlashCommands extends Effect.Service<SlashCommands>()(
 
 			return slash satisfies SlashCommandsApi;
 		}),
-	}
+	},
 ) {}

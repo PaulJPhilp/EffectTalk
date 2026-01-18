@@ -113,5 +113,5 @@ export class SessionStore extends Effect.Service<SessionStore>()(
 				focusPrev,
 			} satisfies SessionStoreApi;
 		}),
-	}
+	},
 ) {}

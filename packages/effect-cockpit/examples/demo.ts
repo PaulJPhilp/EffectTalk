@@ -1,23 +1,23 @@
+import os from "node:os";
+import path from "node:path";
 import { Effect, Layer } from "effect";
 import { render } from "ink";
 import React from "react";
-import { App } from "../src/ui/App.js";
-import { SessionStore, SessionStoreLive } from "../src/state/SessionStore.js";
 import { BlockService, BlockServiceLive } from "../src/core/BlockService.js";
-import {
-	ProcessRuntime,
-	ProcessRuntimeLive,
-} from "../src/core/ProcessRuntime.js";
 import {
 	CommandExecutor,
 	CommandExecutorLive,
 } from "../src/core/CommandExecutor.js";
+import { PluginManager, PluginManagerLive } from "../src/core/PluginManager.js";
+import {
+	ProcessRuntime,
+	ProcessRuntimeLive,
+} from "../src/core/ProcessRuntime.js";
 import { SlashCommands, SlashCommandsLive } from "../src/core/SlashCommands.js";
 import { Persistence, PersistenceLive } from "../src/state/Persistence.js";
-import { PluginManager, PluginManagerLive } from "../src/core/PluginManager.js";
+import { SessionStore, SessionStoreLive } from "../src/state/SessionStore.js";
+import { App } from "../src/ui/App.js";
 import type { Session } from "../types/session.js";
-import path from "node:path";
-import os from "node:os";
 
 // Define a custom initial session for the Demo App
 const demoSession: Session = {

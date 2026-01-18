@@ -1,5 +1,5 @@
 export {
-  PromptConfig,
-  PromptConfigLayer,
-  type PromptConfigSchema,
+	PromptConfig,
+	PromptConfigLayer,
+	type PromptConfigSchema,
 } from "./prompt-config.js";

@@ -59,14 +59,16 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
           }
 
           const now = new Date();
-           const metadata: BlobMetadata = {
-             id,
-             mimeType,
-             sizeBytes: data.length,
-             createdAt: now,
-             updatedAt: now,
-             ...(options?.customMetadata !== undefined && { customMetadata: options.customMetadata }),
-           };
+          const metadata: BlobMetadata = {
+            id,
+            mimeType,
+            sizeBytes: data.length,
+            createdAt: now,
+            updatedAt: now,
+            ...(options?.customMetadata !== undefined && {
+              customMetadata: options.customMetadata,
+            }),
+          };
 
           const blob: Blob = {
             metadata,

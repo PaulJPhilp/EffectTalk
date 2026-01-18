@@ -41,22 +41,22 @@ import { PromptNotFoundError, VariableValidationError } from "./errors.js";
  * @returns A Layer providing PromptStorageService
  */
 export const createMockStorageLayer = (
-  templates: Map<string, PromptTemplate>
+	templates: Map<string, PromptTemplate>,
 ): Layer.Layer<PromptStorageService> =>
-  Layer.succeed(PromptStorageService, {
-    load: (id) =>
-      templates.has(id)
-        ? Effect.succeed(templates.get(id)!)
-        : Effect.fail(
-            new PromptNotFoundError({
-              message: `Prompt not found: ${id}`,
-              promptId: id,
-            })
-          ),
-    save: () => Effect.void,
-    list: () => Effect.succeed([...templates.values()]),
-    delete: () => Effect.void,
-  } satisfies PromptStorageServiceSchema);
+	Layer.succeed(PromptStorageService, {
+		load: (id) =>
+			templates.has(id)
+				? Effect.succeed(templates.get(id)!)
+				: Effect.fail(
+						new PromptNotFoundError({
+							message: `Prompt not found: ${id}`,
+							promptId: id,
+						}),
+					),
+		save: () => Effect.void,
+		list: () => Effect.succeed([...templates.values()]),
+		delete: () => Effect.void,
+	} satisfies PromptStorageServiceSchema);
 
 /**
  * Create a mock validation layer for testing
@@ -67,22 +67,22 @@ export const createMockStorageLayer = (
  * @returns A Layer providing ValidationService
  */
 export const createMockValidationLayer = (
-  validator?: (
-    variables: unknown,
-    schema: Schema.Schema<unknown>
-  ) => readonly VariableValidationError[]
+	validator?: (
+		variables: unknown,
+		schema: Schema.Schema<unknown>,
+	) => readonly VariableValidationError[],
 ): Layer.Layer<ValidationService> =>
-  Layer.succeed(ValidationService, {
-    validate: (variables, schema) => {
-      const errors = validator?.(variables, schema) ?? [];
-      const result: ValidationResult = {
-        valid: errors.length === 0,
-        errors,
-        warnings: [],
-      };
-      return Effect.succeed(result);
-    },
-  } satisfies ValidationServiceSchema);
+	Layer.succeed(ValidationService, {
+		validate: (variables, schema) => {
+			const errors = validator?.(variables, schema) ?? [];
+			const result: ValidationResult = {
+				valid: errors.length === 0,
+				errors,
+				warnings: [],
+			};
+			return Effect.succeed(result);
+		},
+	} satisfies ValidationServiceSchema);
 
 /**
  * Create a complete test layer with both storage and validation
@@ -94,13 +94,13 @@ export const createMockValidationLayer = (
  * @returns A Layer providing both PromptStorageService and ValidationService
  */
 export const createMockPromptLayer = (
-  templates: Map<string, PromptTemplate>,
-  validator?: (
-    variables: unknown,
-    schema: Schema.Schema<unknown>
-  ) => readonly VariableValidationError[]
+	templates: Map<string, PromptTemplate>,
+	validator?: (
+		variables: unknown,
+		schema: Schema.Schema<unknown>,
+	) => readonly VariableValidationError[],
 ): Layer.Layer<PromptStorageService | ValidationService> =>
-  Layer.merge(
-    createMockStorageLayer(templates),
-    createMockValidationLayer(validator)
-  );
+	Layer.merge(
+		createMockStorageLayer(templates),
+		createMockValidationLayer(validator),
+	);

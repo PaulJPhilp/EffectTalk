@@ -78,7 +78,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   message: `Failed to validate content: ${String(err)}`,
                   id,
                   field: "content",
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -94,7 +94,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   message: `Failed to validate metadata: ${String(err)}`,
                   id,
                   field: "metadata",
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -128,7 +128,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   operation: "save",
                   id,
                   path: contentPath,
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -148,7 +148,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   operation: "save",
                   id,
                   path: metadataPath,
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -185,7 +185,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                 operation: "load",
                 id,
                 path: contentPath,
-                ...((err instanceof Error) ? { cause: err } : {}),
+                ...(err instanceof Error ? { cause: err } : {}),
               });
             })
           );
@@ -201,7 +201,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   message: `Failed to parse content: ${String(err)}`,
                   id,
                   field: "content",
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -221,7 +221,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                 operation: "load",
                 id,
                 path: metadataPath,
-                ...((err instanceof Error) ? { cause: err } : {}),
+                ...(err instanceof Error ? { cause: err } : {}),
               });
             })
           );
@@ -237,7 +237,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   message: `Failed to parse metadata: ${String(err)}`,
                   id,
                   field: "metadata",
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -269,7 +269,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                 operation: "loadContent",
                 id,
                 path: contentPath,
-                ...((err instanceof Error) ? { cause: err } : {}),
+                ...(err instanceof Error ? { cause: err } : {}),
               });
             })
           );
@@ -281,7 +281,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   message: `Failed to parse content: ${String(err)}`,
                   id,
                   field: "content",
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -310,7 +310,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                 operation: "loadMetadata",
                 id,
                 path: metadataPath,
-                ...((err instanceof Error) ? { cause: err } : {}),
+                ...(err instanceof Error ? { cause: err } : {}),
               });
             })
           );
@@ -322,7 +322,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   message: `Failed to parse metadata: ${String(err)}`,
                   id,
                   field: "metadata",
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -345,20 +345,18 @@ export const createFileSystemBackend = <TContent, TMeta>(
           );
 
           // Check if item exists with error mapping
-          const exists = yield* fs
-            .exists(contentPath)
-            .pipe(
-              Effect.mapError(
-                (err) =>
-                  new StorageError({
-                    message: `Failed to check item existence: ${String(err)}`,
-                    operation: "delete",
-                    id,
-                    path: contentPath,
-                    ...((err instanceof Error) ? { cause: err } : {}),
-                  })
-              )
-            );
+          const exists = yield* fs.exists(contentPath).pipe(
+            Effect.mapError(
+              (err) =>
+                new StorageError({
+                  message: `Failed to check item existence: ${String(err)}`,
+                  operation: "delete",
+                  id,
+                  path: contentPath,
+                  ...(err instanceof Error ? { cause: err } : {}),
+                })
+            )
+          );
           if (!exists) {
             return yield* Effect.fail(
               new NotFoundError({
@@ -369,21 +367,19 @@ export const createFileSystemBackend = <TContent, TMeta>(
           }
 
           // Delete content file with error mapping
-          yield* fs
-            .remove(contentPath)
-            .pipe(
-              Effect.mapError(
-                (err) =>
-                  new StorageError({
-                    message: `Failed to delete content file: ${String(err)}`,
-                    operation: "delete",
-                    id,
-                    path: contentPath,
-                    ...((err instanceof Error) ? { cause: err } : {}),
-                  })
-              ),
-              Effect.asVoid
-            );
+          yield* fs.remove(contentPath).pipe(
+            Effect.mapError(
+              (err) =>
+                new StorageError({
+                  message: `Failed to delete content file: ${String(err)}`,
+                  operation: "delete",
+                  id,
+                  path: contentPath,
+                  ...(err instanceof Error ? { cause: err } : {}),
+                })
+            ),
+            Effect.asVoid
+          );
 
           // Note: Metadata file is not deleted (orphaned metadata files are harmless)
         }),
@@ -405,7 +401,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                   operation: "list",
                   id,
                   path: contentPath,
-                  ...((err instanceof Error) ? { cause: err } : {}),
+                  ...(err instanceof Error ? { cause: err } : {}),
                 })
             )
           );
@@ -443,7 +439,7 @@ export const createFileSystemBackend = <TContent, TMeta>(
                     message: `Failed to parse metadata: ${String(err)}`,
                     id,
                     field: "metadata",
-                    ...((err instanceof Error) ? { cause: err } : {}),
+                    ...(err instanceof Error ? { cause: err } : {}),
                   })
               )
             );

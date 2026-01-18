@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { Effect } from "effect";
 import { Box, Text, useInput } from "ink";
+import type React from "react";
+import { useEffect, useState } from "react";
 import type { Session } from "../types/session.js";
 import { MultiLineInput } from "./MultiLineInput.js";
 import { Sidebar } from "./Sidebar.js";
 import { VirtualBlockList } from "./VirtualBlockList.js";
-import { Effect } from "effect";
 
 export interface AppProps {
 	readonly session: Session;

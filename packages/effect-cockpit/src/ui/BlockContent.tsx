@@ -1,7 +1,7 @@
-import React from "react";
 import { Box, Text } from "ink";
-import { SimpleMarkdown } from "./SimpleMarkdown.js";
+import type React from "react";
 import type { Block } from "../types/block.js";
+import { SimpleMarkdown } from "./SimpleMarkdown.js";
 
 export interface BlockContentProps {
 	readonly block: Block;

@@ -1,7 +1,7 @@
-import { Effect, Stream, Scope } from "effect";
+import { Effect, type Scope, Stream } from "effect";
+import { SessionStore } from "../state/SessionStore.js";
 import type { Block, BlockStatus } from "../types/block.js";
 import { ProcessRuntime } from "./ProcessRuntime.js";
-import { SessionStore } from "../state/SessionStore.js";
 
 export interface BlockServiceApi {
 	readonly create: (command: string) => Effect.Effect<Block>;
@@ -53,7 +53,7 @@ export class BlockService extends Effect.Service<BlockService>()(
 						const command = parts[0] ?? "";
 						const args = parts.slice(1);
 
-						const process = yield* runtime.spawn(command, args);
+						const process = yield* runtime.spawn(command, args, {});
 
 						yield* process.onData.pipe(
 							Stream.runForEach((data) =>
@@ -76,5 +76,5 @@ export class BlockService extends Effect.Service<BlockService>()(
 					),
 			} satisfies BlockServiceApi;
 		}),
-	}
+	},
 ) {}

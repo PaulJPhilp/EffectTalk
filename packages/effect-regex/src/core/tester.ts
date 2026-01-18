@@ -166,51 +166,49 @@ export const testRegex = (
           ),
         ])
       ).pipe(
-        Effect.match(
-          {
-            onFailure: (error) => {
-              const durationMs = Date.now() - caseStartTime;
-              if ((error as Error).message === "TIMEOUT") {
-                results.push({
-                  caseIndex: i,
-                  passed: false,
-                  matched: false,
-                  expectedMatch: testCase.shouldMatch,
-                  timedOut: true,
-                  durationMs,
-                });
-                warnings.push(`Test case ${i} timed out after ${durationMs}ms`);
-              } else {
-                results.push({
-                  caseIndex: i,
-                  passed: false,
-                  matched: false,
-                  expectedMatch: testCase.shouldMatch,
-                  error: (error as Error).message,
-                  timedOut: false,
-                  durationMs,
-                });
-              }
-            },
-            onSuccess: (result) => {
-              const durationMs = Date.now() - caseStartTime;
+        Effect.match({
+          onFailure: (error) => {
+            const durationMs = Date.now() - caseStartTime;
+            if ((error as Error).message === "TIMEOUT") {
               results.push({
                 caseIndex: i,
-                ...result,
+                passed: false,
+                matched: false,
+                expectedMatch: testCase.shouldMatch,
+                timedOut: true,
+                durationMs,
+              });
+              warnings.push(`Test case ${i} timed out after ${durationMs}ms`);
+            } else {
+              results.push({
+                caseIndex: i,
+                passed: false,
+                matched: false,
+                expectedMatch: testCase.shouldMatch,
+                error: (error as Error).message,
                 timedOut: false,
                 durationMs,
               });
+            }
+          },
+          onSuccess: (result) => {
+            const durationMs = Date.now() - caseStartTime;
+            results.push({
+              caseIndex: i,
+              ...result,
+              timedOut: false,
+              durationMs,
+            });
 
-              // Check for timeout warnings
-              if (durationMs > timeoutMs * 0.8) {
-                warnings.push(
-                  `Test case ${i} took ${durationMs}ms (close to ${timeoutMs}ms timeout)`
-                );
-              }
-            },
-          }
-        )
-      )
+            // Check for timeout warnings
+            if (durationMs > timeoutMs * 0.8) {
+              warnings.push(
+                `Test case ${i} took ${durationMs}ms (close to ${timeoutMs}ms timeout)`
+              );
+            }
+          },
+        })
+      );
     }
 
     const passed = results.filter((r) => r.passed).length;

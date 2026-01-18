@@ -1,16 +1,16 @@
+import os from "node:os";
+import path from "node:path";
 import { Effect, Layer, Scope, Stream } from "effect";
 import { render } from "ink";
 import React from "react";
-import { App } from "./ui/App.js";
-import { SessionStore } from "./state/SessionStore.js";
 import { BlockService } from "./core/BlockService.js";
-import { ProcessRuntime } from "./core/ProcessRuntime.js";
 import { CommandExecutor } from "./core/CommandExecutor.js";
+import { ProcessRuntime } from "./core/ProcessRuntime.js";
 import { SlashCommands } from "./core/SlashCommands.js";
 import { Persistence } from "./state/Persistence.js";
+import { SessionStore } from "./state/SessionStore.js";
 import type { Session } from "./types/session.js";
-import path from "node:path";
-import os from "node:os";
+import { App } from "./ui/App.js";
 
 const DB_PATH = path.join(os.homedir(), ".effect-cockpit.db");
 
@@ -63,12 +63,12 @@ const program = Effect.gen(function* () {
 			},
 			onFocusNext: () => {
 				Effect.runPromise(
-					store.focusNext.pipe(Effect.provide(MainLayer)),
+					store.focusNext.pipe(Effect.provide(MainLayer), Effect.scoped),
 				).catch(console.error);
 			},
 			onFocusPrev: () => {
 				Effect.runPromise(
-					store.focusPrev.pipe(Effect.provide(MainLayer)),
+					store.focusPrev.pipe(Effect.provide(MainLayer), Effect.scoped),
 				).catch(console.error);
 			},
 		});

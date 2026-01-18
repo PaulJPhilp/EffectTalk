@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { Box, Text } from "ink";
+import type React from "react";
+import { useEffect, useState } from "react";
 import type { Session } from "../types/session.js";
 import { BlockContent } from "./BlockContent.js";
 

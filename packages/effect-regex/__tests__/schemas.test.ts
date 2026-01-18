@@ -111,7 +111,9 @@ describe("effect-regex MCP Tool Schemas", () => {
     });
 
     it("should have anchor property", () => {
-      expect(BUILD_REGEX_SCHEMA.inputSchema.properties).toHaveProperty("anchor");
+      expect(BUILD_REGEX_SCHEMA.inputSchema.properties).toHaveProperty(
+        "anchor"
+      );
       const anchor = BUILD_REGEX_SCHEMA.inputSchema.properties.anchor;
       expect(anchor.type).toBe("boolean");
     });
@@ -127,7 +129,9 @@ describe("effect-regex MCP Tool Schemas", () => {
     });
 
     it("should have pattern property", () => {
-      expect(TEST_REGEX_SCHEMA.inputSchema.properties).toHaveProperty("pattern");
+      expect(TEST_REGEX_SCHEMA.inputSchema.properties).toHaveProperty(
+        "pattern"
+      );
       const pattern = TEST_REGEX_SCHEMA.inputSchema.properties.pattern;
       expect(pattern.type).toBe("string");
     });
@@ -189,11 +193,15 @@ describe("effect-regex MCP Tool Schemas", () => {
     });
 
     it("should have pattern property", () => {
-      expect(LINT_REGEX_SCHEMA.inputSchema.properties).toHaveProperty("pattern");
+      expect(LINT_REGEX_SCHEMA.inputSchema.properties).toHaveProperty(
+        "pattern"
+      );
     });
 
     it("should have dialect property", () => {
-      expect(LINT_REGEX_SCHEMA.inputSchema.properties).toHaveProperty("dialect");
+      expect(LINT_REGEX_SCHEMA.inputSchema.properties).toHaveProperty(
+        "dialect"
+      );
       const dialect = LINT_REGEX_SCHEMA.inputSchema.properties.dialect;
       expect(dialect.enum).toContain("js");
       expect(dialect.enum).toContain("re2");
@@ -486,8 +494,8 @@ describe("effect-regex MCP Tool Schemas", () => {
     });
 
     it("should define constraints on string properties", () => {
-      const search = LIBRARY_LIST_SCHEMA.inputSchema.properties.filter
-        .properties.search;
+      const search =
+        LIBRARY_LIST_SCHEMA.inputSchema.properties.filter.properties.search;
       expect(search.maxLength).toBeDefined();
     });
   });

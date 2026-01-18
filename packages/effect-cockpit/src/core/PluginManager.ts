@@ -18,5 +18,5 @@ export class PluginManager extends Effect.Service<PluginManager>()(
 				getPlugins: Ref.get(plugins),
 			} satisfies PluginManagerApi;
 		}),
-	}
+	},
 ) {}

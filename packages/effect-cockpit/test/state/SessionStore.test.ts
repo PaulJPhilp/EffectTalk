@@ -1,5 +1,5 @@
-import { Effect, Layer } from "effect";
-import { describe, it, expect } from "vitest";
+import { Effect } from "effect";
+import { describe, expect, it } from "vitest";
 import { SessionStore } from "../../src/state/SessionStore.js";
 import type { Session } from "../../src/types/session.js";
 

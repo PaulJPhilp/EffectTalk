@@ -130,7 +130,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Failed to parse response: ${String(error)}`,
                   response: undefined,
-                  ...('message' in (error as any) ? { cause: error as Error } : {}),
+                  ...("message" in (error as any)
+                    ? { cause: error as Error }
+                    : {}),
                 })
             )
           );
@@ -149,7 +151,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Schema validation failed: ${String(error)}`,
                   response,
-                  ...('message' in (error as any) ? { cause: error as Error } : {}),
+                  ...("message" in (error as any)
+                    ? { cause: error as Error }
+                    : {}),
                 })
             )
           );
@@ -205,9 +209,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
 
             const errorBody = yield* Effect.try(() =>
               JSON.parse(errorText)
-            ).pipe(
-              Effect.orElse(() => Effect.succeed(errorText))
-            );
+            ).pipe(Effect.orElse(() => Effect.succeed(errorText)));
 
             return yield* Effect.fail(
               handleHttpError(rawResponse.status, errorBody)
@@ -220,7 +222,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Failed to parse response: ${String(error)}`,
                   response: undefined,
-                  ...('message' in (error as any) ? { cause: error as Error } : {}),
+                  ...("message" in (error as any)
+                    ? { cause: error as Error }
+                    : {}),
                 })
             )
           );
@@ -231,7 +235,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Schema validation failed: ${String(error)}`,
                   response,
-                  ...('message' in (error as any) ? { cause: error as Error } : {}),
+                  ...("message" in (error as any)
+                    ? { cause: error as Error }
+                    : {}),
                 })
             )
           );
@@ -274,7 +280,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                   new InvalidResponseError({
                     message: `Invalid request: ${String(error)}`,
                     response: apiRequest,
-                    ...('message' in (error as any) ? { cause: error as Error } : {}),
+                    ...("message" in (error as any)
+                      ? { cause: error as Error }
+                      : {}),
                   })
               )
             );
@@ -353,7 +361,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                     new InvalidResponseError({
                       message: `Invalid streaming request: ${String(error)}`,
                       response: apiRequest,
-                      ...('message' in (error as any) ? { cause: error as Error } : {}),
+                      ...("message" in (error as any)
+                        ? { cause: error as Error }
+                        : {}),
                     })
                 )
               );
@@ -391,9 +401,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
 
                 const errorBody = yield* Effect.try(() =>
                   JSON.parse(errorText)
-                ).pipe(
-                  Effect.orElse(() => Effect.succeed(errorText))
-                );
+                ).pipe(Effect.orElse(() => Effect.succeed(errorText)));
 
                 return yield* Effect.fail(
                   handleHttpError(response.status, errorBody)
@@ -446,7 +454,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                       Effect.mapError((error) => {
                         // Log malformed chunks for debugging without failing the stream
                         const errorMsg =
-                          error instanceof Error ? error.message : String(error);
+                          error instanceof Error
+                            ? error.message
+                            : String(error);
                         console.warn(
                           `[OpenRouter SSE] Malformed chunk skipped: ${errorMsg.substring(0, 100)}... | data: ${data.substring(0, 100)}...`
                         );
@@ -457,7 +467,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
 
                     // Use Effect.runSync to execute synchronously in stream context
                     const result = Effect.runSync(parsed);
-                    return result !== undefined ? Option.some(result) : Option.none();
+                    return result !== undefined
+                      ? Option.some(result)
+                      : Option.none();
                   }
 
                   return Option.none();
@@ -471,7 +483,9 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                         new InvalidResponseError({
                           message: `Stream chunk validation failed: ${String(error)}`,
                           response: chunk,
-                          ...('message' in (error as any) ? { cause: error as Error } : {}),
+                          ...("message" in (error as any)
+                            ? { cause: error as Error }
+                            : {}),
                         })
                     )
                   )

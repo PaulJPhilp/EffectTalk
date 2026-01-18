@@ -1,8 +1,8 @@
 import { Effect, Layer, Scope } from "effect";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { BlockService } from "../../src/core/BlockService.js";
-import { SessionStore } from "../../src/state/SessionStore.js";
 import { ProcessRuntime } from "../../src/core/ProcessRuntime.js";
+import { SessionStore } from "../../src/state/SessionStore.js";
 import type { Session } from "../../src/types/session.js";
 
 const initialSession: Session = {

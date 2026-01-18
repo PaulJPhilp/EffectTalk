@@ -1,5 +1,5 @@
-import React from "react";
 import { Box, Text } from "ink";
+import type React from "react";
 
 export const SimpleMarkdown: React.FC<{ children: string }> = ({
 	children,

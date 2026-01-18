@@ -48,10 +48,12 @@ export class InvalidArtifactTypeError extends Data.TaggedError(
 )<{
   readonly message: string;
   readonly content: string;
-  readonly hints?: {
-    readonly filename?: string | undefined;
-    readonly mimeType?: string | undefined;
-  } | undefined;
+  readonly hints?:
+    | {
+        readonly filename?: string | undefined;
+        readonly mimeType?: string | undefined;
+      }
+    | undefined;
   readonly cause?: Error | undefined;
 }> {}
 
