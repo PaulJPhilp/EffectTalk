@@ -1,6 +1,6 @@
 {
   "name": "effect-schema-utils",
-  "version": "0.5.0-beta",
+  "version": "0.5.1",
   "type": "module",
   "description": "Schema validation utilities for Effect - format and extract information from Effect.Schema parse errors",
   "main": "./dist/index.js",

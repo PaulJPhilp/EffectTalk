@@ -1,6 +1,6 @@
 {
   "name": "effect-supermemory",
-  "version": "0.5.0-beta",
+  "version": "0.5.1",
   "description": "Effect-native client abstractions for Supermemory long-term memory API",
   "private": false,
   "type": "module",

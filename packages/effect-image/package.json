@@ -1,6 +1,6 @@
 {
   "name": "effect-image",
-  "version": "0.5.0-beta",
+  "version": "0.5.1",
   "description": "Type-safe, Effect-native image processing and ML preprocessing library",
   "type": "module",
   "main": "./dist/index.js",

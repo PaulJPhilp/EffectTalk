@@ -1,6 +1,6 @@
 {
   "name": "effect-toml",
-  "version": "0.5.0-beta",
+  "version": "0.5.1",
   "description": "Type-safe, composable TOML parser for TypeScript using Effect",
   "type": "module",
   "main": "./dist/index.js",

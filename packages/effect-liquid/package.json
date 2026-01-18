@@ -1,6 +1,6 @@
 {
   "name": "effect-liquid",
-  "version": "0.5.0-beta",
+  "version": "0.5.1",
   "description": "Type-safe, composable Liquid templating engine for TypeScript using Effect",
   "type": "module",
   "main": "./dist/index.js",

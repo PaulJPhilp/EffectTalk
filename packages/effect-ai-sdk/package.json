@@ -1,6 +1,6 @@
 {
   "name": "effect-ai-sdk",
-  "version": "0.5.0-beta",
+  "version": "0.5.1",
   "description": "Effect-native wrapper around Vercel AI SDK v5 for type-safe AI operations",
   "private": true,
   "type": "module",

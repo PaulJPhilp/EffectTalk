@@ -1,6 +1,6 @@
 {
 	"name": "effect-cockpit",
-	"version": "0.5.0-beta",
+	"version": "0.5.1",
 	"description": "Next-generation application harness wrapping CLI tools and processes into a structured TUI",
 	"private": true,
 	"type": "module",
