@@ -18,7 +18,7 @@ async function getOTLPExporter(endpoint: string) {
       message: `Failed to load OTLP exporter. Make sure @opentelemetry/exporter-trace-otlp-http is installed.`,
       exporterType: "otlp",
       endpoint,
-      cause: err instanceof Error ? err : undefined,
+      ...(err instanceof Error ? { cause: err } : {}),
     });
   }
 }
@@ -104,7 +104,7 @@ export class TelemetryService extends Effect.Service<TelemetryServiceSchema>()(
               new InitializationError({
                 message: `Failed to initialize: ${err instanceof Error ? err.message : String(err)}`,
                 serviceName,
-                cause: err instanceof Error ? err : undefined,
+                ...(err instanceof Error ? { cause: err } : {}),
               })
             );
           }
@@ -125,7 +125,7 @@ export class TelemetryService extends Effect.Service<TelemetryServiceSchema>()(
               new TelemetryError({
                 message: `Shutdown failed: ${err instanceof Error ? err.message : String(err)}`,
                 operation: "shutdown",
-                cause: err instanceof Error ? err : undefined,
+                ...(err instanceof Error ? { cause: err } : {}),
               })
             );
           }

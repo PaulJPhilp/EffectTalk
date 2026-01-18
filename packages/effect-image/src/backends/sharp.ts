@@ -36,7 +36,7 @@ const toBackendError = (error: unknown, operation: string): BackendError => {
   return new BackendError({
     message: `Sharp ${operation} failed: ${message}`,
     backend: "sharp",
-    cause: error instanceof Error ? error : undefined,
+    ...(error instanceof Error ? { cause: error } : {}),
   });
 };
 
@@ -61,7 +61,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
               return yield* Effect.fail(
                 new ImageDecodeError({
                   message: "Buffer is empty or invalid",
-                  format,
+                  ...(format ? { format } : {}),
                 })
               );
             }
@@ -95,8 +95,8 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                   error instanceof Error ? error.message : String(error);
                 return new ImageDecodeError({
                   message: `Failed to decode image: ${message}`,
-                  format,
-                  cause: error instanceof Error ? error : undefined,
+                  ...(format ? { format } : {}),
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -152,7 +152,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                   error instanceof Error ? error.message : String(error);
                 return new ImageDecodeError({
                   message: `Failed to read metadata: ${message}`,
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -214,7 +214,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 return new ImageEncodeError({
                   message: `Failed to encode to ${format}: ${message}`,
                   targetFormat: format,
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -272,7 +272,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 return new ImageProcessError({
                   message: `Failed to resize image: ${message}`,
                   operation: "resize",
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -329,7 +329,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 return new ImageProcessError({
                   message: `Failed to crop image: ${message}`,
                   operation: "crop",
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -368,7 +368,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 return new ImageProcessError({
                   message: `Failed to convert to grayscale: ${message}`,
                   operation: "toGrayscale",
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -421,7 +421,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 return new ImageProcessError({
                   message: `Failed to rotate image: ${message}`,
                   operation: "rotate",
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -460,7 +460,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 return new ImageProcessError({
                   message: `Failed to flip image horizontally: ${message}`,
                   operation: "flipHorizontal",
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });
@@ -499,7 +499,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 return new ImageProcessError({
                   message: `Failed to flip image vertically: ${message}`,
                   operation: "flipVertical",
-                  cause: error instanceof Error ? error : undefined,
+                  ...(error instanceof Error ? { cause: error } : {}),
                 });
               },
             });

@@ -90,12 +90,12 @@ export class OpenRouterService extends Effect.Service<OpenRouterServiceSchema>()
               name: rawModel.name,
               provider: "openrouter" as const,
               contextLength: rawModel.context_length,
-              pricing: rawModel.pricing
-                ? {
-                    prompt: rawModel.pricing.prompt,
-                    completion: rawModel.pricing.completion,
-                  }
-                : undefined,
+              ...(rawModel.pricing && {
+                pricing: {
+                  prompt: rawModel.pricing.prompt,
+                  completion: rawModel.pricing.completion,
+                },
+              }),
             }));
 
             return models as readonly Model[];

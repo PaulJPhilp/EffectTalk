@@ -105,7 +105,7 @@ export const decodeFromFile = (path: string, format?: ImageFormat) =>
             message: `Failed to read file`,
             path,
             operation: "read",
-            cause: error instanceof Error ? error : undefined,
+            ...(error instanceof Error ? { cause: error } : {}),
           })
       )
     );
@@ -187,7 +187,7 @@ export const getMetadataFromFile = (path: string) =>
             message: `Failed to read file`,
             path,
             operation: "read",
-            cause: error instanceof Error ? error : undefined,
+            ...(error instanceof Error ? { cause: error } : {}),
           })
       )
     );
@@ -297,7 +297,7 @@ export const encodeToFile = (
             message: `Failed to write file`,
             path,
             operation: "write",
-            cause: error instanceof Error ? error : undefined,
+            ...(error instanceof Error ? { cause: error } : {}),
           })
       )
     );

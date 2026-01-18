@@ -25,7 +25,6 @@ function applyFilters(
         return yield* Effect.fail(
           new LiquidRenderError({
             message: `Unknown filter: ${filter.name}`,
-            cause: undefined,
           })
         );
       }
@@ -102,7 +101,6 @@ function renderNode(
           return yield* Effect.fail(
             new LiquidRenderError({
               message: `Unknown tag: ${tagNode.name}`,
-              cause: undefined,
             })
           );
         }
@@ -153,7 +151,6 @@ function renderNode(
           return yield* Effect.fail(
             new LiquidRenderError({
               message: "For tag executor not found",
-              cause: undefined,
             })
           );
         }
@@ -215,7 +212,6 @@ function renderNode(
           return yield* Effect.fail(
             new LiquidRenderError({
               message: "Assign tag executor not found",
-              cause: undefined,
             })
           );
         }
@@ -245,7 +241,6 @@ function renderNode(
           return yield* Effect.fail(
             new LiquidRenderError({
               message: "Capture tag executor not found",
-              cause: undefined,
             })
           );
         }
@@ -278,7 +273,6 @@ function renderNode(
           return yield* Effect.fail(
             new LiquidRenderError({
               message: "Include tag executor not found",
-              cause: undefined,
             })
           );
         }
@@ -304,7 +298,6 @@ function renderNode(
           return yield* Effect.fail(
             new LiquidRenderError({
               message: "Render tag executor not found",
-              cause: undefined,
             })
           );
         }
@@ -327,7 +320,6 @@ function renderNode(
         return yield* Effect.fail(
           new LiquidRenderError({
             message: `Unknown node type: ${(node as { type: string }).type}`,
-            cause: undefined,
           })
         );
       }

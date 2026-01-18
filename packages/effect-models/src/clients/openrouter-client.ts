@@ -73,7 +73,6 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
           case 429:
             return new RateLimitError({
               message: "Rate limit exceeded",
-              retryAfter: undefined,
             });
           case 400:
           case 422:
@@ -131,7 +130,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Failed to parse response: ${String(error)}`,
                   response: undefined,
-                  cause: error as Error,
+                  ...('message' in (error as any) ? { cause: error as Error } : {}),
                 })
             )
           );
@@ -150,7 +149,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Schema validation failed: ${String(error)}`,
                   response,
-                  cause: error as Error,
+                  ...('message' in (error as any) ? { cause: error as Error } : {}),
                 })
             )
           );
@@ -221,7 +220,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Failed to parse response: ${String(error)}`,
                   response: undefined,
-                  cause: error as Error,
+                  ...('message' in (error as any) ? { cause: error as Error } : {}),
                 })
             )
           );
@@ -232,7 +231,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 new InvalidResponseError({
                   message: `Schema validation failed: ${String(error)}`,
                   response,
-                  cause: error as Error,
+                  ...('message' in (error as any) ? { cause: error as Error } : {}),
                 })
             )
           );
@@ -275,7 +274,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                   new InvalidResponseError({
                     message: `Invalid request: ${String(error)}`,
                     response: apiRequest,
-                    cause: error as Error,
+                    ...('message' in (error as any) ? { cause: error as Error } : {}),
                   })
               )
             );
@@ -298,13 +297,13 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                 },
                 finishReason: choice.finish_reason,
               })),
-              usage: apiResponse.usage
-                ? {
-                    promptTokens: apiResponse.usage.prompt_tokens,
-                    completionTokens: apiResponse.usage.completion_tokens,
-                    totalTokens: apiResponse.usage.total_tokens,
-                  }
-                : undefined,
+              ...(apiResponse.usage && {
+                usage: {
+                  promptTokens: apiResponse.usage.prompt_tokens,
+                  completionTokens: apiResponse.usage.completion_tokens,
+                  totalTokens: apiResponse.usage.total_tokens,
+                },
+              }),
             };
 
             return response;
@@ -354,7 +353,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                     new InvalidResponseError({
                       message: `Invalid streaming request: ${String(error)}`,
                       response: apiRequest,
-                      cause: error as Error,
+                      ...('message' in (error as any) ? { cause: error as Error } : {}),
                     })
                 )
               );
@@ -472,7 +471,7 @@ export class OpenRouterClient extends Effect.Service<OpenRouterClient>()(
                         new InvalidResponseError({
                           message: `Stream chunk validation failed: ${String(error)}`,
                           response: chunk,
-                          cause: error as Error,
+                          ...('message' in (error as any) ? { cause: error as Error } : {}),
                         })
                     )
                   )

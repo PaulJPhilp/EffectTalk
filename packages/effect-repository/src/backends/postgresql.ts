@@ -141,7 +141,7 @@ export const PostgreSQLBackend = (
               message: `Failed to save blob: ${id}`,
               operation: "save",
               backend: backendName,
-              cause: err as Error,
+              ...(err && err.message ? { cause: err as Error } : {}),
             })
         )
       );
@@ -169,7 +169,7 @@ export const PostgreSQLBackend = (
               message: `Failed to get blob: ${id}`,
               operation: "get",
               backend: backendName,
-              cause: err as Error,
+              ...(err && err.message ? { cause: err as Error } : {}),
             })
         )
       );
@@ -212,7 +212,7 @@ export const PostgreSQLBackend = (
               message: `Failed to get metadata: ${id}`,
               operation: "getMetadata",
               backend: backendName,
-              cause: err as Error,
+              ...(err && err.message ? { cause: err as Error } : {}),
             })
         )
       );
@@ -260,7 +260,7 @@ export const PostgreSQLBackend = (
               message: `Failed to delete blob: ${id}`,
               operation: "delete",
               backend: backendName,
-              cause: err as Error,
+              ...(err && err.message ? { cause: err as Error } : {}),
             })
         )
       );
@@ -312,7 +312,7 @@ export const PostgreSQLBackend = (
               message: "Failed to list blobs",
               operation: "list",
               backend: backendName,
-              cause: err as Error,
+              ...(err && err.message ? { cause: err as Error } : {}),
             })
         )
       );

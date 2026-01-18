@@ -69,7 +69,7 @@ export class PromptStorageService extends Effect.Service<PromptStorageServiceSch
                 message: `Failed to load prompt: ${promptId}`,
                 operation: "read",
                 path: promptsDir,
-                cause: err as Error,
+                ...(err && err.message ? { cause: err as Error } : {}),
               });
             })
           );
@@ -120,7 +120,7 @@ export class PromptStorageService extends Effect.Service<PromptStorageServiceSch
                     message: `Failed to save prompt: ${template.id}`,
                     operation: "write",
                     path: promptsDir,
-                    cause: err as Error,
+                    ...(err && err.message ? { cause: err as Error } : {}),
                   })
               )
             );
@@ -136,7 +136,7 @@ export class PromptStorageService extends Effect.Service<PromptStorageServiceSch
                   message: "Failed to list prompts",
                   operation: "list",
                   path: promptsDir,
-                  cause: err as Error,
+                  ...(err && err.message ? { cause: err as Error } : {}),
                 })
             )
           );
@@ -195,7 +195,7 @@ export class PromptStorageService extends Effect.Service<PromptStorageServiceSch
                 message: `Failed to delete prompt: ${promptId}`,
                 operation: "delete",
                 path: promptsDir,
-                cause: err as Error,
+                ...(err && err.message ? { cause: err as Error } : {}),
               });
             })
           );

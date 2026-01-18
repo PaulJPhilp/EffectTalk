@@ -141,7 +141,7 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
                     message: `Failed to create directory: ${dir}`,
                     operation: "save",
                     backend: backendName,
-                    cause: err as Error,
+                    ...(err && err.message ? { cause: err as Error } : {}),
                   })
               )
             );
@@ -165,7 +165,7 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
                     message: `Failed to write blob: ${id}`,
                     operation: "save",
                     backend: backendName,
-                    cause: err as Error,
+                    ...(err && err.message ? { cause: err as Error } : {}),
                   })
               )
             );
@@ -193,7 +193,7 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
                     message: `Failed to write metadata: ${id}`,
                     operation: "save",
                     backend: backendName,
-                    cause: err as Error,
+                    ...(err && err.message ? { cause: err as Error } : {}),
                   })
               )
             );
@@ -314,7 +314,7 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
                     message: `Failed to delete blob: ${id}`,
                     operation: "delete",
                     backend: backendName,
-                    cause: err as Error,
+                    ...(err && err.message ? { cause: err as Error } : {}),
                   })
               )
             );

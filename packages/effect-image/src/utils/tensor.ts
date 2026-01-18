@@ -244,7 +244,7 @@ export const reshapeCHWtoHWC = (
   height: number,
   width: number
 ): TensorData => {
-  const [c, h, w] = tensor.shape;
+  const [c, h, w] = tensor.shape as [number, number, number];
 
   if (h !== height || w !== width) {
     throw new Error(
@@ -286,7 +286,7 @@ export const reshapeHWCtoCHW = (
   height: number,
   width: number
 ): TensorData => {
-  const [h, w, c] = tensor.shape;
+  const [h, w, c] = tensor.shape as [number, number, number];
 
   if (h !== height || w !== width) {
     throw new Error(
