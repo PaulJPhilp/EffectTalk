@@ -34,9 +34,9 @@ export const MetadataSchema: Schema.Schema<Metadata> = Schema.Record({
  * Schema for Frontmatter with optional testing fields
  */
 export const FrontmatterSchema: Schema.Schema<Frontmatter> = Schema.Struct({
-  expectedOutput: Schema.optional(Schema.String),
-  expectedError: Schema.optional(Schema.String),
-  needsReview: Schema.optional(Schema.Boolean),
+  expectedOutput: Schema.optionalWith(Schema.String, { exact: true }),
+  expectedError: Schema.optionalWith(Schema.String, { exact: true }),
+  needsReview: Schema.optionalWith(Schema.Boolean, { exact: true }),
 }).pipe(
   Schema.extend(Schema.Record({ key: Schema.String, value: JSONValueSchema }))
 );

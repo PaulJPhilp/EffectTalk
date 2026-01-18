@@ -152,8 +152,8 @@ export const PostgreSQLBackend = (
         sizeBytes: data.length,
         createdAt: now,
         updatedAt: now,
-        customMetadata: options?.customMetadata,
-      } satisfies BlobMetadata;
+        ...(options?.customMetadata !== undefined && { customMetadata: options.customMetadata }),
+        } satisfies BlobMetadata;
     });
 
   const get = (
@@ -192,10 +192,10 @@ export const PostgreSQLBackend = (
           sizeBytes: row.size_bytes,
           createdAt: row.created_at,
           updatedAt: row.updated_at,
-          customMetadata: row.custom_metadata ?? undefined,
-        },
-        data: row.data,
-      } satisfies Blob;
+          ...(row.custom_metadata !== null && row.custom_metadata !== undefined && { customMetadata: row.custom_metadata }),
+          },
+          data: row.data,
+          } satisfies Blob;
     });
 
   const getMetadata = (
@@ -234,8 +234,8 @@ export const PostgreSQLBackend = (
         sizeBytes: row.size_bytes,
         createdAt: row.created_at,
         updatedAt: row.updated_at,
-        customMetadata: row.custom_metadata ?? undefined,
-      } satisfies BlobMetadata;
+        ...(row.custom_metadata !== null && row.custom_metadata !== undefined && { customMetadata: row.custom_metadata }),
+        } satisfies BlobMetadata;
     });
 
   const exists = (id: BlobId): Effect.Effect<boolean, RepositoryError> =>
@@ -323,12 +323,13 @@ export const PostgreSQLBackend = (
         sizeBytes: row.size_bytes,
         createdAt: row.created_at,
         updatedAt: row.updated_at,
-        customMetadata: row.custom_metadata ?? undefined,
+        ...(row.custom_metadata !== null && row.custom_metadata !== undefined && { customMetadata: row.custom_metadata }),
       }));
 
+      const hasMoreResults = rows.length === limit;
       return {
         items,
-        nextCursor: rows.length === limit ? String(offset + limit) : undefined,
+        ...(hasMoreResults && { nextCursor: String(offset + limit) }),
       } satisfies ListResult;
     });
 

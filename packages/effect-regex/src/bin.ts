@@ -84,7 +84,8 @@ switch (command) {
       console.error("Usage: lint <pattern>");
       process.exit(1);
     }
-    const pattern = args[1];
+    // biome-ignore lint/style/noNonNullAssertion: args.length >= 2 is checked above
+    const pattern = args[1]!;
     try {
       // Validate pattern by constructing RegExp
       const regex = new RegExp(pattern);
@@ -211,18 +212,20 @@ switch (command) {
       console.error("\nExample: test '\\d{3}' test-cases.json");
       process.exit(1);
     }
-    const pattern = args[1];
-    const jsonFile = args[2];
+    // biome-ignore lint/style/noNonNullAssertion: args.length >= 3 is checked above
+    const pattern = args[1]!;
+    // biome-ignore lint/style/noNonNullAssertion: args.length >= 3 is checked above
+    const jsonFile = args[2]!;
 
     // Parse optional flags
     const dialectArg = args.find((arg) => arg.startsWith("--dialect="));
     const dialect = dialectArg
-      ? (dialectArg.split("=")[1] as "js" | "re2-sim" | "re2")
+      ? (dialectArg.split("=")[1]! as "js" | "re2-sim" | "re2")
       : "js";
 
     const timeoutArg = args.find((arg) => arg.startsWith("--timeout="));
     const timeout = timeoutArg
-      ? Number.parseInt(timeoutArg.split("=")[1], 10)
+      ? Number.parseInt(timeoutArg.split("=")[1]!, 10)
       : 100;
 
     try {
@@ -281,14 +284,15 @@ switch (command) {
                 timingMs: result.timingMs,
                 warnings: result.warnings,
                 failures: result.failures.map((failure) => ({
-                  caseIndex: failure.caseIndex,
-                  input: testCases[failure.caseIndex].input,
-                  expectedMatch: failure.expectedMatch,
-                  actualMatch: failure.matched,
-                  timedOut: failure.timedOut,
-                  durationMs: failure.durationMs,
-                  error: failure.error,
-                })),
+                   caseIndex: failure.caseIndex,
+                   // biome-ignore lint/style/noNonNullAssertion: caseIndex is guaranteed to be valid from testCases
+                   input: testCases[failure.caseIndex]!.input,
+                   expectedMatch: failure.expectedMatch,
+                   actualMatch: failure.matched,
+                   timedOut: failure.timedOut,
+                   durationMs: failure.durationMs,
+                   error: failure.error,
+                 })),
               },
               null,
               2

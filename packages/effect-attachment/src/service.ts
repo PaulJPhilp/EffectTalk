@@ -34,8 +34,8 @@ const blobMetadataToAttachment = (metadata: BlobMetadata): Attachment => {
     mimeType: metadata.mimeType,
     sizeBytes: metadata.sizeBytes,
     uploadedAt: metadata.createdAt,
-    chatId: customMeta.chatId,
-    userId: customMeta.userId,
+    ...(customMeta.chatId !== undefined && { chatId: customMeta.chatId }),
+    ...(customMeta.userId !== undefined && { userId: customMeta.userId }),
   };
 };
 
@@ -101,10 +101,11 @@ export const createAttachmentService = (
 
     // Extract save operation outside generator (before any type-problematic operations)
     // biome-ignore lint/suspicious/noExplicitAny: TypeScript Effect.gen type inference limitation
-    const saveBlob: any = backend.save(data, mimeType, {
-      id: options?.id,
-      customMetadata,
-    });
+    const saveOptions: Record<string, unknown> = { customMetadata };
+    if (options?.id !== undefined) {
+      saveOptions.id = options.id;
+    }
+    const saveBlob: any = backend.save(data, mimeType, saveOptions);
 
     return Effect.gen(function* () {
       // Validate filename
@@ -180,11 +181,16 @@ export const createAttachmentService = (
 
   const list = (options?: AttachmentListOptions) => {
     // Convert to repository options
-    const repoOptions = {
-      limit: options?.limit,
-      cursor: options?.cursor,
-      mimeTypePrefix: options?.mimeTypePrefix,
-    };
+    const repoOptions: Record<string, unknown> = {};
+    if (options?.limit !== undefined) {
+      repoOptions.limit = options.limit;
+    }
+    if (options?.cursor !== undefined) {
+      repoOptions.cursor = options.cursor;
+    }
+    if (options?.mimeTypePrefix !== undefined) {
+      repoOptions.mimeTypePrefix = options.mimeTypePrefix;
+    }
 
     // biome-ignore lint/suspicious/noExplicitAny: TypeScript Effect.gen type inference limitation
     const listBlobs: any = backend.list(repoOptions);

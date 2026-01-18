@@ -65,7 +65,7 @@ export const explain = (ast: Ast, options: ExplainOptions): ExplanationNode => {
           type: "characterClass",
           description: `Matches any character ${charDesc} the set: ${node.chars}`,
           pattern: chars,
-          notes: node.negated ? ["Negated character class"] : undefined,
+          ...(node.negated && { notes: ["Negated character class"] }),
         };
       }
 
@@ -81,7 +81,7 @@ export const explain = (ast: Ast, options: ExplainOptions): ExplanationNode => {
             ? `(?<${node.name}>${child.pattern})`
             : `(${child.pattern})`,
           children: [child],
-          notes: node.name ? [`Captured as: ${node.name}`] : undefined,
+          ...(node.name && { notes: [`Captured as: ${node.name}`] }),
         };
       }
 
@@ -105,9 +105,7 @@ export const explain = (ast: Ast, options: ExplainOptions): ExplanationNode => {
           description: quantifierDesc,
           pattern: `${qChild.pattern}${quantifierPattern}`,
           children: [qChild],
-          notes: node.lazy
-            ? ["Lazy matching (prefers shorter matches)"]
-            : undefined,
+          ...(node.lazy && { notes: ["Lazy matching (prefers shorter matches)"] }),
         };
       }
 

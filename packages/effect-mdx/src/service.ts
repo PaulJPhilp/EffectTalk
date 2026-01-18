@@ -129,17 +129,21 @@ export class MdxService extends Effect.Service<MdxServiceSchema>()(
         // Make stringify enumerable for compatibility
         Object.defineProperty(stringifyFn, "name", { value: "stringify" });
 
+        const excerptValue = result.excerpt;
+        const emptyValue = (result as any).empty;
+        const isEmptyValue = (result as any).isEmpty;
+
         return {
           data: result.data as UnknownRecord,
           content: result.content,
-          excerpt: result.excerpt,
-          empty: (result as any).empty,
-          isEmpty: (result as any).isEmpty,
+          ...(excerptValue !== undefined && { excerpt: excerptValue }),
+          ...(emptyValue !== undefined && { empty: emptyValue }),
+          ...(isEmptyValue !== undefined && { isEmpty: isEmptyValue }),
           language: result.language,
           matter: result.matter,
           orig: result.orig.toString(),
           stringify: stringifyFn,
-        };
+        } as ParsedFrontmatterResult;
       };
 
       const readMdxAndFrontmatter = (
@@ -380,13 +384,16 @@ export class MdxService extends Effect.Service<MdxServiceSchema>()(
                   | "boolean"
                   | "array"
                   | "object",
-                description: hasStringKey(value, "description")
-                  ? value.description
-                  : undefined,
-                required:
-                  "required" in value ? value.required === true : undefined,
-                default: "default" in value ? value.default : undefined,
               };
+              if (hasStringKey(value, "description")) {
+                paramDef.description = value.description;
+              }
+              if ("required" in value) {
+                paramDef.required = value.required === true;
+              }
+              if ("default" in value) {
+                paramDef.default = value.default;
+              }
               parameters[key] = paramDef;
             }
           }

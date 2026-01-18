@@ -153,7 +153,8 @@ export const testRegex = (
     const warnings: string[] = [];
 
     for (let i = 0; i < cases.length; i++) {
-      const testCase = cases[i];
+      // biome-ignore lint/style/noNonNullAssertion: i is in range [0, cases.length)
+      const testCase = cases[i]!;
       const caseStartTime = Date.now();
 
       // Run the test with timeout using Effect.promise
@@ -274,8 +275,9 @@ const runTestCase = (
 
     // For numbered groups
     for (let i = 1; i < match.length; i++) {
-      if (match[i] !== undefined) {
-        captures[i.toString()] = match[i];
+      const group = match[i];
+      if (group !== undefined) {
+        captures[i.toString()] = group;
       }
     }
 

@@ -37,11 +37,12 @@ const BlobMetadataSchema = S.Struct({
   sizeBytes: S.Number,
   createdAt: S.Date,
   updatedAt: S.Date,
-  customMetadata: S.optional(
+  customMetadata: S.optionalWith(
     S.Record({
       key: S.String,
       value: S.String,
-    })
+    }),
+    { exact: true }
   ),
 });
 
@@ -154,7 +155,7 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
               sizeBytes: data.length,
               createdAt: now,
               updatedAt: now,
-              customMetadata: options?.customMetadata,
+              ...(options?.customMetadata !== undefined && { customMetadata: options.customMetadata }),
             };
 
             // Write blob data
@@ -375,11 +376,11 @@ export class FileSystemBackend extends Effect.Service<FileSystemBackend>()(
             const limit = options?.limit ?? metadataList.length;
             const items = metadataList.slice(0, limit);
 
+            const hasMoreResults = metadataList.length > limit;
             return {
               items,
-              nextCursor:
-                metadataList.length > limit ? String(limit) : undefined,
-              totalCount: metadataList.length,
+              ...(hasMoreResults && { nextCursor: String(limit) }),
+              ...(metadataList.length > 0 && { totalCount: metadataList.length }),
             } satisfies ListResult;
           });
 

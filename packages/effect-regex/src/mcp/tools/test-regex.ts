@@ -34,11 +34,19 @@ export const handleTestRegex: ToolHandler<TestRegexArgs, any> = (
       timeoutMs = LIMITS.DEFAULT_TIMEOUT_MS,
     } = args;
 
-    const testCases: RegexTestCase[] = cases.map((c) => ({
-      input: c.input,
-      shouldMatch: c.shouldMatch ?? true,
-      expectedCaptures: c.expectedCaptures,
-    }));
+    const testCases: RegexTestCase[] = cases.map((c) => {
+      if (c.expectedCaptures !== undefined) {
+        return {
+          input: c.input,
+          shouldMatch: c.shouldMatch ?? true,
+          expectedCaptures: c.expectedCaptures,
+        };
+      }
+      return {
+        input: c.input,
+        shouldMatch: c.shouldMatch ?? true,
+      };
+    });
 
     return yield* testRegex(pattern, testCases, dialect as any, timeoutMs);
   }).pipe(

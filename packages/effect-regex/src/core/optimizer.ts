@@ -135,7 +135,8 @@ function constantFolding(ast: RegexAST): RegexAST {
 
       // If only one child remains, unwrap
       if (merged.length === 1) {
-        return merged[0];
+        // biome-ignore lint/style/noNonNullAssertion: merged.length === 1 is checked
+        return merged[0]!;
       }
 
       return { type: "seq", children: merged };
@@ -147,7 +148,7 @@ function constantFolding(ast: RegexAST): RegexAST {
     case "group":
       return {
         type: "group",
-        name: ast.name,
+        ...(ast.name !== undefined && { name: ast.name }),
         child: constantFolding(ast.child),
       };
 
@@ -160,7 +161,7 @@ function constantFolding(ast: RegexAST): RegexAST {
         child: constantFolding(ast.child),
         min: ast.min,
         max: ast.max,
-        lazy: ast.lazy,
+        ...(ast.lazy !== undefined && { lazy: ast.lazy }),
       };
 
     default:
@@ -206,7 +207,7 @@ function quantifierSimplification(ast: RegexAST): RegexAST {
           child: inner.child,
           min: combinedMin,
           max: combinedMax,
-          lazy: outer.lazy,
+          ...(outer.lazy !== undefined && { lazy: outer.lazy }),
         };
       }
 
@@ -220,7 +221,7 @@ function quantifierSimplification(ast: RegexAST): RegexAST {
         child: optimizedChild,
         min: ast.min,
         max: ast.max,
-        lazy: ast.lazy,
+        ...(ast.lazy !== undefined && { lazy: ast.lazy }),
       };
     }
 
@@ -239,7 +240,7 @@ function quantifierSimplification(ast: RegexAST): RegexAST {
     case "group":
       return {
         type: "group",
-        name: ast.name,
+        ...(ast.name !== undefined && { name: ast.name }),
         child: quantifierSimplification(ast.child),
       };
 
@@ -295,7 +296,8 @@ function characterClassMerging(ast: RegexAST): RegexAST {
         const newChildren = [merged, ...nonCharClasses];
 
         if (newChildren.length === 1) {
-          return newChildren[0];
+          // biome-ignore lint/style/noNonNullAssertion: newChildren.length === 1 is checked
+          return newChildren[0]!;
         }
 
         return { type: "alt", children: newChildren };
@@ -310,7 +312,7 @@ function characterClassMerging(ast: RegexAST): RegexAST {
     case "group":
       return {
         type: "group",
-        name: ast.name,
+        ...(ast.name !== undefined && { name: ast.name }),
         child: characterClassMerging(ast.child),
       };
 
@@ -323,7 +325,7 @@ function characterClassMerging(ast: RegexAST): RegexAST {
         child: characterClassMerging(ast.child),
         min: ast.min,
         max: ast.max,
-        lazy: ast.lazy,
+        ...(ast.lazy !== undefined && { lazy: ast.lazy }),
       };
 
     default:
@@ -365,7 +367,8 @@ function alternationDeduplication(ast: RegexAST): RegexAST {
 
       // If only one alternative remains, unwrap
       if (unique.length === 1) {
-        return unique[0];
+        // biome-ignore lint/style/noNonNullAssertion: unique.length === 1 is checked
+        return unique[0]!;
       }
 
       // Sort for deterministic output (already done by alt constructor, but ensure it)
@@ -381,7 +384,7 @@ function alternationDeduplication(ast: RegexAST): RegexAST {
     case "group":
       return {
         type: "group",
-        name: ast.name,
+        ...(ast.name !== undefined && { name: ast.name }),
         child: alternationDeduplication(ast.child),
       };
 
@@ -394,7 +397,7 @@ function alternationDeduplication(ast: RegexAST): RegexAST {
         child: alternationDeduplication(ast.child),
         min: ast.min,
         max: ast.max,
-        lazy: ast.lazy,
+        ...(ast.lazy !== undefined && { lazy: ast.lazy }),
       };
 
     default:

@@ -530,7 +530,7 @@ class Parser {
     return {
       type: "variable",
       name: path,
-      filters: filters.length > 0 ? filters : undefined,
+      ...(filters.length > 0 && { filters }),
       position: startToken.position,
       line: startToken.line,
       column: startToken.column,

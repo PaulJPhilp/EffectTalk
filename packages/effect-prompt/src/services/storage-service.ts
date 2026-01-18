@@ -77,21 +77,29 @@ export class PromptStorageService extends Effect.Service<PromptStorageServiceSch
           const metadata = result.metadata as PromptMetadata;
 
           // Transform storage format to PromptTemplate domain model
-          const template: PromptTemplate = {
-            id: promptId,
-            name: metadata.name ?? promptId,
-            description: metadata.description,
-            content: result.content,
-            metadata: {
-              version: metadata.version ?? "1.0.0",
-              created: new Date(metadata.created ?? Date.now()),
-              updated: new Date(metadata.updated ?? Date.now()),
-              tags: metadata.tags ?? [],
-              author: metadata.author,
-              extends: metadata.extends,
-              maxTokens: metadata.maxTokens,
-            },
-          };
+           const templateMetadata: any = {
+             version: metadata.version ?? "1.0.0",
+             created: new Date(metadata.created ?? Date.now()),
+             updated: new Date(metadata.updated ?? Date.now()),
+             tags: metadata.tags ?? [],
+           };
+           if (metadata.author !== undefined) {
+             templateMetadata.author = metadata.author;
+           }
+           if (metadata.extends !== undefined) {
+             templateMetadata.extends = metadata.extends;
+           }
+           if (metadata.maxTokens !== undefined) {
+             templateMetadata.maxTokens = metadata.maxTokens;
+           }
+
+           const template: PromptTemplate = {
+             id: promptId,
+             name: metadata.name ?? promptId,
+             ...(metadata.description !== undefined && { description: metadata.description }),
+             content: result.content,
+             metadata: templateMetadata,
+           };
 
           return template;
         });

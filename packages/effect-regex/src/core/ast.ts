@@ -417,7 +417,7 @@ export const cls = (chars: string, negated = false): CharClassNode => ({
 
 export const group = (child: Ast, name?: string): GroupNode => ({
   type: "group",
-  name,
+  ...(name !== undefined && { name }),
   child,
 });
 
@@ -432,9 +432,9 @@ export const tryCapture = (
   validation?: { description: string; pattern?: string }
 ): TryCaptureNode => ({
   type: "trycapture",
-  name,
+  ...(name !== undefined && { name }),
   child,
-  validation,
+  ...(validation !== undefined && { validation }),
 });
 
 export const backref = (target: string | number): BackrefNode => ({

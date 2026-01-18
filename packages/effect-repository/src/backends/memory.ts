@@ -59,14 +59,14 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
           }
 
           const now = new Date();
-          const metadata: BlobMetadata = {
-            id,
-            mimeType,
-            sizeBytes: data.length,
-            createdAt: now,
-            updatedAt: now,
-            customMetadata: options?.customMetadata,
-          };
+           const metadata: BlobMetadata = {
+             id,
+             mimeType,
+             sizeBytes: data.length,
+             createdAt: now,
+             updatedAt: now,
+             ...(options?.customMetadata !== undefined && { customMetadata: options.customMetadata }),
+           };
 
           const blob: Blob = {
             metadata,
@@ -156,11 +156,12 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
           // Apply limit
           const limit = options?.limit ?? items.length;
           const limitedItems = items.slice(0, limit);
+          const hasMoreResults = items.length > limit;
 
           return {
             items: limitedItems,
-            nextCursor: items.length > limit ? String(limit) : undefined,
-            totalCount: items.length,
+            ...(hasMoreResults && { nextCursor: String(limit) }),
+            ...(items.length > 0 && { totalCount: items.length }),
           } satisfies ListResult;
         });
 
