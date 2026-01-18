@@ -37,7 +37,7 @@ export const jsonBackend: Backend = {
           line,
           column,
           snippet,
-          cause: error instanceof Error ? error : undefined,
+          ...(error instanceof Error ? { cause: error } : {}),
         });
       },
     }),
@@ -59,7 +59,7 @@ export const jsonBackend: Backend = {
         return new StringifyError({
           message: errorMessage,
           reason,
-          cause: error instanceof Error ? error : undefined,
+          ...(error instanceof Error ? { cause: error } : {}),
         });
       },
     }),

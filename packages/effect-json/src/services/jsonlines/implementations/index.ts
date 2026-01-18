@@ -55,7 +55,7 @@ const parseLine = (
         line: 1, // Always 1 since we're parsing a single line
         column,
         snippet,
-        cause: error instanceof Error ? error : undefined,
+        ...(error instanceof Error ? { cause: error } : {}),
       });
     },
   });
@@ -114,7 +114,7 @@ export const stringifyBatch = (
         line: 1,
         column: 1,
         snippet: "",
-        cause: error instanceof Error ? error : undefined,
+        ...(error instanceof Error ? { cause: error } : {}),
       });
     },
   });
@@ -220,7 +220,7 @@ export const stringifyStream = <R>(
             line: 1,
             column: 1,
             snippet: "",
-            cause: error instanceof Error ? error : undefined,
+            ...(error instanceof Error ? { cause: error } : {}),
           });
         },
       })

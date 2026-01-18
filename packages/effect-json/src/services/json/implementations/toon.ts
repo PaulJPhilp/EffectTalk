@@ -39,7 +39,7 @@ export const toonBackend: Backend = {
           line,
           column,
           snippet,
-          cause: error instanceof Error ? error : undefined,
+          ...(error instanceof Error ? { cause: error } : {}),
         });
       },
     }),
@@ -54,7 +54,7 @@ export const toonBackend: Backend = {
         return new StringifyError({
           message: `TOON Stringify Error: ${errorMessage}`,
           reason: "unknown", // TOON specific errors might map to other reasons
-          cause: error instanceof Error ? error : undefined,
+          ...(error instanceof Error ? { cause: error } : {}),
         });
       },
     }),

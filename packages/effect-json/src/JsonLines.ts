@@ -100,7 +100,7 @@ export class JsonLinesService extends Effect.Service<JsonLinesService>()(
                   schemaPath: "",
                   expected: "valid JSON",
                   actual: valuesArray,
-                  cause: cause instanceof Error ? cause : undefined,
+                  ...(cause instanceof Error ? { cause } : {}),
                 });
               })
             );
@@ -151,7 +151,7 @@ export class JsonLinesService extends Effect.Service<JsonLinesService>()(
                       schemaPath: "",
                       expected: "valid JSON",
                       actual: value,
-                      cause: error instanceof Error ? error : undefined,
+                      ...(error instanceof Error ? { cause: error } : {}),
                     });
                   },
                 });
@@ -245,7 +245,7 @@ export const stringifyJsonLines = <A, I, R>(
           schemaPath: "",
           expected: "valid JSON",
           actual: valuesArray,
-          cause: cause instanceof Error ? cause : undefined,
+          ...(cause instanceof Error ? { cause } : {}),
         });
       })
     );
@@ -336,7 +336,7 @@ export const streamStringifyJsonLines = <A, I, R>(
               schemaPath: "",
               expected: "valid JSON",
               actual: value,
-              cause: error instanceof Error ? error : undefined,
+              ...(error instanceof Error ? { cause: error } : {}),
             });
           },
         });

@@ -23,7 +23,7 @@ export const mockBackend: Backend = {
           line: 0,
           column: 0,
           snippet: String(input),
-          cause: error instanceof Error ? error : undefined,
+          ...(error instanceof Error ? { cause: error } : {}),
         }),
     }),
 
@@ -34,7 +34,7 @@ export const mockBackend: Backend = {
         new StringifyError({
           message: error instanceof Error ? error.message : String(error),
           reason: "unknown",
-          cause: error instanceof Error ? error : undefined,
+          ...(error instanceof Error ? { cause: error } : {}),
         }),
     }),
 };
