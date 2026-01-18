@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "effect": ["../../node_modules/effect"],
+      "effect/*": ["../../node_modules/effect/*"],
+      "effect-json": ["../effect-json/dist/index.d.ts"]
+    }
+  },
+  "references": [
+    {
+      "path": "../effect-json"
+    }
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "__tests__"]
+}

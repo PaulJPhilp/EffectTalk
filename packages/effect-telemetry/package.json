@@ -1,0 +1,62 @@
+{
+  "name": "effect-telemetry",
+  "version": "1.0.0",
+  "description": "OpenTelemetry integration for Effect applications with automatic instrumentation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./instrumentation": {
+      "import": "./dist/instrumentation/index.js",
+      "types": "./dist/instrumentation/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "lint": "biome check --apply src __tests__",
+    "format:fix": "biome format --write src __tests__"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.7.0",
+    "@opentelemetry/core": "^1.16.0",
+    "@opentelemetry/resources": "^1.16.0",
+    "@opentelemetry/semantic-conventions": "^1.16.0",
+    "effect": "^3.19.14",
+    "effect-env": "workspace:*"
+  },
+  "peerDependencies": {
+    "@opentelemetry/sdk-node": "^0.47.0",
+    "@opentelemetry/sdk-trace-node": "^0.47.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.47.0"
+  },
+  "peerDependenciesMeta": {
+    "@opentelemetry/exporter-trace-otlp-http": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@effect/vitest": "^0.5.5",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.55.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
+  },
+  "keywords": [
+    "observability",
+    "opentelemetry",
+    "tracing",
+    "metrics",
+    "effect",
+    "instrumentation"
+  ],
+  "author": "Hume",
+  "license": "MIT"
+}

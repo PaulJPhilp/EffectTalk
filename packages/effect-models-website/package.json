@@ -1,0 +1,43 @@
+{
+  "name": "effect-models-website",
+  "version": "0.6.1",
+  "description": "Web application for effect-models",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run src/server.ts",
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format . --write",
+    "db:migrate": "drizzle-kit migrate",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@effect/platform": "^0.90.10",
+    "@effect/platform-bun": "^0.75.0",
+    "drizzle-orm": "^0.44.6",
+    "effect": "^3.19.9",
+    "effect-models": "workspace:*",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.7",
+    "@effect/vitest": "^0.25.1",
+    "@types/node": "^20.19.25",
+    "@types/pg": "^8.11.10",
+    "drizzle-kit": "^0.30.0",
+    "typescript": "^5.9.3",
+    "ultracite": "6.3.6",
+    "vitest": "^4.0.15"
+  },
+  "engines": {
+    "bun": ">=1.0",
+    "node": ">=18.18"
+  }
+}

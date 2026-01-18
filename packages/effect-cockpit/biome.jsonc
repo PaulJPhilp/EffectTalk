@@ -1,0 +1,6 @@
+{
+  "extends": ["../../biome.jsonc"],
+  "linter": {
+    "ignore": ["dist"]
+  }
+}

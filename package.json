@@ -1,0 +1,37 @@
+{
+  "name": "effecttalk",
+  "version": "0.0.0",
+  "private": true,
+  "description": "EffectTalk: Unified Effect-native monorepo for AI agent infrastructure and data foundation",
+  "type": "module",
+  "packageManager": "bun@1.1.33",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "bun run --filter '*' build",
+    "typecheck": "bun run --filter '*' typecheck",
+    "test": "bun run --filter 'effect-*' test",
+    "test:watch": "bun run --filter 'effect-*' test:watch",
+    "test:coverage": "bun run --filter 'effect-*' test:coverage",
+    "test:coverage:aggregate": "bun scripts/aggregate-coverage.ts",
+    "test:coverage:check": "bun scripts/check-coverage-threshold.ts",
+    "lint": "bun run --filter '*' lint",
+    "format": "bun run --filter '*' format",
+    "format:fix": "bun run --filter '*' format:fix",
+    "smoke:consumer": "bun scripts/consumer-smoke-test.ts",
+    "check:architecture": "bun scripts/architecture-check.ts",
+    "check:test-structure": "bun scripts/validate-test-structure.ts",
+    "check:dependencies": "bun scripts/validate-architecture.ts",
+    "verify": "bun run format:fix && bun run lint && bun run typecheck && bun run check:architecture && bun run check:test-structure && bun run build && bun run test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.7",
+    "@vitest/coverage-v8": "^4.0.16",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@effect/platform-node": "^0.103.0",
+    "ultracite": "^6.5.0"
+  }
+}

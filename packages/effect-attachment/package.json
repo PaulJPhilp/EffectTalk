@@ -1,0 +1,36 @@
+{
+  "name": "effect-attachment",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Chat attachment management for Effect",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format:fix": "biome format . --write"
+  },
+  "dependencies": {
+    "effect": "^3.19.9",
+    "effect-repository": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.7",
+    "@effect/vitest": "^0.25.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

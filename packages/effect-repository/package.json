@@ -1,0 +1,39 @@
+{
+  "name": "effect-repository",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Generic blob storage abstraction for Effect",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format:fix": "biome format . --write"
+  },
+  "dependencies": {
+    "effect": "^3.19.9",
+    "@effect/platform": "^0.90.10",
+    "@effect/sql": "^0.16.0",
+    "effect-json": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.7",
+    "@effect/platform-node": "^0.96.0",
+    "@effect/vitest": "^0.25.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

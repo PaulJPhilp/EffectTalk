@@ -1,0 +1,68 @@
+{
+  "name": "effect-html",
+  "version": "1.0.0",
+  "description": "A library for working with HTML using Effect",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "effect",
+    "html",
+    "cheerio",
+    "parsing",
+    "scraping",
+    "hume"
+  ],
+  "author": "Paul Philp",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulJPhilp/hume.git",
+    "directory": "packages/effect-html"
+  },
+  "bugs": {
+    "url": "https://github.com/PaulJPhilp/hume/issues"
+  },
+  "homepage": "https://github.com/PaulJPhilp/hume#readme",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format . --write"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "effect": "^3.19.9",
+    "effect-json": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.7",
+    "@effect/vitest": "^0.25.1",
+    "@types/node": "^20.19.25",
+    "typescript": "^5.9.3",
+    "ultracite": "6.3.6",
+    "vitest": "^4.0.15"
+  },
+  "engines": {
+    "bun": ">=1.0",
+    "node": ">=18.18"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "name": "effect-ai-sdk",
+  "version": "0.1.0",
+  "description": "Effect-native wrapper around Vercel AI SDK v5 for type-safe AI operations",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.1.33",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PaulJPhilp/mcluhan.git",
+    "directory": "packages/effect-ai-sdk"
+  },
+  "license": "MIT",
+  "author": "Paul J Philp",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check .",
+    "format": "biome format .",
+    "format:fix": "biome format --write ."
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.2",
+    "@ai-sdk/deepseek": "^2.0.2",
+    "@ai-sdk/google": "^3.0.2",
+    "@ai-sdk/groq": "^3.0.2",
+    "@ai-sdk/openai": "^3.0.2",
+    "@ai-sdk/perplexity": "^3.0.2",
+    "@ai-sdk/provider": "^3.0.1",
+    "@ai-sdk/xai": "^3.0.3",
+    "ai": "^6.0.27",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@ai-sdk/codemod": "^3.0.1",
+    "@biomejs/biome": "2.3.7",
+    "@effect/language-service": "^0.57.1",
+    "@effect/vitest": "^0.25.1",
+    "@types/node": "^20.19.27",
+    "effect": "^3.19.14",
+    "jscodeshift": "^17.3.0",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.9.3",
+    "ultracite": "6.3.6",
+    "vitest": "^4.0.16"
+  },
+  "peerDependencies": {
+    "effect": "^3.0.0"
+  }
+}
