@@ -1,22 +1,22 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "module": "ESNext",
-    "target": "ES2022",
-    "moduleResolution": "Bundler",
-    "lib": ["ES2022", "DOM"],
-    "jsx": "react-jsx",
-    "types": ["vitest/globals"],
-    "skipLibCheck": true,
-    "baseUrl": "./",
-    "paths": {
-      "~/*": ["src/*"],
-      "effect-cockpit/*": ["./src/*"]
-    },
-    "strictNullChecks": true,
-    "esModuleInterop": true
-  },
-  "include": ["src", "test", "vitest.config.ts"]
+	"compilerOptions": {
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"module": "ESNext",
+		"target": "ES2022",
+		"moduleResolution": "Bundler",
+		"lib": ["ES2022", "DOM"],
+		"jsx": "react-jsx",
+		"types": ["vitest/globals"],
+		"skipLibCheck": true,
+		"baseUrl": "./",
+		"paths": {
+			"~/*": ["src/*"],
+			"effect-cockpit/*": ["./src/*"]
+		},
+		"strictNullChecks": true,
+		"esModuleInterop": true
+	},
+	"include": ["src", "test", "vitest.config.ts"]
 }

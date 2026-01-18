@@ -1,12 +1,12 @@
-import { Effect } from "effect"
-import { EnvService } from "effect-env"
+import { Effect } from "effect";
+import { EnvService } from "effect-env";
 
 export type TelemetryConfigSchema = {
-  readonly isEnabled: () => Effect.Effect<boolean>
-  readonly getServiceName: () => Effect.Effect<string>
-  readonly getEndpoint: () => Effect.Effect<string>
-  readonly getExporterType: () => Effect.Effect<"otlp" | "console">
-}
+  readonly isEnabled: () => Effect.Effect<boolean>;
+  readonly getServiceName: () => Effect.Effect<string>;
+  readonly getEndpoint: () => Effect.Effect<string>;
+  readonly getExporterType: () => Effect.Effect<"otlp" | "console">;
+};
 
 export class TelemetryConfig extends Effect.Service<TelemetryConfigSchema>()(
   "TelemetryConfig",
@@ -16,13 +16,13 @@ export class TelemetryConfig extends Effect.Service<TelemetryConfigSchema>()(
     // biome-ignore lint/suspicious/noExplicitAny: Effect service dependency injection
     effect: Effect.gen(function* () {
       // biome-ignore lint/suspicious/noExplicitAny: EnvService is properly injected
-      const env = yield* (EnvService as any)
+      const env = yield* EnvService as any;
 
       return {
         isEnabled: () =>
           Effect.gen(function* () {
-            const value = yield* env.get("OTEL_ENABLED")
-            return value === "true" || value === "1"
+            const value = yield* env.get("OTEL_ENABLED");
+            return value === "true" || value === "1";
           }).pipe(Effect.orElse(() => Effect.succeed(true))), // Default: enabled
 
         getServiceName: () =>
@@ -37,10 +37,10 @@ export class TelemetryConfig extends Effect.Service<TelemetryConfigSchema>()(
 
         getExporterType: () =>
           Effect.gen(function* () {
-            const type = yield* env.get("OTEL_EXPORTER_TYPE")
-            return type === "otlp" ? "otlp" : "console"
+            const type = yield* env.get("OTEL_EXPORTER_TYPE");
+            return type === "otlp" ? "otlp" : "console";
           }).pipe(Effect.orElse(() => Effect.succeed("console" as const))),
-      } as TelemetryConfigSchema
+      } as TelemetryConfigSchema;
     }),
   }
 ) {}

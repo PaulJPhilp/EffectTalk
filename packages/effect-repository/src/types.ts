@@ -8,24 +8,24 @@
  * Unique identifier for blobs
  * Can be UUID, hash-based, or custom ID
  */
-export type BlobId = string
+export type BlobId = string;
 
 /**
  * Metadata for a stored blob
  */
 export interface BlobMetadata {
   /** Unique identifier */
-  readonly id: BlobId
+  readonly id: BlobId;
   /** MIME type (e.g., 'image/jpeg', 'application/pdf') */
-  readonly mimeType: string
+  readonly mimeType: string;
   /** Size in bytes */
-  readonly sizeBytes: number
+  readonly sizeBytes: number;
   /** Creation timestamp */
-  readonly createdAt: Date
+  readonly createdAt: Date;
   /** Last modified timestamp */
-  readonly updatedAt: Date
+  readonly updatedAt: Date;
   /** Optional custom metadata as key-value pairs */
-  readonly customMetadata?: Record<string, string>
+  readonly customMetadata?: Record<string, string>;
 }
 
 /**
@@ -33,9 +33,9 @@ export interface BlobMetadata {
  */
 export interface Blob {
   /** Metadata */
-  readonly metadata: BlobMetadata
+  readonly metadata: BlobMetadata;
   /** Binary content */
-  readonly data: Buffer
+  readonly data: Buffer;
 }
 
 /**
@@ -43,11 +43,11 @@ export interface Blob {
  */
 export interface SaveOptions {
   /** Explicit ID (if not provided, backend generates one) */
-  readonly id?: BlobId
+  readonly id?: BlobId;
   /** Custom metadata */
-  readonly customMetadata?: Record<string, string>
+  readonly customMetadata?: Record<string, string>;
   /** Whether to overwrite existing blob with same ID */
-  readonly overwrite?: boolean
+  readonly overwrite?: boolean;
 }
 
 /**
@@ -55,11 +55,11 @@ export interface SaveOptions {
  */
 export interface ListOptions {
   /** Maximum number of results */
-  readonly limit?: number
+  readonly limit?: number;
   /** Pagination cursor (backend-specific) */
-  readonly cursor?: string
+  readonly cursor?: string;
   /** Filter by MIME type prefix (e.g., 'image/') */
-  readonly mimeTypePrefix?: string
+  readonly mimeTypePrefix?: string;
 }
 
 /**
@@ -67,9 +67,9 @@ export interface ListOptions {
  */
 export interface ListResult {
   /** Blob metadata (without content) */
-  readonly items: readonly BlobMetadata[]
+  readonly items: readonly BlobMetadata[];
   /** Next page cursor (if more results available) */
-  readonly nextCursor?: string
+  readonly nextCursor?: string;
   /** Total count (if supported by backend) */
-  readonly totalCount?: number
+  readonly totalCount?: number;
 }

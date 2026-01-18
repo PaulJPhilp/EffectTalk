@@ -6,12 +6,8 @@
  * @module api
  */
 
-import type { RepositoryBackend } from "./backends/types.js"
-import type {
-  BlobId,
-  ListOptions,
-  SaveOptions,
-} from "./types.js"
+import type { RepositoryBackend } from "./backends/types.js";
+import type { BlobId, ListOptions, SaveOptions } from "./types.js";
 
 /**
  * Save blob to repository
@@ -27,7 +23,7 @@ export const save = (
   data: Buffer,
   mimeType: string,
   options?: SaveOptions
-) => backend.save(data, mimeType, options)
+) => backend.save(data, mimeType, options);
 
 /**
  * Get blob with data from repository
@@ -36,8 +32,7 @@ export const save = (
  * @param id - Blob identifier
  * @returns Effect yielding blob with data and metadata
  */
-export const get = (backend: RepositoryBackend, id: BlobId) =>
-  backend.get(id)
+export const get = (backend: RepositoryBackend, id: BlobId) => backend.get(id);
 
 /**
  * Get blob metadata without fetching binary data
@@ -47,7 +42,7 @@ export const get = (backend: RepositoryBackend, id: BlobId) =>
  * @returns Effect yielding blob metadata
  */
 export const getMetadata = (backend: RepositoryBackend, id: BlobId) =>
-  backend.getMetadata(id)
+  backend.getMetadata(id);
 
 /**
  * Check if blob exists
@@ -57,7 +52,7 @@ export const getMetadata = (backend: RepositoryBackend, id: BlobId) =>
  * @returns Effect yielding true if blob exists
  */
 export const exists = (backend: RepositoryBackend, id: BlobId) =>
-  backend.exists(id)
+  backend.exists(id);
 
 /**
  * Delete blob from repository
@@ -67,7 +62,7 @@ export const exists = (backend: RepositoryBackend, id: BlobId) =>
  * @returns Effect yielding void on success
  */
 export const deleteBlob = (backend: RepositoryBackend, id: BlobId) =>
-  backend.delete(id)
+  backend.delete(id);
 
 /**
  * List blobs with optional filtering and pagination
@@ -76,7 +71,5 @@ export const deleteBlob = (backend: RepositoryBackend, id: BlobId) =>
  * @param options - List options (limit, cursor, filters)
  * @returns Effect yielding paginated list result
  */
-export const list = (
-  backend: RepositoryBackend,
-  options?: ListOptions
-) => backend.list(options)
+export const list = (backend: RepositoryBackend, options?: ListOptions) =>
+  backend.list(options);

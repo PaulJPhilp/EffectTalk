@@ -15,7 +15,7 @@ export type {
   AttachmentListOptions,
   AttachmentListResult,
   AttachmentServiceConfig,
-} from "./types.js"
+} from "./types.js";
 
 // Errors
 export {
@@ -23,10 +23,10 @@ export {
   InvalidAttachmentError,
   AttachmentSizeLimitError,
   UnsupportedAttachmentTypeError,
-} from "./errors.js"
+} from "./errors.js";
 
 // Service
 export {
   createAttachmentService,
   type AttachmentServiceSchema,
-} from "./service.js"
+} from "./service.js";

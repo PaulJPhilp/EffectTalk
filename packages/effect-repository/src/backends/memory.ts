@@ -7,13 +7,13 @@
  * @module backends/memory
  */
 
-import { Effect, Ref } from "effect"
-import crypto from "node:crypto"
+import { Effect, Ref } from "effect";
+import crypto from "node:crypto";
 import {
   BlobAlreadyExistsError,
   BlobNotFoundError,
   RepositoryError,
-} from "../errors.js"
+} from "../errors.js";
 import type {
   Blob,
   BlobId,
@@ -21,10 +21,10 @@ import type {
   ListOptions,
   ListResult,
   SaveOptions,
-} from "../types.js"
-import type { RepositoryBackend } from "./types.js"
+} from "../types.js";
+import type { RepositoryBackend } from "./types.js";
 
-const defaultIdGenerator = (): string => crypto.randomUUID()
+const defaultIdGenerator = (): string => crypto.randomUUID();
 
 /**
  * InMemoryBackend Service
@@ -38,18 +38,14 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
   {
     accessors: true,
     effect: Effect.gen(function* () {
-      const storageRef = yield* Ref.make(new Map<BlobId, Blob>())
-      const backendName = "InMemory"
-      const idGenerator = defaultIdGenerator
+      const storageRef = yield* Ref.make(new Map<BlobId, Blob>());
+      const backendName = "InMemory";
+      const idGenerator = defaultIdGenerator;
 
-      const save = (
-        data: Buffer,
-        mimeType: string,
-        options?: SaveOptions
-      ) =>
+      const save = (data: Buffer, mimeType: string, options?: SaveOptions) =>
         Effect.gen(function* () {
-          const id = options?.id ?? idGenerator()
-          const storage = yield* Ref.get(storageRef)
+          const id = options?.id ?? idGenerator();
+          const storage = yield* Ref.get(storageRef);
 
           // Check if exists
           if (!options?.overwrite && storage.has(id)) {
@@ -59,10 +55,10 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
                 id,
                 backend: backendName,
               })
-            )
+            );
           }
 
-          const now = new Date()
+          const now = new Date();
           const metadata: BlobMetadata = {
             id,
             mimeType,
@@ -70,25 +66,22 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
             createdAt: now,
             updatedAt: now,
             customMetadata: options?.customMetadata,
-          }
+          };
 
           const blob: Blob = {
             metadata,
             data,
-          }
+          };
 
-          yield* Ref.update(
-            storageRef,
-            (map) => new Map(map).set(id, blob)
-          )
+          yield* Ref.update(storageRef, (map) => new Map(map).set(id, blob));
 
-          return metadata
-        })
+          return metadata;
+        });
 
       const get = (id: BlobId) =>
         Effect.gen(function* () {
-          const storage = yield* Ref.get(storageRef)
-          const blob = storage.get(id)
+          const storage = yield* Ref.get(storageRef);
+          const blob = storage.get(id);
 
           if (!blob) {
             return yield* Effect.fail(
@@ -97,16 +90,16 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
                 id,
                 backend: backendName,
               })
-            )
+            );
           }
 
-          return blob
-        })
+          return blob;
+        });
 
       const getMetadata = (id: BlobId) =>
         Effect.gen(function* () {
-          const storage = yield* Ref.get(storageRef)
-          const blob = storage.get(id)
+          const storage = yield* Ref.get(storageRef);
+          const blob = storage.get(id);
 
           if (!blob) {
             return yield* Effect.fail(
@@ -115,21 +108,21 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
                 id,
                 backend: backendName,
               })
-            )
+            );
           }
 
-          return blob.metadata
-        })
+          return blob.metadata;
+        });
 
       const exists = (id: BlobId) =>
         Effect.gen(function* () {
-          const storage = yield* Ref.get(storageRef)
-          return storage.has(id)
-        })
+          const storage = yield* Ref.get(storageRef);
+          return storage.has(id);
+        });
 
       const deleteBlob = (id: BlobId) =>
         Effect.gen(function* () {
-          const storage = yield* Ref.get(storageRef)
+          const storage = yield* Ref.get(storageRef);
 
           if (!storage.has(id)) {
             return yield* Effect.fail(
@@ -138,38 +131,38 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
                 id,
                 backend: backendName,
               })
-            )
+            );
           }
 
           yield* Ref.update(storageRef, (map) => {
-            const newMap = new Map(map)
-            newMap.delete(id)
-            return newMap
-          })
-        })
+            const newMap = new Map(map);
+            newMap.delete(id);
+            return newMap;
+          });
+        });
 
       const list = (options?: ListOptions) =>
         Effect.gen(function* () {
-          const storage = yield* Ref.get(storageRef)
-          let items = Array.from(storage.values()).map((blob) => blob.metadata)
+          const storage = yield* Ref.get(storageRef);
+          let items = Array.from(storage.values()).map((blob) => blob.metadata);
 
           // Apply MIME type prefix filter
           if (options?.mimeTypePrefix) {
             items = items.filter((meta) =>
               meta.mimeType.startsWith(options.mimeTypePrefix!)
-            )
+            );
           }
 
           // Apply limit
-          const limit = options?.limit ?? items.length
-          const limitedItems = items.slice(0, limit)
+          const limit = options?.limit ?? items.length;
+          const limitedItems = items.slice(0, limit);
 
           return {
             items: limitedItems,
             nextCursor: items.length > limit ? String(limit) : undefined,
             totalCount: items.length,
-          } satisfies ListResult
-        })
+          } satisfies ListResult;
+        });
 
       return {
         save,
@@ -178,9 +171,9 @@ export class InMemoryBackend extends Effect.Service<InMemoryBackend>()(
         exists,
         delete: deleteBlob,
         list,
-      } satisfies RepositoryBackend
+      } satisfies RepositoryBackend;
     }),
   }
 ) {}
 
-export const InMemoryBackendLayer = InMemoryBackend.Default
+export const InMemoryBackendLayer = InMemoryBackend.Default;

@@ -12,6 +12,12 @@
       }
     },
     {
+      "includes": ["**/dist/**"],
+      "linter": {
+        "enabled": false
+      }
+    },
+    {
       "includes": ["**/index.ts"],
       "linter": {
         "rules": {

@@ -7,14 +7,14 @@
  * @module backends/postgresql
  */
 
-import { Effect } from "effect"
-import type { SqlClient } from "@effect/sql"
-import crypto from "node:crypto"
+import { Effect } from "effect";
+import type { SqlClient } from "@effect/sql";
+import crypto from "node:crypto";
 import {
   BlobAlreadyExistsError,
   BlobNotFoundError,
   RepositoryError,
-} from "../errors.js"
+} from "../errors.js";
 import type {
   Blob,
   BlobId,
@@ -22,20 +22,20 @@ import type {
   ListOptions,
   ListResult,
   SaveOptions,
-} from "../types.js"
-import type { RepositoryBackend } from "./types.js"
+} from "../types.js";
+import type { RepositoryBackend } from "./types.js";
 
 /**
  * PostgreSQL Backend Configuration
  */
 export interface PostgreSQLBackendConfig {
   /** Table name (default: 'blobs') */
-  readonly tableName?: string
+  readonly tableName?: string;
   /** ID generation strategy */
-  readonly idGenerator?: () => string
+  readonly idGenerator?: () => string;
 }
 
-const defaultIdGenerator = (): string => crypto.randomUUID()
+const defaultIdGenerator = (): string => crypto.randomUUID();
 
 /**
  * PostgreSQL row type
@@ -56,13 +56,13 @@ const defaultIdGenerator = (): string => crypto.randomUUID()
  * CREATE INDEX idx_blobs_custom_metadata ON blobs USING GIN(custom_metadata);
  */
 interface BlobRow {
-  readonly id: string
-  readonly mime_type: string
-  readonly size_bytes: number
-  readonly created_at: Date
-  readonly updated_at: Date
-  readonly custom_metadata: Record<string, string> | null
-  readonly data: Buffer
+  readonly id: string;
+  readonly mime_type: string;
+  readonly size_bytes: number;
+  readonly created_at: Date;
+  readonly updated_at: Date;
+  readonly custom_metadata: Record<string, string> | null;
+  readonly data: Buffer;
 }
 
 /**
@@ -88,12 +88,10 @@ export const PostgreSQLBackend = (
   sql: SqlClient.SqlClient,
   config?: PostgreSQLBackendConfig
 ): RepositoryBackend => {
-  const {
-    tableName = "blobs",
-    idGenerator = defaultIdGenerator,
-  } = config ?? {}
+  const { tableName = "blobs", idGenerator = defaultIdGenerator } =
+    config ?? {};
 
-  const backendName = "PostgreSQL"
+  const backendName = "PostgreSQL";
 
   const save = (
     data: Buffer,
@@ -101,14 +99,14 @@ export const PostgreSQLBackend = (
     options?: SaveOptions
   ): Effect.Effect<BlobMetadata, BlobAlreadyExistsError | RepositoryError> =>
     Effect.gen(function* () {
-      const id = options?.id ?? idGenerator()
-      const now = new Date()
+      const id = options?.id ?? idGenerator();
+      const now = new Date();
 
       // Check if exists
       if (!options?.overwrite) {
         const existing = yield* sql<{ id: string }>`
           SELECT id FROM ${sql(tableName)} WHERE id = ${id}
-        `.pipe(Effect.catchAll(() => Effect.succeed([] as never[])))
+        `.pipe(Effect.catchAll(() => Effect.succeed([] as never[])));
 
         if (existing.length > 0) {
           return yield* Effect.fail(
@@ -117,7 +115,7 @@ export const PostgreSQLBackend = (
               id,
               backend: backendName,
             })
-          )
+          );
         }
       }
 
@@ -146,7 +144,7 @@ export const PostgreSQLBackend = (
               cause: err as Error,
             })
         )
-      )
+      );
 
       return {
         id,
@@ -155,10 +153,12 @@ export const PostgreSQLBackend = (
         createdAt: now,
         updatedAt: now,
         customMetadata: options?.customMetadata,
-      } satisfies BlobMetadata
-    })
+      } satisfies BlobMetadata;
+    });
 
-  const get = (id: BlobId): Effect.Effect<Blob, BlobNotFoundError | RepositoryError> =>
+  const get = (
+    id: BlobId
+  ): Effect.Effect<Blob, BlobNotFoundError | RepositoryError> =>
     Effect.gen(function* () {
       const rows = yield* sql<BlobRow>`
         SELECT * FROM ${sql(tableName)} WHERE id = ${id}
@@ -172,7 +172,7 @@ export const PostgreSQLBackend = (
               cause: err as Error,
             })
         )
-      )
+      );
 
       if (rows.length === 0) {
         return yield* Effect.fail(
@@ -181,10 +181,10 @@ export const PostgreSQLBackend = (
             id,
             backend: backendName,
           })
-        )
+        );
       }
 
-      const row = rows[0]!
+      const row = rows[0]!;
       return {
         metadata: {
           id: row.id,
@@ -195,10 +195,12 @@ export const PostgreSQLBackend = (
           customMetadata: row.custom_metadata ?? undefined,
         },
         data: row.data,
-      } satisfies Blob
-    })
+      } satisfies Blob;
+    });
 
-  const getMetadata = (id: BlobId): Effect.Effect<BlobMetadata, BlobNotFoundError | RepositoryError> =>
+  const getMetadata = (
+    id: BlobId
+  ): Effect.Effect<BlobMetadata, BlobNotFoundError | RepositoryError> =>
     Effect.gen(function* () {
       const rows = yield* sql<BlobRow>`
         SELECT id, mime_type, size_bytes, created_at, updated_at, custom_metadata
@@ -213,7 +215,7 @@ export const PostgreSQLBackend = (
               cause: err as Error,
             })
         )
-      )
+      );
 
       if (rows.length === 0) {
         return yield* Effect.fail(
@@ -222,10 +224,10 @@ export const PostgreSQLBackend = (
             id,
             backend: backendName,
           })
-        )
+        );
       }
 
-      const row = rows[0]!
+      const row = rows[0]!;
       return {
         id: row.id,
         mimeType: row.mime_type,
@@ -233,19 +235,21 @@ export const PostgreSQLBackend = (
         createdAt: row.created_at,
         updatedAt: row.updated_at,
         customMetadata: row.custom_metadata ?? undefined,
-      } satisfies BlobMetadata
-    })
+      } satisfies BlobMetadata;
+    });
 
   const exists = (id: BlobId): Effect.Effect<boolean, RepositoryError> =>
     Effect.gen(function* () {
       const rows = yield* sql<{ id: string }>`
         SELECT 1 FROM ${sql(tableName)} WHERE id = ${id}
-      `.pipe(Effect.catchAll(() => Effect.succeed([] as never[])))
+      `.pipe(Effect.catchAll(() => Effect.succeed([] as never[])));
 
-      return rows.length > 0
-    })
+      return rows.length > 0;
+    });
 
-  const deleteBlob = (id: BlobId): Effect.Effect<void, BlobNotFoundError | RepositoryError> =>
+  const deleteBlob = (
+    id: BlobId
+  ): Effect.Effect<void, BlobNotFoundError | RepositoryError> =>
     Effect.gen(function* () {
       const result = yield* sql`
         DELETE FROM ${sql(tableName)} WHERE id = ${id}
@@ -259,7 +263,7 @@ export const PostgreSQLBackend = (
               cause: err as Error,
             })
         )
-      )
+      );
 
       // Check if anything was deleted
       // biome-ignore lint/suspicious/noExplicitAny: SqlResult varies by driver
@@ -270,34 +274,34 @@ export const PostgreSQLBackend = (
             id,
             backend: backendName,
           })
-        )
+        );
       }
-    })
+    });
 
-  const list = (options?: ListOptions): Effect.Effect<ListResult, RepositoryError> =>
+  const list = (
+    options?: ListOptions
+  ): Effect.Effect<ListResult, RepositoryError> =>
     Effect.gen(function* () {
-      const limit = options?.limit ?? 100
-      const offset = options?.cursor ? Number.parseInt(options.cursor, 10) : 0
+      const limit = options?.limit ?? 100;
+      const offset = options?.cursor ? Number.parseInt(options.cursor, 10) : 0;
 
       // Build query with optional filters
       let queryStr = `
         SELECT id, mime_type, size_bytes, created_at, updated_at, custom_metadata
         FROM ${tableName}
-      `
+      `;
 
-      const whereConditions: string[] = []
+      const whereConditions: string[] = [];
 
       if (options?.mimeTypePrefix) {
-        whereConditions.push(
-          `mime_type LIKE '${options.mimeTypePrefix}%'`
-        )
+        whereConditions.push(`mime_type LIKE '${options.mimeTypePrefix}%'`);
       }
 
       if (whereConditions.length > 0) {
-        queryStr += ` WHERE ${whereConditions.join(" AND ")}`
+        queryStr += ` WHERE ${whereConditions.join(" AND ")}`;
       }
 
-      queryStr += ` ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`
+      queryStr += ` ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
 
       const rows = yield* sql<BlobRow>`
         ${sql.unsafe(queryStr)}
@@ -311,7 +315,7 @@ export const PostgreSQLBackend = (
               cause: err as Error,
             })
         )
-      )
+      );
 
       const items: BlobMetadata[] = rows.map((row: BlobRow) => ({
         id: row.id,
@@ -320,14 +324,13 @@ export const PostgreSQLBackend = (
         createdAt: row.created_at,
         updatedAt: row.updated_at,
         customMetadata: row.custom_metadata ?? undefined,
-      }))
+      }));
 
       return {
         items,
-        nextCursor:
-          rows.length === limit ? String(offset + limit) : undefined,
-      } satisfies ListResult
-    })
+        nextCursor: rows.length === limit ? String(offset + limit) : undefined,
+      } satisfies ListResult;
+    });
 
   return {
     save,
@@ -336,8 +339,8 @@ export const PostgreSQLBackend = (
     exists,
     delete: deleteBlob,
     list,
-  } satisfies RepositoryBackend
-}
+  } satisfies RepositoryBackend;
+};
 
 /**
  * PostgreSQL backend layer for dependency injection
@@ -351,4 +354,4 @@ export const PostgreSQLBackend = (
  * const myLayer = Layer.provide(PostgreSQLBackendLayer)
  * ```
  */
-export const PostgreSQLBackendLayer = null as any
+export const PostgreSQLBackendLayer = null as any;

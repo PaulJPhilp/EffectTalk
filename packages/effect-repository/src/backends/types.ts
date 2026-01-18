@@ -6,7 +6,7 @@
  * @module backends/types
  */
 
-import { Effect } from "effect"
+import { Effect } from "effect";
 import type {
   Blob,
   BlobId,
@@ -14,12 +14,12 @@ import type {
   ListOptions,
   ListResult,
   SaveOptions,
-} from "../types.js"
+} from "../types.js";
 import type {
   BlobNotFoundError,
   BlobAlreadyExistsError,
   RepositoryError,
-} from "../errors.js"
+} from "../errors.js";
 
 /**
  * RepositoryBackend - Interface for blob storage implementations
@@ -42,7 +42,7 @@ export interface RepositoryBackend {
     data: Buffer,
     mimeType: string,
     options?: SaveOptions
-  ) => Effect.Effect<BlobMetadata, BlobAlreadyExistsError | RepositoryError>
+  ) => Effect.Effect<BlobMetadata, BlobAlreadyExistsError | RepositoryError>;
 
   /**
    * Get blob by ID with binary data
@@ -54,7 +54,7 @@ export interface RepositoryBackend {
    */
   readonly get: (
     id: BlobId
-  ) => Effect.Effect<Blob, BlobNotFoundError | RepositoryError>
+  ) => Effect.Effect<Blob, BlobNotFoundError | RepositoryError>;
 
   /**
    * Get blob metadata without fetching binary data
@@ -68,7 +68,7 @@ export interface RepositoryBackend {
    */
   readonly getMetadata: (
     id: BlobId
-  ) => Effect.Effect<BlobMetadata, BlobNotFoundError | RepositoryError>
+  ) => Effect.Effect<BlobMetadata, BlobNotFoundError | RepositoryError>;
 
   /**
    * Check if blob exists
@@ -77,9 +77,7 @@ export interface RepositoryBackend {
    * @returns Effect yielding true if blob exists, false otherwise
    * @throws RepositoryError - On storage operation failure
    */
-  readonly exists: (
-    id: BlobId
-  ) => Effect.Effect<boolean, RepositoryError>
+  readonly exists: (id: BlobId) => Effect.Effect<boolean, RepositoryError>;
 
   /**
    * Delete blob by ID
@@ -91,7 +89,7 @@ export interface RepositoryBackend {
    */
   readonly delete: (
     id: BlobId
-  ) => Effect.Effect<void, BlobNotFoundError | RepositoryError>
+  ) => Effect.Effect<void, BlobNotFoundError | RepositoryError>;
 
   /**
    * List blobs with optional filtering and pagination
@@ -102,5 +100,5 @@ export interface RepositoryBackend {
    */
   readonly list: (
     options?: ListOptions
-  ) => Effect.Effect<ListResult, RepositoryError>
+  ) => Effect.Effect<ListResult, RepositoryError>;
 }

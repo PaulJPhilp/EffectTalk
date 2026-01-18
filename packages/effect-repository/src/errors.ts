@@ -6,8 +6,8 @@
  * @module errors
  */
 
-import { Data } from "effect"
-import type { BlobId } from "./types.js"
+import { Data } from "effect";
+import type { BlobId } from "./types.js";
 
 /**
  * BlobNotFoundError - Thrown when blob does not exist
@@ -15,9 +15,9 @@ import type { BlobId } from "./types.js"
  * Discriminator: "BlobNotFoundError"
  */
 export class BlobNotFoundError extends Data.TaggedError("BlobNotFoundError")<{
-  readonly message: string
-  readonly id: BlobId
-  readonly backend: string
+  readonly message: string;
+  readonly id: BlobId;
+  readonly backend: string;
 }> {}
 
 /**
@@ -28,9 +28,9 @@ export class BlobNotFoundError extends Data.TaggedError("BlobNotFoundError")<{
 export class BlobAlreadyExistsError extends Data.TaggedError(
   "BlobAlreadyExistsError"
 )<{
-  readonly message: string
-  readonly id: BlobId
-  readonly backend: string
+  readonly message: string;
+  readonly id: BlobId;
+  readonly backend: string;
 }> {}
 
 /**
@@ -39,16 +39,16 @@ export class BlobAlreadyExistsError extends Data.TaggedError(
  * Discriminator: "RepositoryError"
  */
 export class RepositoryError extends Data.TaggedError("RepositoryError")<{
-  readonly message: string
+  readonly message: string;
   readonly operation:
     | "save"
     | "get"
     | "delete"
     | "list"
     | "exists"
-    | "getMetadata"
-  readonly backend: string
-  readonly cause?: Error
+    | "getMetadata";
+  readonly backend: string;
+  readonly cause?: Error;
 }> {}
 
 /**
@@ -57,9 +57,9 @@ export class RepositoryError extends Data.TaggedError("RepositoryError")<{
  * Discriminator: "InvalidBlobError"
  */
 export class InvalidBlobError extends Data.TaggedError("InvalidBlobError")<{
-  readonly message: string
-  readonly reason: string
-  readonly receivedValue?: unknown
+  readonly message: string;
+  readonly reason: string;
+  readonly receivedValue?: unknown;
 }> {}
 
 /**
@@ -68,10 +68,10 @@ export class InvalidBlobError extends Data.TaggedError("InvalidBlobError")<{
  * Discriminator: "StorageQuotaError"
  */
 export class StorageQuotaError extends Data.TaggedError("StorageQuotaError")<{
-  readonly message: string
-  readonly backend: string
-  readonly quotaBytes?: number
-  readonly usedBytes?: number
+  readonly message: string;
+  readonly backend: string;
+  readonly quotaBytes?: number;
+  readonly usedBytes?: number;
 }> {}
 
 /**
@@ -80,7 +80,7 @@ export class StorageQuotaError extends Data.TaggedError("StorageQuotaError")<{
 export type RetryableRepositoryError =
   | RepositoryError
   | StorageQuotaError
-  | BlobAlreadyExistsError
+  | BlobAlreadyExistsError;
 
 /**
  * Union type for all repository errors
@@ -90,4 +90,4 @@ export type RepositoryErrorType =
   | BlobAlreadyExistsError
   | RepositoryError
   | InvalidBlobError
-  | StorageQuotaError
+  | StorageQuotaError;

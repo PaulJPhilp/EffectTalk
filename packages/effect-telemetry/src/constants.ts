@@ -19,7 +19,7 @@ export const SPANS = {
 
   // Generic
   HTTP_REQUEST: (method: string) => `http.${method.toLowerCase()}`,
-} as const
+} as const;
 
 /**
  * Attribute naming convention: {namespace}.{attribute_name}
@@ -44,4 +44,4 @@ export const ATTRIBUTES = {
   ERROR_TYPE: "error.type",
   ERROR_MESSAGE: "error.message",
   ERROR_STACK: "error.stack",
-} as const
+} as const;

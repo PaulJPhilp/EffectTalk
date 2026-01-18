@@ -15,7 +15,7 @@ export type {
   SaveOptions,
   ListOptions,
   ListResult,
-} from "./types.js"
+} from "./types.js";
 
 // Errors
 export {
@@ -26,7 +26,7 @@ export {
   StorageQuotaError,
   type RetryableRepositoryError,
   type RepositoryErrorType,
-} from "./errors.js"
+} from "./errors.js";
 
 // Schemas
 export {
@@ -40,28 +40,28 @@ export {
   type ListOptionsType,
   ListResultSchema,
   type ListResultType,
-} from "./schemas.js"
+} from "./schemas.js";
 
 // Backend interface
-export type { RepositoryBackend } from "./backends/types.js"
+export type { RepositoryBackend } from "./backends/types.js";
 
 // Backends
 export {
   InMemoryBackend,
   InMemoryBackendLayer,
-} from "./backends/index.js"
+} from "./backends/index.js";
 
 export {
   FileSystemBackend,
   FileSystemBackendLayer,
   type FileSystemBackendConfig,
-} from "./backends/index.js"
+} from "./backends/index.js";
 
 export {
   PostgreSQLBackend,
   PostgreSQLBackendLayer,
   type PostgreSQLBackendConfig,
-} from "./backends/index.js"
+} from "./backends/index.js";
 
 // API functions
 export {
@@ -71,7 +71,7 @@ export {
   exists,
   deleteBlob,
   list,
-} from "./api.js"
+} from "./api.js";
 
 // Testing utilities
 export {
@@ -79,4 +79,4 @@ export {
   createTestBlobMetadata,
   createTestBlobs,
   assertBlobMatches,
-} from "./testing.js"
+} from "./testing.js";

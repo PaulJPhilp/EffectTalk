@@ -1,19 +1,25 @@
-import { Effect } from "effect"
-import { TelemetryService, type TelemetryServiceSchema } from "../services/telemetry-service.js"
-import { MetricsService, type MetricsServiceSchema } from "../services/metrics-service.js"
-import { SPANS, ATTRIBUTES } from "../constants.js"
+import { Effect } from "effect";
+import {
+  TelemetryService,
+  type TelemetryServiceSchema,
+} from "../services/telemetry-service.js";
+import {
+  MetricsService,
+  type MetricsServiceSchema,
+} from "../services/metrics-service.js";
+import { SPANS, ATTRIBUTES } from "../constants.js";
 
 export interface LLMInstrumentationOptions {
-  readonly provider: string
-  readonly model: string
+  readonly provider: string;
+  readonly model: string;
 }
 
 interface LLMResponse {
   readonly usage?: {
-    readonly promptTokens: number
-    readonly completionTokens: number
-    readonly totalTokens: number
-  }
+    readonly promptTokens: number;
+    readonly completionTokens: number;
+    readonly totalTokens: number;
+  };
 }
 
 /**
@@ -27,55 +33,58 @@ interface LLMResponse {
  * - Request ID propagation via context
  */
 // biome-ignore lint/suspicious/noExplicitAny: Effect service dependency injection requires any
-export const instrumentLLMComplete = <A extends LLMResponse, E, R>(
-  options: LLMInstrumentationOptions
-  // biome-ignore lint/suspicious/noExplicitAny: Service requirements for flexible composition
-) => (effect: Effect.Effect<A, E, R>): Effect.Effect<A, E | any, R | any> =>
-  Effect.gen(function* () {
-    // biome-ignore lint/suspicious/noExplicitAny: Dynamic service resolution
-    const telemetry = (yield* TelemetryService) as any as TelemetryServiceSchema
-    // biome-ignore lint/suspicious/noExplicitAny: Dynamic service resolution
-    const metrics = (yield* MetricsService) as any as MetricsServiceSchema
+export const instrumentLLMComplete =
+  <A extends LLMResponse, E, R>(
+    options: LLMInstrumentationOptions
+    // biome-ignore lint/suspicious/noExplicitAny: Service requirements for flexible composition
+  ) =>
+  (effect: Effect.Effect<A, E, R>): Effect.Effect<A, E | any, R | any> =>
+    Effect.gen(function* () {
+      // biome-ignore lint/suspicious/noExplicitAny: Dynamic service resolution
+      const telemetry =
+        (yield* TelemetryService) as any as TelemetryServiceSchema;
+      // biome-ignore lint/suspicious/noExplicitAny: Dynamic service resolution
+      const metrics = (yield* MetricsService) as any as MetricsServiceSchema;
 
-    const startTime = Date.now()
+      const startTime = Date.now();
 
-    const result = yield* effect.pipe(
-      telemetry.withSpan(SPANS.LLM_COMPLETE, {
-        [ATTRIBUTES.LLM_PROVIDER]: options.provider,
-        [ATTRIBUTES.LLM_MODEL]: options.model,
-      }),
-      Effect.tap((response: any) => {
-        const duration = Date.now() - startTime
+      const result = yield* effect.pipe(
+        telemetry.withSpan(SPANS.LLM_COMPLETE, {
+          [ATTRIBUTES.LLM_PROVIDER]: options.provider,
+          [ATTRIBUTES.LLM_MODEL]: options.model,
+        }),
+        Effect.tap((response: any) => {
+          const duration = Date.now() - startTime;
 
-        return Effect.gen(function* () {
-          // Record latency
-          yield* metrics.recordLatency({
+          return Effect.gen(function* () {
+            // Record latency
+            yield* metrics.recordLatency({
+              operation: SPANS.LLM_COMPLETE,
+              durationMs: duration,
+            });
+
+            // Record tokens if available
+            if (response?.usage) {
+              yield* metrics.recordLLMTokens({
+                provider: options.provider,
+                model: options.model,
+                promptTokens: response.usage.promptTokens,
+                completionTokens: response.usage.completionTokens,
+                totalTokens: response.usage.totalTokens,
+              });
+            }
+          });
+        }),
+        Effect.tapError((error: any) => {
+          return metrics.recordError({
             operation: SPANS.LLM_COMPLETE,
-            durationMs: duration,
-          })
-
-          // Record tokens if available
-          if (response?.usage) {
-            yield* metrics.recordLLMTokens({
-              provider: options.provider,
-              model: options.model,
-              promptTokens: response.usage.promptTokens,
-              completionTokens: response.usage.completionTokens,
-              totalTokens: response.usage.totalTokens,
-            })
-          }
+            errorType: error?._tag ?? "UnknownError",
+          });
         })
-      }),
-      Effect.tapError((error: any) => {
-        return metrics.recordError({
-          operation: SPANS.LLM_COMPLETE,
-          errorType: error?._tag ?? "UnknownError",
-        })
-      })
-    )
+      );
 
-    return result
-  })
+      return result;
+    });
 
 /**
  * Instruments an LLM streaming operation with automatic tracing and metrics collection.
@@ -91,12 +100,13 @@ export const instrumentLLMStream =
   <A>(effect: Effect.Effect<A, E, R>): Effect.Effect<A, E | any, R | any> =>
     Effect.gen(function* () {
       // biome-ignore lint/suspicious/noExplicitAny: Dynamic service resolution
-      const telemetry = (yield* TelemetryService) as any as TelemetryServiceSchema
+      const telemetry =
+        (yield* TelemetryService) as any as TelemetryServiceSchema;
 
       return yield* effect.pipe(
         telemetry.withSpan(SPANS.LLM_STREAM, {
           [ATTRIBUTES.LLM_PROVIDER]: options.provider,
           [ATTRIBUTES.LLM_MODEL]: options.model,
         } as any)
-      )
-    })
+      );
+    });

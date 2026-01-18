@@ -22,8 +22,8 @@
  * @module testing
  */
 
-import crypto from "node:crypto"
-import type { BlobMetadata } from "./types.js"
+import crypto from "node:crypto";
+import type { BlobMetadata } from "./types.js";
 
 /**
  * Create test blob data as a Buffer
@@ -33,10 +33,10 @@ import type { BlobMetadata } from "./types.js"
  */
 export const createTestBlobData = (content?: string): Buffer => {
   if (content) {
-    return Buffer.from(content, "utf-8")
+    return Buffer.from(content, "utf-8");
   }
-  return crypto.randomBytes(1024) // 1KB of random data
-}
+  return crypto.randomBytes(1024); // 1KB of random data
+};
 
 /**
  * Create a test blob metadata object
@@ -49,7 +49,7 @@ export const createTestBlobData = (content?: string): Buffer => {
 export const createTestBlobMetadata = (
   overrides?: Partial<BlobMetadata>
 ): BlobMetadata => {
-  const now = new Date()
+  const now = new Date();
   return {
     id: crypto.randomUUID(),
     mimeType: "application/octet-stream",
@@ -58,8 +58,8 @@ export const createTestBlobMetadata = (
     updatedAt: now,
     customMetadata: {},
     ...overrides,
-  }
-}
+  };
+};
 
 /**
  * Create multiple test blobs for batch operations
@@ -72,16 +72,16 @@ export const createTestBlobs = (
   count: number,
   baseContent?: string
 ): Array<{
-  data: Buffer
-  mimeType: string
-  id: string
+  data: Buffer;
+  mimeType: string;
+  id: string;
 }> => {
   return Array.from({ length: count }, (_, i) => ({
     data: createTestBlobData(baseContent ? `${baseContent}-${i}` : undefined),
     mimeType: `application/test-${i}`,
     id: crypto.randomUUID(),
-  }))
-}
+  }));
+};
 
 /**
  * Assert that a blob matches expected properties
@@ -93,16 +93,16 @@ export const createTestBlobs = (
 export const assertBlobMatches = (
   blob: { data: Buffer; metadata: BlobMetadata },
   expected: {
-    dataSize?: number
-    mimeType?: string
-    hasCustomMetadata?: boolean
+    dataSize?: number;
+    mimeType?: string;
+    hasCustomMetadata?: boolean;
   }
 ): void => {
   if (expected.dataSize !== undefined) {
     if (blob.data.length !== expected.dataSize) {
       throw new Error(
         `Expected data size ${expected.dataSize}, got ${blob.data.length}`
-      )
+      );
     }
   }
 
@@ -110,17 +110,18 @@ export const assertBlobMatches = (
     if (blob.metadata.mimeType !== expected.mimeType) {
       throw new Error(
         `Expected mimeType ${expected.mimeType}, got ${blob.metadata.mimeType}`
-      )
+      );
     }
   }
 
   if (expected.hasCustomMetadata !== undefined) {
     const hasMetadata =
-      blob.metadata.customMetadata && Object.keys(blob.metadata.customMetadata).length > 0
+      blob.metadata.customMetadata &&
+      Object.keys(blob.metadata.customMetadata).length > 0;
     if (hasMetadata !== expected.hasCustomMetadata) {
       throw new Error(
         `Expected custom metadata ${expected.hasCustomMetadata ? "present" : "absent"}`
-      )
+      );
     }
   }
-}
+};

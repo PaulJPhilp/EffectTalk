@@ -4,26 +4,26 @@
  * @module types
  */
 
-import type { BlobId } from "effect-repository"
+import type { BlobId } from "effect-repository";
 
 /**
  * Attachment metadata without binary data
  */
 export interface Attachment {
   /** Unique identifier (same as blob ID) */
-  readonly id: BlobId
+  readonly id: BlobId;
   /** Original filename */
-  readonly filename: string
+  readonly filename: string;
   /** MIME type */
-  readonly mimeType: string
+  readonly mimeType: string;
   /** Size in bytes */
-  readonly sizeBytes: number
+  readonly sizeBytes: number;
   /** Upload timestamp */
-  readonly uploadedAt: Date
+  readonly uploadedAt: Date;
   /** Optional: Associated chat/conversation ID */
-  readonly chatId?: string
+  readonly chatId?: string;
   /** Optional: User ID who uploaded */
-  readonly userId?: string
+  readonly userId?: string;
 }
 
 /**
@@ -31,7 +31,7 @@ export interface Attachment {
  */
 export interface AttachmentWithData extends Attachment {
   /** Binary content */
-  readonly data: Buffer
+  readonly data: Buffer;
 }
 
 /**
@@ -39,11 +39,11 @@ export interface AttachmentWithData extends Attachment {
  */
 export interface UploadOptions {
   /** Associated chat ID */
-  readonly chatId?: string
+  readonly chatId?: string;
   /** User ID */
-  readonly userId?: string
+  readonly userId?: string;
   /** Custom attachment ID (if not provided, auto-generated) */
-  readonly id?: BlobId
+  readonly id?: BlobId;
 }
 
 /**
@@ -51,15 +51,15 @@ export interface UploadOptions {
  */
 export interface AttachmentListOptions {
   /** Filter by chat ID */
-  readonly chatId?: string
+  readonly chatId?: string;
   /** Filter by user ID */
-  readonly userId?: string
+  readonly userId?: string;
   /** Filter by MIME type prefix (e.g., 'image/') */
-  readonly mimeTypePrefix?: string
+  readonly mimeTypePrefix?: string;
   /** Maximum number of results */
-  readonly limit?: number
+  readonly limit?: number;
   /** Pagination cursor */
-  readonly cursor?: string
+  readonly cursor?: string;
 }
 
 /**
@@ -67,11 +67,11 @@ export interface AttachmentListOptions {
  */
 export interface AttachmentListResult {
   /** Attachments (without binary data) */
-  readonly items: readonly Attachment[]
+  readonly items: readonly Attachment[];
   /** Next page cursor */
-  readonly nextCursor?: string
+  readonly nextCursor?: string;
   /** Total count (if available) */
-  readonly totalCount?: number
+  readonly totalCount?: number;
 }
 
 /**
@@ -79,7 +79,7 @@ export interface AttachmentListResult {
  */
 export interface AttachmentServiceConfig {
   /** Maximum attachment size in bytes (default: 10MB) */
-  readonly maxSizeBytes?: number
+  readonly maxSizeBytes?: number;
   /** Allowed MIME types (empty = all allowed) */
-  readonly allowedMimeTypes?: readonly string[]
+  readonly allowedMimeTypes?: readonly string[];
 }

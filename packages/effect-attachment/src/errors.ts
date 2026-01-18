@@ -4,8 +4,8 @@
  * @module errors
  */
 
-import { Data } from "effect"
-import type { BlobId } from "effect-repository"
+import { Data } from "effect";
+import type { BlobId } from "effect-repository";
 
 /**
  * AttachmentNotFoundError - Thrown when attachment does not exist
@@ -15,8 +15,8 @@ import type { BlobId } from "effect-repository"
 export class AttachmentNotFoundError extends Data.TaggedError(
   "AttachmentNotFoundError"
 )<{
-  readonly message: string
-  readonly id: BlobId
+  readonly message: string;
+  readonly id: BlobId;
 }> {}
 
 /**
@@ -27,9 +27,9 @@ export class AttachmentNotFoundError extends Data.TaggedError(
 export class InvalidAttachmentError extends Data.TaggedError(
   "InvalidAttachmentError"
 )<{
-  readonly message: string
-  readonly reason: string
-  readonly filename?: string
+  readonly message: string;
+  readonly reason: string;
+  readonly filename?: string;
 }> {}
 
 /**
@@ -40,10 +40,10 @@ export class InvalidAttachmentError extends Data.TaggedError(
 export class AttachmentSizeLimitError extends Data.TaggedError(
   "AttachmentSizeLimitError"
 )<{
-  readonly message: string
-  readonly filename: string
-  readonly sizeBytes: number
-  readonly limitBytes: number
+  readonly message: string;
+  readonly filename: string;
+  readonly sizeBytes: number;
+  readonly limitBytes: number;
 }> {}
 
 /**
@@ -54,7 +54,7 @@ export class AttachmentSizeLimitError extends Data.TaggedError(
 export class UnsupportedAttachmentTypeError extends Data.TaggedError(
   "UnsupportedAttachmentTypeError"
 )<{
-  readonly message: string
-  readonly mimeType: string
-  readonly allowedTypes: readonly string[]
+  readonly message: string;
+  readonly mimeType: string;
+  readonly allowedTypes: readonly string[];
 }> {}

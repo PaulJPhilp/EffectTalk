@@ -4,19 +4,19 @@
  * @module backends
  */
 
-export type { RepositoryBackend } from "./types.js"
+export type { RepositoryBackend } from "./types.js";
 
-export { InMemoryBackend, InMemoryBackendLayer } from "./memory.js"
-export type { } from "./memory.js"
+export { InMemoryBackend, InMemoryBackendLayer } from "./memory.js";
+export type {} from "./memory.js";
 
 export {
   FileSystemBackend,
   FileSystemBackendLayer,
   type FileSystemBackendConfig,
-} from "./filesystem.js"
+} from "./filesystem.js";
 
 export {
   PostgreSQLBackend,
   PostgreSQLBackendLayer,
   type PostgreSQLBackendConfig,
-} from "./postgresql.js"
+} from "./postgresql.js";
