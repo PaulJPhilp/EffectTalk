@@ -4,8 +4,8 @@ import { MemoriesService, SearchService } from "effect-supermemory";
 import type {
   SlashCommandContext,
   SlashCommandResult,
-} from "@/tui-slash-commands";
-import type { TUIError } from "@/types";
+} from "@/tui-slash-commands.js";
+import type { TUIError } from "@/types.js";
 import {
   API_KEY_MIN_VISIBLE_LENGTH,
   API_KEY_VISIBLE_CHARS,
@@ -14,8 +14,8 @@ import {
   DEFAULT_SEARCH_TOP_K,
   SCORE_PERCENTAGE_MULTIPLIER,
   SUPERMEMORY_API_KEY_PREFIX,
-} from "../constants";
-import { type ConfigError, updateApiKey } from "./config";
+} from "@/constants.js";
+import { type ConfigError, updateApiKey } from "./config.js";
 
 /**
  * Mask API key for display - show only first and last 4 characters
@@ -146,6 +146,7 @@ export function handleSearchCommand(
     } else {
       for (let i = 0; i < memories.length; i++) {
         const memory = memories[i];
+        if (!memory) continue;
         const score = memory.score
           ? (memory.score * SCORE_PERCENTAGE_MULTIPLIER).toFixed(1)
           : "N/A";

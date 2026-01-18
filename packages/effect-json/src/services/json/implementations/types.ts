@@ -7,9 +7,9 @@
 import type { Effect } from "effect";
 import type { ParseError, StringifyError } from "../../../errors.js";
 
-export type StringifyOptions = {
+export interface StringifyOptions {
   readonly indent?: number;
-};
+}
 
 /**
  * Backend interface

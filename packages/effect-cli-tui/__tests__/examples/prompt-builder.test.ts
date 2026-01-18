@@ -24,19 +24,19 @@ import {
   getTemplate,
   templates,
   zeroShotTemplate,
-} from "../../examples/prompt-builder/templates";
+} from "../../examples/prompt-builder/templates.js";
 import type {
   BuiltPrompt,
   TemplateField,
   UserResponses,
-} from "../../examples/prompt-builder/types";
+} from "../../examples/prompt-builder/types.js";
 import {
   createInputValidator,
   validateField,
   validateGeneratedPrompt,
   validateResponses,
-} from "../../examples/prompt-builder/validation";
-import { MockCLI, MockSlashDependencies } from "../fixtures/test-layers";
+} from "../../examples/prompt-builder/validation.js";
+import { MockCLI, MockSlashDependencies } from "../fixtures/test-layers.js";
 
 describe("Prompt Builder Example - Workflow Tests", () => {
   beforeEach(() => {
@@ -76,11 +76,19 @@ describe("Prompt Builder Example - Workflow Tests", () => {
   describe("Template System", () => {
     it("should have all 5 templates available", () => {
       expect(templates).toHaveLength(5);
-      expect(templates.map((t) => t.name)).toContain("Zero-Shot");
-      expect(templates.map((t) => t.name)).toContain("One-Shot");
-      expect(templates.map((t) => t.name)).toContain("Instruction-First");
-      expect(templates.map((t) => t.name)).toContain("Contract-First");
-      expect(templates.map((t) => t.name)).toContain("Chain-of-Thought");
+      expect(templates.map((t: TemplateField) => t.name)).toContain(
+        "Zero-Shot"
+      );
+      expect(templates.map((t: TemplateField) => t.name)).toContain("One-Shot");
+      expect(templates.map((t: TemplateField) => t.name)).toContain(
+        "Instruction-First"
+      );
+      expect(templates.map((t: TemplateField) => t.name)).toContain(
+        "Contract-First"
+      );
+      expect(templates.map((t: TemplateField) => t.name)).toContain(
+        "Chain-of-Thought"
+      );
     });
 
     it("should get template by ID", () => {
@@ -520,7 +528,7 @@ describe("Prompt Builder Example - Workflow Tests", () => {
       const result = await Effect.runPromise(
         Effect.gen(function* () {
           const selectedTemplate = templates.find(
-            (t) => t.name === "NonExistent"
+            (t: TemplateField) => t.name === "NonExistent"
           );
           if (!selectedTemplate) {
             yield* displayError(

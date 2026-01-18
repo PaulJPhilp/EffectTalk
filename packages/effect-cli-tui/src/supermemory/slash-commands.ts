@@ -3,13 +3,13 @@ import { Console, Effect } from "effect";
 import {
   createEffectCliSlashCommand,
   type SlashCommandDefinition,
-} from "@/tui-slash-commands";
-import { TUIError } from "@/types";
+} from "@/tui-slash-commands.js";
+import { TUIError } from "@/types.js";
 import {
   handleAddCommand,
   handleApiKeyCommand,
   handleSearchCommand,
-} from "./commands";
+} from "./commands.js";
 
 /**
  * Supermemory slash commands
@@ -27,7 +27,8 @@ export const SUPERMEMORY_SLASH_COMMANDS: readonly SlashCommandDefinition[] = [
         case "api-key":
           return handleApiKeyCommand(context).pipe(
             Effect.mapError(
-              (error) => new TUIError("RenderError", error.message)
+              (error) =>
+                new TUIError({ reason: "RenderError", message: error.message })
             )
           );
         case "add":

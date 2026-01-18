@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { YamlBackend, YamlBackendLayer } from "./backends/YamlBackend.js";
-import { YamlParseError, YamlStringifyError } from "./errors.js";
+import { YamlBackend, YamlBackendLayer } from "@/effect-yaml/backends/YamlBackend.js";
+import { YamlParseError, YamlStringifyError } from "@/effect-yaml/errors.js";
 
 /**
  * Parses a YAML string into a JavaScript object.

@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 import YAML from "yaml";
-import { YamlParseError, YamlStringifyError } from "../errors.js";
+import { YamlParseError, YamlStringifyError } from "@/effect-yaml/errors.js";
 
 export class YamlBackend extends Effect.Service<YamlBackend>()("YamlBackend", {
   succeed: {

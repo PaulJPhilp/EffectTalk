@@ -1,8 +1,8 @@
 import * as cheerio from "cheerio";
 import { Effect } from "effect";
 import { JsonService, validateAgainstSchema } from "effect-json";
-import { HtmlError } from "./errors.js";
-import { HtmlMetadataSchema, type HtmlMetadata } from "./schemas.js";
+import { HtmlError } from "@/effect-html/errors.js";
+import { HtmlMetadataSchema, type HtmlMetadata } from "@/effect-html/schemas.js";
 
 export interface HtmlServiceSchema {
   /**

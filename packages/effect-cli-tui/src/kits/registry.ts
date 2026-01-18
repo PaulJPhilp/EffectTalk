@@ -5,9 +5,9 @@ import {
   DEFAULT_SLASH_COMMANDS,
   setGlobalSlashCommandRegistry,
   type SlashCommandDefinition,
-} from "@/tui-slash-commands";
-import { loadKitConfig, saveKitConfig } from "./config";
-import { KitError, type Kit, type KitRegistry } from "./types";
+} from "@/tui-slash-commands.js";
+import { loadKitConfig, saveKitConfig } from "./config.js";
+import { KitError, type Kit, type KitRegistry } from "./types.js";
 
 /**
  * Kit Registry Service

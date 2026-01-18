@@ -22,17 +22,19 @@ export function promptInput(
   validate?: (value: string) => boolean | string
 ): Effect.Effect<string, PromptError> {
   return Effect.tryPromise({
-    try: async () =>
-      await input({
-        message,
-        default: defaultValue,
-        validate: validate
-          ? (v) => {
-              const result = validate(v);
-              return result === true ? true : String(result);
-            }
-          : undefined,
-      }),
+    try: async () => {
+      const options: Parameters<typeof input>[0] = { message };
+      if (defaultValue !== undefined) {
+        options.default = defaultValue;
+      }
+      if (validate !== undefined) {
+        options.validate = (v: string) => {
+          const result = validate(v);
+          return result === true ? true : String(result);
+        };
+      }
+      return await input(options);
+    },
     catch: (error) =>
       new PromptError({
         message: `Prompt failed: ${String(error)}`,
@@ -69,15 +71,19 @@ export function promptChoice(
   defaultIndex?: number
 ): Effect.Effect<string, PromptError> {
   return Effect.tryPromise({
-    try: async () =>
-      await select({
+    try: async () => {
+      const options: Parameters<typeof select>[0] = {
         message,
         choices: choices.map((choice) => ({
           name: choice,
           value: choice,
         })),
-        default: defaultIndex !== undefined ? choices[defaultIndex] : undefined,
-      }),
+      };
+      if (defaultIndex !== undefined && choices[defaultIndex]) {
+        options.default = choices[defaultIndex];
+      }
+      return await select(options);
+    },
     catch: (error) =>
       new PromptError({
         message: `Choice prompt failed: ${String(error)}`,
@@ -93,17 +99,16 @@ export function promptPassword(
   validate?: (value: string) => boolean | string
 ): Effect.Effect<string, PromptError> {
   return Effect.tryPromise({
-    try: async () =>
-      await password({
-        message,
-        mask: "*",
-        validate: validate
-          ? (v) => {
-              const result = validate(v);
-              return result === true ? true : String(result);
-            }
-          : undefined,
-      }),
+    try: async () => {
+      const options: Parameters<typeof password>[0] = { message, mask: "*" };
+      if (validate !== undefined) {
+        options.validate = (v: string) => {
+          const result = validate(v);
+          return result === true ? true : String(result);
+        };
+      }
+      return await password(options);
+    },
     catch: (error) =>
       new PromptError({
         message: `Password prompt failed: ${String(error)}`,

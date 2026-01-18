@@ -126,7 +126,7 @@ describe("jsonBackend", () => {
     });
 
     it("should detect circular references", async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Testing circular reference
+
       const circular: any = { id: 1 };
       circular.self = circular;
 

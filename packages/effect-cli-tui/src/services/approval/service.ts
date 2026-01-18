@@ -1,8 +1,8 @@
 import { Console, Effect } from "effect";
 
-import { TUIHandler } from "@/tui";
-import type { TUIError } from "@/types";
-import { SEPARATOR_WIDTH } from "../../constants";
+import { TUIHandler } from "@/tui.js";
+import type { TUIError } from "@/types.js";
+import { SEPARATOR_WIDTH } from "@/constants.js";
 
 /**
  * Operation kind for approval requests

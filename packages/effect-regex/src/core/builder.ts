@@ -1,4 +1,4 @@
-import type { Ast } from "./ast.js";
+import type { Ast } from "@/effect-regex/core/ast.js";
 import {
   alt,
   anchor,
@@ -15,8 +15,8 @@ import {
   raw,
   seq,
   tryCapture,
-} from "./ast.js";
-import { emit as emitPattern } from "./emitter.js";
+} from "@/effect-regex/core/ast.js";
+import { emit as emitPattern } from "@/effect-regex/core/emitter.js";
 
 /**
  * Fluent builder for regex patterns

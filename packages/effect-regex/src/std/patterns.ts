@@ -1,4 +1,4 @@
-import { digit, RegexBuilder, word } from "../core/builder.js";
+import { digit, RegexBuilder, word } from "@/effect-regex/core/builder.js";
 
 /**
  * Standard library of vetted regex patterns

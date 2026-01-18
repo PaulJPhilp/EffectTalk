@@ -2,17 +2,17 @@
 import { Effect } from "effect";
 import { describe, expect, it, vi } from "vitest";
 
-import { displayInfo, displayWarning } from "@core/colors";
-import { display, displayError, displaySuccess } from "@core/display";
-import { DisplayService } from "@services/display";
-import { createTheme, mergeTheme } from "@services/theme/helpers";
-import { themes } from "@services/theme/presets";
+import { displayInfo, displayWarning } from "../../core/colors";
+import { display, displayError, displaySuccess } from "../../core/display";
+import { DisplayService } from "../services/display";
+import { createTheme, mergeTheme } from "../services/theme/helpers";
+import { themes } from "../services/theme/presets";
 import {
   ThemeService,
   getCurrentTheme,
   setTheme,
   withTheme,
-} from "@services/theme/service";
+} from "../services/theme/service";
 
 describe("ThemeService", () => {
   describe("Default Theme", () => {

@@ -8,9 +8,9 @@
 export type {
   RegexBuilderService as IRegexBuilderService,
   ValidationService as IValidationService,
-} from "./types.js";
+} from "@/effect-regex/services/types.js";
 
 export {
   RegexBuilderService,
   ValidationService,
-} from "./types.js";
+} from "@/effect-regex/services/types.js";

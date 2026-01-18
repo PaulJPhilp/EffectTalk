@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { defaultTheme } from "./presets";
-import type { Theme } from "./types";
+import { defaultTheme } from "./presets.js";
+import type { Theme } from "./types.js";
 
 /**
  * Module-level theme storage for synchronous access from display helpers.

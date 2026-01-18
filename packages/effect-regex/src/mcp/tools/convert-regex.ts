@@ -5,9 +5,9 @@
  */
 
 import { Effect } from "effect";
-import { convertDialect } from "../converter.js";
-import type { ConvertRegexArgs, ToolHandler } from "../types.js";
-import { toMcpError, validateInputEffect } from "../utils/validation.js";
+import { convertDialect } from "@/effect-regex/mcp/converter.js";
+import type { ConvertRegexArgs, ToolHandler } from "@/effect-regex/mcp/types.js";
+import { toMcpError, validateInputEffect } from "@/effect-regex/mcp/utils/validation.js";
 
 /**
  * Handle convert_regex tool requests

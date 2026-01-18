@@ -8,7 +8,7 @@ import { Box, Text } from "ink";
 import SelectInput from "ink-select-input";
 import type React from "react";
 
-import type { SelectOption } from "@/types";
+import type { SelectOption } from "../types.js";
 
 export interface SelectProps {
   message: string;
@@ -57,7 +57,7 @@ export const Select: React.FC<SelectProps> = ({
       <SelectInput
         indicatorComponent={(props: { isSelected?: boolean }) => (
           <Text
-            bold={props.isSelected}
+            bold={!!props.isSelected}
             color={props.isSelected ? "cyan" : "gray"}
           >
             {props.isSelected ? "> " : "  "}
@@ -70,7 +70,7 @@ export const Select: React.FC<SelectProps> = ({
         }) => (
           <Box flexDirection="column">
             <Text
-              bold={props.isSelected}
+              bold={!!props.isSelected}
               color={props.isSelected ? "cyan" : "white"}
             >
               {props.label}

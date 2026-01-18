@@ -1,5 +1,5 @@
 // biome-ignore assist/source/organizeImports: <>
-export { EffectCLI } from "./cli";
+export { EffectCLI } from "./cli.js";
 export {
   applyChalkStyle,
   displayHighlight,
@@ -7,7 +7,7 @@ export {
   displayListItem,
   displayMuted,
   displayWarning,
-} from "./core/colors";
+} from "./core/colors.js";
 export {
   display,
   displayError,
@@ -15,14 +15,14 @@ export {
   displayLines,
   displayOutput,
   displaySuccess,
-} from "./core/display";
+} from "./core/display.js";
 // Runtimes
 export {
   runWithCLI,
   runWithRuntime,
   runWithTUI,
   runWithTUIWithSlashCommands,
-} from "./runtime";
+} from "./runtime.js";
 export {
   DEFAULT_SLASH_COMMANDS,
   DEFAULT_SLASH_COMMAND_REGISTRY,
@@ -38,7 +38,7 @@ export {
   parseSlashCommand,
   setGlobalSlashCommandRegistry,
   withSlashCommands,
-} from "./tui-slash-commands";
+} from "./tui-slash-commands.js";
 export type {
   ParsedSlashCommand,
   SessionHistoryEntry,
@@ -46,10 +46,10 @@ export type {
   SlashCommandDefinition,
   SlashCommandRegistry,
   SlashCommandResult,
-} from "./tui-slash-commands";
-export { displayBox, displayPanel } from "./ui/boxes/box";
-export { Title } from "./ui/boxes/box-style";
-export type { BoxStyle } from "./ui/boxes/box-style";
+} from "./tui-slash-commands.js";
+export { displayBox, displayPanel } from "./ui/boxes/box.js";
+export { Title } from "./ui/boxes/box-style.js";
+export type { BoxStyle } from "./ui/boxes/box-style.js";
 // Panels
 export {
   KeyValuePanel,
@@ -57,7 +57,7 @@ export {
   TablePanel,
   renderKeyValuePanel,
   renderTablePanel,
-} from "./ui/panels";
+} from "./ui/panels/index.js";
 export type {
   KeyValueItem,
   KeyValuePanelProps,
@@ -65,41 +65,44 @@ export type {
   PanelTableColumn,
   TablePanelProps,
   TableRow,
-} from "./ui/panels";
+} from "./ui/panels/index.js";
 // Layout
-export { TUILayout } from "./ui/layout/TUILayout";
-export type { OutputItem, TUILayoutProps } from "./ui/layout/TUILayout";
-export type { SpinnerOptions } from "./ui/progress/spinner";
+export { TUILayout } from "./ui/layout/TUILayout.js";
+export type { OutputItem, TUILayoutProps } from "./ui/layout/TUILayout.js";
+export type { SpinnerOptions } from "./ui/progress/spinner.js";
 // Progress indicators
 export {
   spinnerEffect,
   startSpinner,
   stopSpinner,
   updateSpinner,
-} from "./ui/progress/spinner";
-export type { TableColumn, TableOptions } from "./ui/tables/table";
+} from "./ui/progress/spinner.js";
+export type { TableColumn, TableOptions } from "./ui/tables/table.js";
 // Tables
-export { displayTable } from "./ui/tables/table";
+export { displayTable } from "./ui/tables/table.js";
 
 // TUI
-export { TUIHandler } from "./tui";
+export { TUIHandler } from "./tui.js";
 
 // Supermemory integration
-export * from "./supermemory";
+export * from "./supermemory/index.js";
 
 // Kits system
-export * from "./kits";
+export * from "./kits/index.js";
 
 // Agent harness services
-export { ApprovalService } from "./services/approval";
-export type { OperationKind, OperationSummary } from "./services/approval";
-export { ToolCallLogService } from "./services/logs";
-export type { ToolCallLogEntry } from "./services/logs";
-export { ModeService } from "./services/mode";
-export type { Mode } from "./services/mode";
+export { ApprovalService } from "./services/approval/index.js";
+export type {
+  OperationKind,
+  OperationSummary,
+} from "./services/approval/index.js";
+export { ToolCallLogService } from "./services/logs/index.js";
+export type { ToolCallLogEntry } from "./services/logs/index.js";
+export { ModeService } from "./services/mode/index.js";
+export type { Mode } from "./services/mode/index.js";
 
 // Utilities
-export { makeUnifiedDiff } from "./utils/diff";
+export { makeUnifiedDiff } from "./utils/diff.js";
 export {
   getCurrentBranch,
   getGitRoot,

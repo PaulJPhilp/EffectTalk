@@ -5,9 +5,9 @@
  */
 
 import { Effect } from "effect";
-import { type RegexTestCase, testRegex } from "../../core/tester.js";
-import { LIMITS, type TestRegexArgs, type ToolHandler } from "../types.js";
-import { toMcpError, validateInputEffect } from "../utils/validation.js";
+import { type RegexTestCase, testRegex } from "@/effect-regex/core/tester.js";
+import { LIMITS, type TestRegexArgs, type ToolHandler } from "@/effect-regex/mcp/types.js";
+import { toMcpError, validateInputEffect } from "@/effect-regex/mcp/utils/validation.js";
 
 /**
  * Handle test_regex tool requests

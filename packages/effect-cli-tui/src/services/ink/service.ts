@@ -1,9 +1,9 @@
-import { isError } from "@core/error-utils";
+import { isError } from "@core/error-utils.js";
 import { Effect } from "effect";
 import { render } from "ink";
 import type React from "react";
-import type { InkService as InkServiceApi } from "./api";
-import { InkError } from "./errors";
+import type { InkService as InkServiceApi } from "./api.js";
+import { InkError } from "./errors.js";
 
 /**
  * Ink service for rendering React/Ink components
@@ -34,20 +34,20 @@ export class InkService extends Effect.Service<InkService>()("app/InkService", {
             Effect.try({
               try: () => render(component),
               catch: (err: unknown) =>
-                new InkError(
-                  "RenderError",
-                  `Unable to display the interactive component. ${isError(err) ? err.message : String(err)}\n\nThis may be due to terminal compatibility issues. Please try again or check your terminal settings.`
-                ),
+                new InkError({
+                  reason: "RenderError",
+                  message: `Unable to display the interactive component. ${isError(err) ? err.message : String(err)}\n\nThis may be due to terminal compatibility issues. Please try again or check your terminal settings.`
+                }),
             }),
             // Use: Wait for component to exit
             (instance) =>
               Effect.tryPromise({
                 try: () => instance.waitUntilExit(),
                 catch: (err: unknown) =>
-                  new InkError(
-                    "RenderError",
-                    `Component execution failed. ${isError(err) ? err.message : String(err)}`
-                  ),
+                  new InkError({
+                    reason: "RenderError",
+                    message: `Component execution failed. ${isError(err) ? err.message : String(err)}`
+                  }),
               }),
             // Release: ALWAYS unmount, even on error/interruption
             (instance) =>
@@ -98,10 +98,10 @@ export class InkService extends Effect.Service<InkService>()("app/InkService", {
                   // Prevent default SIGINT behavior (don't exit immediately)
                   // The error will be handled by the Effect error channel
                   reject(
-                    new InkError(
-                      "TerminalError",
-                      "Operation cancelled by user (Ctrl+C)"
-                    )
+                    new InkError({
+                      reason: "TerminalError",
+                      message: "Operation cancelled by user (Ctrl+C)"
+                    })
                   );
                 }
               };
@@ -117,10 +117,10 @@ export class InkService extends Effect.Service<InkService>()("app/InkService", {
                   if (sigintHandler) {
                     process.removeListener("SIGINT", sigintHandler);
                   }
-                  return new InkError(
-                    "RenderError",
-                    `Unable to display the interactive component. ${isError(err) ? err.message : String(err)}\n\nThis may be due to terminal compatibility issues. Please try again or check your terminal settings.`
-                  );
+                  return new InkError({
+                    reason: "RenderError",
+                    message: `Unable to display the interactive component. ${isError(err) ? err.message : String(err)}\n\nThis may be due to terminal compatibility issues. Please try again or check your terminal settings.`
+                  });
                 },
               });
 
@@ -133,10 +133,10 @@ export class InkService extends Effect.Service<InkService>()("app/InkService", {
                 catch: (err: unknown) =>
                   err instanceof InkError
                     ? err
-                    : new InkError(
-                        "ComponentError",
-                        `Component execution failed. ${isError(err) ? err.message : String(err)}`
-                      ),
+                    : new InkError({
+                        reason: "ComponentError",
+                        message: `Component execution failed. ${isError(err) ? err.message : String(err)}`
+                      }),
               }),
             // Release: ALWAYS unmount and clean up SIGINT handler
             ({ instance, sigintHandler }) =>

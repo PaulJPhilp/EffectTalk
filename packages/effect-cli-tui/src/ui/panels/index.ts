@@ -7,7 +7,7 @@ export {
   KeyValuePanel,
   Panel,
   TablePanel,
-} from "./Panel";
+} from "./Panel.js";
 export type {
   KeyValueItem,
   KeyValuePanelProps,
@@ -15,5 +15,5 @@ export type {
   PanelTableColumn,
   TablePanelProps,
   TableRow,
-} from "./Panel";
-export { renderKeyValuePanel, renderTablePanel } from "./render";
+} from "./Panel.js";
+export { renderKeyValuePanel, renderTablePanel } from "./render.js";

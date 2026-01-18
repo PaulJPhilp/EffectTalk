@@ -5,7 +5,13 @@
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
-    "composite": true
+    "composite": true,
+    "baseUrl": "../../",
+    "paths": {
+      "@/effect-regex/*": ["./packages/effect-regex/src/*"],
+      "effect": ["./node_modules/effect"],
+      "effect/*": ["./node_modules/effect/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "__tests__"]

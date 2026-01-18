@@ -45,7 +45,7 @@
     "supermemory": "4.0.0",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
-    "ultracite": "6.3.6",
+    "ultracite": "^6.5.0",
     "vitest": "^4.0.16"
   },
   "dependencies": {

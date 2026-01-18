@@ -30,7 +30,7 @@ import {
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
 import { Effect } from "effect";
-import { ALL_TOOLS } from "./schemas.js";
+import { ALL_TOOLS } from "@/effect-regex/mcp/schemas.js";
 import {
   handleBuildRegex,
   handleConvertRegex,
@@ -39,7 +39,7 @@ import {
   handleLintRegex,
   handleOptimizePattern,
   handleTestRegex,
-} from "./tools/index.js";
+} from "@/effect-regex/mcp/tools/index.js";
 
 /**
  * Create and configure the MCP server

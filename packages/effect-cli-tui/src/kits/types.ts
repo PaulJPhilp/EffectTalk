@@ -1,6 +1,6 @@
 import { Data, type Effect } from "effect";
 
-import type { SlashCommandDefinition } from "@/tui-slash-commands";
+import type { SlashCommandDefinition } from "@/tui-slash-commands.js";
 
 /**
  * Kit definition - a named, versioned collection of slash commands

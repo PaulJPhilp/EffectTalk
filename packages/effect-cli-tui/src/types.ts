@@ -43,47 +43,31 @@ export interface PromptOptions {
 }
 
 // Error types
-export class CLIError extends Data.TaggedError("CLIError") {
-  constructor(
-    readonly reason:
-      | "CommandFailed"
-      | "Timeout"
-      | "NotFound"
-      | "ExecutionError",
-    readonly message: string,
-    readonly exitCode?: number
-  ) {
-    super();
-  }
-}
+export class CLIError extends Data.TaggedError("CLIError")<{
+  readonly reason: "CommandFailed" | "Timeout" | "NotFound" | "ExecutionError";
+  readonly message: string;
+  readonly exitCode?: number;
+}> {}
 
-export class TUIError extends Data.TaggedError("TUIError") {
-  constructor(
-    readonly reason:
-      | "Cancelled"
-      | "ValidationFailed"
-      | "RenderError"
-      | "SlashCommandAbort"
-      | "SlashCommandExit",
-    readonly message: string
-  ) {
-    super();
-  }
-}
+export class TUIError extends Data.TaggedError("TUIError")<{
+  readonly reason:
+    | "Cancelled"
+    | "ValidationFailed"
+    | "RenderError"
+    | "SlashCommandAbort"
+    | "SlashCommandExit";
+  readonly message: string;
+}> {}
 
 /**
  * Ink rendering error type
  *
  * Thrown when Ink component rendering fails.
  */
-export class InkError extends Data.TaggedError("InkError") {
-  constructor(
-    readonly reason: "RenderError" | "ComponentError" | "TerminalError",
-    readonly message: string
-  ) {
-    super();
-  }
-}
+export class InkError extends Data.TaggedError("InkError")<{
+  readonly reason: "RenderError" | "ComponentError" | "TerminalError";
+  readonly message: string;
+}> {}
 
 // Box border style types
 export type BorderStyle = "single" | "double" | "rounded" | "bold" | "classic";
@@ -154,4 +138,4 @@ export type {
   DisplayOptions,
   DisplayType,
   JsonDisplayOptions,
-} from "./services/display/types";
+} from "./services/display/types.js";

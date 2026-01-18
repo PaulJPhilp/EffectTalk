@@ -8,8 +8,8 @@
  * @module core/emitter
  */
 
-import type { Ast } from "./ast.js";
-import type { RegexBuilder, RegexPattern } from "./builder.js";
+import type { Ast } from "@/effect-regex/core/ast.js";
+import type { RegexBuilder, RegexPattern } from "@/effect-regex/core/builder.js";
 
 /**
  * Supported regex dialects

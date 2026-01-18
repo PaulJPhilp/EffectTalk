@@ -4,8 +4,8 @@
 
 import type { Effect } from "effect";
 import type React from "react";
-import type { LayoutError } from "./errors";
-import type { OutputItem } from "./types";
+import type { LayoutError } from "./errors.js";
+import type { OutputItem } from "./types.js";
 
 /**
  * Layout service API

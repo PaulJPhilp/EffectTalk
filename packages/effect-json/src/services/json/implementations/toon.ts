@@ -9,6 +9,9 @@ import { ParseError, StringifyError } from "../../../errors.js";
 import { buildSnippet, getLineColumn, toString } from "../../../utils/index.js";
 import type { Backend } from "./types.js";
 
+// Pre-compiled regex for position extraction to avoid repeated compilation
+const POSITION_REGEX = /position (\d+)/;
+
 /**
  * TOON Backend implementation
  *
@@ -26,9 +29,9 @@ export const toonBackend: Backend = {
         // TOON errors might not have position info in the same way as JSON
         // We'll try to extract it if available, otherwise default to 0
         // Adjust regex based on actual TOON error format if known
-        const positionMatch = errorMessage.match(/position (\d+)/);
+        const positionMatch = errorMessage.match(POSITION_REGEX);
         const position = positionMatch
-          ? Number.parseInt(positionMatch[1]!, 10)
+          ? Number.parseInt(positionMatch[1] ?? "0", 10)
           : 0;
 
         const { line, column } = getLineColumn(inputStr, position);

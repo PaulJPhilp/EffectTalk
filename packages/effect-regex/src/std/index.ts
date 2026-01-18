@@ -17,17 +17,17 @@
  */
 
 // Export all general patterns
-export * from "./patterns.js";
+export * from "@/effect-regex/std/patterns.js";
 
 // Export all security patterns
-export * from "./security-patterns.js";
+export * from "@/effect-regex/std/security-patterns.js";
 
 // Create a unified registry combining both pattern sets
-import { STANDARD_PATTERNS, type StandardPatternName } from "./patterns.js";
+import { STANDARD_PATTERNS, type StandardPatternName } from "@/effect-regex/std/patterns.js";
 import {
   SECURITY_PATTERNS,
   type SecurityPatternName,
-} from "./security-patterns.js";
+} from "@/effect-regex/std/security-patterns.js";
 
 /**
  * Complete registry of all available patterns

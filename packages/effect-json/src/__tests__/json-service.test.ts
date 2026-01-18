@@ -4,7 +4,7 @@
  * Tests JsonService parse and stringify operations with all supported formats
  */
 
-import { Effect, Either, Layer } from "effect";
+import { Effect, Either } from "effect";
 import { describe, expect, it } from "vitest";
 import { JsonService } from "../services/json/service.js";
 
@@ -30,7 +30,7 @@ describe("JsonService", () => {
         return yield* service.parse("jsonc", jsonc);
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as { name: string };
       expect(result.name).toBe("test");
     });
 
@@ -41,7 +41,7 @@ describe("JsonService", () => {
         return yield* service.parse("json", buffer);
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as { key: string };
       expect(result.key).toBe("value");
     });
 
@@ -52,7 +52,7 @@ describe("JsonService", () => {
         return yield* service.parse("superjson", json);
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as { date: unknown };
       expect(result.date).toBeDefined();
     });
 
@@ -62,7 +62,7 @@ describe("JsonService", () => {
         return yield* service.parse("json", "[1,2,3]");
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as number[];
       expect(Array.isArray(result)).toBe(true);
       expect(result).toEqual([1, 2, 3]);
     });
@@ -74,7 +74,9 @@ describe("JsonService", () => {
         return yield* service.parse("json", nested);
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as {
+        user: { profile: { age: number } };
+      };
       expect(result.user.profile.age).toBe(30);
     });
 
@@ -85,7 +87,7 @@ describe("JsonService", () => {
         return yield* service.parse("json", buffer);
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as { key: string };
       expect(result.key).toBe("value");
     });
 
@@ -242,7 +244,10 @@ describe("JsonService", () => {
         return parsed;
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as {
+        enabled: boolean;
+        disabled: boolean;
+      };
       expect(result.enabled).toBe(true);
       expect(result.disabled).toBe(false);
     });
@@ -256,7 +261,11 @@ describe("JsonService", () => {
         return parsed;
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as {
+        int: number;
+        float: number;
+        exp: number;
+      };
       expect(result.int).toBe(42);
       expect(typeof result.float).toBe("number");
     });
@@ -270,12 +279,15 @@ describe("JsonService", () => {
         return parsed;
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as Record<
+        string,
+        never
+      >;
       expect(result).toEqual({});
     });
 
     it("should handle empty arrays", async () => {
-      const arr = [];
+      const arr: unknown[] = [];
       const program = Effect.gen(function* () {
         const service = yield* JsonService;
         const stringified = yield* service.stringify("json", arr);
@@ -283,7 +295,7 @@ describe("JsonService", () => {
         return parsed;
       }).pipe(Effect.provide(JsonService.Default));
 
-      const result = await Effect.runPromise(program);
+      const result = (await Effect.runPromise(program)) as unknown[];
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });

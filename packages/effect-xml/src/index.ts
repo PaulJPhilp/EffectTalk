@@ -5,13 +5,13 @@
  */
 
 // Types
-export type { XmlDocument } from "./types.js";
+export type { XmlDocument } from "@/effect-xml/types.js";
 
 // Convenience Functions
-export { parseString, parseStringDefault } from "./api.js";
+export { parseString, parseStringDefault } from "@/effect-xml/api.js";
 
 // Errors
-export { XmlParseError } from "./errors.js";
+export { XmlParseError } from "@/effect-xml/errors.js";
 
 // Backends (for advanced usage)
-export { XmlBackend } from "./backends/XmlBackend.js";
+export { XmlBackend } from "@/effect-xml/backends/XmlBackend.js";

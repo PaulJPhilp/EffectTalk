@@ -1,8 +1,8 @@
 import { Effect } from "effect";
 
-import { withSlashCommands } from "@/tui-slash-commands";
-import { KitRegistryService } from "./registry";
-import type { Kit } from "./types";
+import { withSlashCommands } from "@/tui-slash-commands.js";
+import { KitRegistryService } from "@kits/registry.js";
+import type { Kit } from "@kits/types.js";
 
 /**
  * Enable a kit for the duration of an effect
@@ -78,8 +78,8 @@ export function enableKit(
   kitId: string
 ): Effect.Effect<
   void,
-  import("./types").KitError,
-  import("./registry").KitRegistryService
+  import("@kits/types.js").KitError,
+  import("@kits/registry.js").KitRegistryService
 > {
   return Effect.gen(function* () {
     const registry = yield* KitRegistryService;
@@ -104,8 +104,8 @@ export function disableKit(
   kitId: string
 ): Effect.Effect<
   void,
-  import("./types").KitError,
-  import("./registry").KitRegistryService
+  import("@kits/types.js").KitError,
+  import("@kits/registry.js").KitRegistryService
 > {
   return Effect.gen(function* () {
     const registry = yield* KitRegistryService;

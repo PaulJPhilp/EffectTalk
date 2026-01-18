@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import { XMLParser, XMLValidator } from "fast-xml-parser";
-import { XmlParseError } from "../errors.js";
-import type { XmlDocument, XmlElement } from "../types.js";
+import { XmlParseError } from "@/effect-xml/errors.js";
+import type { XmlDocument, XmlElement } from "@/effect-xml/types.js";
 
 type ParsedNode = unknown;
 

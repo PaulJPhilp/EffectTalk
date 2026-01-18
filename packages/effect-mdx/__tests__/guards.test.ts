@@ -1,14 +1,14 @@
-import { describe, it, expect } from "bun:test";
+import { describe, expect, it } from "@effect/vitest";
 import {
-  isString,
-  isNumber,
-  isBoolean,
-  isObject,
-  isMetadata,
-  hasKey,
-  hasStringKey,
   hasBooleanKey,
+  hasKey,
   hasObjectKey,
+  hasStringKey,
+  isBoolean,
+  isMetadata,
+  isNumber,
+  isObject,
+  isString,
 } from "../src/guards";
 
 describe("Guards Module", () => {

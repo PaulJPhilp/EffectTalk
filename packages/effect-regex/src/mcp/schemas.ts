@@ -10,8 +10,8 @@
  * @module mcp/schemas
  */
 
-import { STANDARD_PATTERNS } from "../std/patterns.js";
-import { LIMITS } from "./types.js";
+import { STANDARD_PATTERNS } from "@/effect-regex/std/patterns.js";
+import { LIMITS } from "@/effect-regex/mcp/types.js";
 
 /**
  * MCP Tool definition with name, description, and input schema

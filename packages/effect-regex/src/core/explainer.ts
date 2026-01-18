@@ -1,4 +1,4 @@
-import type { Ast } from "./ast.js";
+import type { Ast } from "@/effect-regex/core/ast.js";
 
 /**
  * Explanation node for structured regex breakdown

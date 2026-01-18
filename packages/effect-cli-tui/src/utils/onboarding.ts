@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 import { Console, Effect } from "effect";
-import { SEPARATOR_WIDTH } from "../constants";
+import { SEPARATOR_WIDTH } from "../constants.js";
 
 /**
  * Check if this is the first run (no config file exists)

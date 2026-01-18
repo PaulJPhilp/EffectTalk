@@ -58,7 +58,11 @@ const program = Effect.gen(function* () {
 				Effect.runPromise(
 					executor
 						.execute(command)
-						.pipe(Effect.provide(MainLayer), Effect.scoped),
+						.pipe(Effect.provide(MainLayer), Effect.scoped) as Effect.Effect<
+						void,
+						Error,
+						never
+					>,
 				).catch(console.error);
 			},
 			onFocusNext: () => {

@@ -10,11 +10,13 @@ export class XmpBackend extends Effect.Service<XmpBackend>()("XmpBackend", {
   succeed: {
     parse: (buffer: Buffer) =>
       Effect.try({
-        try: () =>
-          ExifReader.load(
-            buffer as unknown as any,
+        try: () => {
+          // biome-ignore lint/suspicious/noExplicitAny
+          return ExifReader.load(
+            buffer as any,
             { xmp: true, expanded: true } as any
-          ),
+          );
+        },
         catch: (error) =>
           new XmpParseError({
             message: error instanceof Error ? error.message : "Unknown error",

@@ -45,7 +45,9 @@ describe("effect-ai-sdk Schema Utilities", () => {
     });
 
     it("should convert optional schema to Zod schema", async () => {
-      const effectSchema = Schema.optional(Schema.String);
+      const effectSchema = Schema.String.pipe(
+        Schema.optional
+      ) as unknown as Schema.Schema<string | undefined, string | undefined>;
       const result = await Effect.runPromise(toZodSchema(effectSchema));
       expect(result).toBeDefined();
     });
@@ -83,7 +85,7 @@ describe("effect-ai-sdk Schema Utilities", () => {
     it("should handle optional fields in struct", async () => {
       const effectSchema = Schema.Struct({
         required: Schema.String,
-        optional: Schema.optional(Schema.String),
+        optional: Schema.String.pipe(Schema.optional),
       });
 
       const result = await Effect.runPromise(toZodSchema(effectSchema));
@@ -131,7 +133,9 @@ describe("effect-ai-sdk Schema Utilities", () => {
     });
 
     it("should handle optional schema", async () => {
-      const effectSchema = Schema.optional(Schema.String);
+      const effectSchema = Schema.String.pipe(
+        Schema.optional
+      ) as unknown as Schema.Schema<string | undefined, string | undefined>;
       const result = await Effect.runPromise(toStandardSchema(effectSchema));
       expect(result).toBe(effectSchema);
     });
@@ -148,7 +152,7 @@ describe("effect-ai-sdk Schema Utilities", () => {
           name: Schema.String,
           contact: Schema.Struct({
             email: Schema.String,
-            phone: Schema.optional(Schema.String),
+            phone: Schema.String.pipe(Schema.optional),
           }),
         }),
         status: Schema.Literal("active", "inactive"),
@@ -196,7 +200,7 @@ describe("effect-ai-sdk Schema Utilities", () => {
     it("should validate optional fields", async () => {
       const schema = Schema.Struct({
         required: Schema.String,
-        optional: Schema.optional(Schema.String),
+        optional: Schema.String.pipe(Schema.optional),
       });
 
       const data = { required: "test" };
@@ -260,11 +264,9 @@ describe("effect-ai-sdk Schema Utilities", () => {
           email: Schema.String,
         }),
         tags: Schema.Array(Schema.String),
-        metadata: Schema.optional(
-          Schema.Struct({
-            created: Schema.String,
-          })
-        ),
+        metadata: Schema.Struct({
+          created: Schema.String,
+        }).pipe(Schema.optional),
       });
 
       const data = {
@@ -328,7 +330,7 @@ describe("effect-ai-sdk Schema Utilities", () => {
     it("should handle optional fields during encoding", async () => {
       const schema = Schema.Struct({
         required: Schema.String,
-        optional: Schema.optional(Schema.String),
+        optional: Schema.String.pipe(Schema.optional),
       });
 
       const data = { required: "test" };

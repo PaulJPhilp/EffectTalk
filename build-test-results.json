@@ -1,0 +1,249 @@
+{
+  "metadata": {
+    "testDate": "2026-01-18",
+    "totalPackages": 27,
+    "passing": 23,
+    "failing": 4,
+    "successRate": 85.2
+  },
+  "summary": {
+    "layer2Status": {
+      "total": 5,
+      "passing": 2,
+      "failing": 3,
+      "passRate": 40.0
+    },
+    "layer1Status": {
+      "total": 22,
+      "passing": 21,
+      "failing": 1,
+      "passRate": 95.5
+    }
+  },
+  "passing": [
+    "effect-ai-sdk",
+    "effect-artifact",
+    "effect-attachment",
+    "effect-csv",
+    "effect-env",
+    "effect-html",
+    "effect-image",
+    "effect-json",
+    "effect-mdx",
+    "effect-models",
+    "effect-models-website",
+    "effect-pdf",
+    "effect-prompt",
+    "effect-regex",
+    "effect-repository",
+    "effect-schema-utils",
+    "effect-storage",
+    "effect-supermemory",
+    "effect-telemetry",
+    "effect-toml",
+    "effect-xml",
+    "effect-xmp",
+    "effect-yaml"
+  ],
+  "failing": [
+    {
+      "name": "effect-actor",
+      "layer": "Layer 2",
+      "category": "Agent Infrastructure",
+      "status": "CRITICAL",
+      "errorType": "TypeScript compilation error",
+      "errorCode": "TS2769",
+      "description": "No overload matches this call - Layer type incompatibility with ManagedRuntime",
+      "files": [
+        {
+          "path": "src/actor/service.test.ts",
+          "line": 93,
+          "column": 18
+        }
+      ],
+      "estimatedFixTime": "5-10 minutes",
+      "priority": "HIGH",
+      "rootCause": "Service test file has incompatible type signatures. The layer function being passed doesn't match the expected ManagedRuntime type parameter."
+    },
+    {
+      "name": "effect-cli-tui",
+      "layer": "Layer 2",
+      "category": "Agent Infrastructure",
+      "status": "CRITICAL",
+      "errorType": "TypeScript ESM module resolution error",
+      "errorCode": "TS2835",
+      "description": "Missing .js file extensions in relative imports for node16/nodenext moduleResolution",
+      "files": [
+        {
+          "path": "src/index.ts",
+          "lines": "2, 10, 18, 25, 41, 49, 50, 51, 52, 60, 68, 70, 71, 72, 79, 80, 82, 85, 88, 91, 94",
+          "count": 24,
+          "description": "Multiple relative imports missing .js extensions"
+        }
+      ],
+      "estimatedFixTime": "1-2 minutes",
+      "priority": "HIGH",
+      "rootCause": "ESM compliance issue - relative imports in src/index.ts lack required .js extensions for proper node16/nodenext module resolution.",
+      "quickFix": "Add .js extension to all relative imports. Example: import X from './path' → import X from './path.js'"
+    },
+    {
+      "name": "effect-cockpit",
+      "layer": "Layer 2",
+      "category": "Agent Infrastructure",
+      "status": "CRITICAL",
+      "errorType": "TypeScript type safety violation",
+      "errorCode": "TS2345",
+      "description": "Effect context requirements type mismatch - 'any' not assignable to 'never'",
+      "files": [
+        {
+          "path": "src/index.ts",
+          "line": 59,
+          "column": 6
+        }
+      ],
+      "estimatedFixTime": "5-10 minutes",
+      "priority": "HIGH",
+      "rootCause": "Effect.Service context requirements are too permissive (using 'any' instead of being properly typed). An Effect with 'any' requirement context is being passed where 'never' (no requirements) is expected."
+    },
+    {
+      "name": "effect-liquid",
+      "layer": "Layer 1",
+      "category": "Data Foundation",
+      "status": "CRITICAL",
+      "errorType": "Complex TypeScript type incompatibility",
+      "errorCodes": ["TS2375", "TS2488", "TS2358", "TS2339"],
+      "description": "Error type union collapse and context requirement type mismatches",
+      "files": [
+        {
+          "path": "src/renderer.ts",
+          "lines": [71, 108, 112, 114, 118, 157, 161, 163, 167, 218, 224, 228, 247, 251, 253],
+          "count": 15,
+          "description": "Multiple type errors from error union and context handling"
+        }
+      ],
+      "estimatedFixTime": "15-30 minutes",
+      "priority": "MEDIUM",
+      "issues": [
+        "Effect context uses 'unknown' instead of 'never'",
+        "Error union (LiquidRenderError & LiquidTagError) reduces to 'never'",
+        "Conditional logic on reduced 'never' types is invalid",
+        "Type narrowing fails due to incompatible discriminators"
+      ],
+      "rootCause": "Error type design flaw - conflicting error types (LiquidRenderError vs LiquidTagError) with incompatible discriminators cause type system to reduce to 'never'. The renderer attempts to handle both error types in the same context, leading to type incompatibility."
+    }
+  ],
+  "errorClassification": {
+    "byCategory": [
+      {
+        "category": "ESM Module Resolution",
+        "count": 1,
+        "packages": ["effect-cli-tui"]
+      },
+      {
+        "category": "Service Type Mismatch",
+        "count": 1,
+        "packages": ["effect-actor"]
+      },
+      {
+        "category": "Effect Context Type Safety",
+        "count": 1,
+        "packages": ["effect-cockpit"]
+      },
+      {
+        "category": "Error Type Union",
+        "count": 1,
+        "packages": ["effect-liquid"]
+      }
+    ],
+    "bySeverity": [
+      {
+        "severity": "CRITICAL",
+        "count": 4,
+        "packages": [
+          "effect-actor",
+          "effect-cli-tui",
+          "effect-cockpit",
+          "effect-liquid"
+        ]
+      }
+    ]
+  },
+  "recommendations": {
+    "fixOrder": [
+      {
+        "priority": 1,
+        "package": "effect-cli-tui",
+        "estimatedTime": "1-2 minutes",
+        "action": "Add .js extensions to all relative imports in src/index.ts",
+        "rationale": "Fastest fix, unblocks TUI layer"
+      },
+      {
+        "priority": 2,
+        "package": "effect-actor",
+        "estimatedTime": "5-10 minutes",
+        "action": "Review and fix service.test.ts line 93 - adjust Layer type compatibility with ManagedRuntime",
+        "rationale": "Unblocks orchestration layer, medium difficulty"
+      },
+      {
+        "priority": 3,
+        "package": "effect-cockpit",
+        "estimatedTime": "5-10 minutes",
+        "action": "Replace 'any' context requirements with explicit types or 'never'",
+        "rationale": "Unblocks dashboard layer, medium difficulty"
+      },
+      {
+        "priority": 4,
+        "package": "effect-liquid",
+        "estimatedTime": "15-30 minutes",
+        "action": "Refactor error handling to avoid incompatible error unions, consider separate render methods",
+        "rationale": "Complex fix, may require design changes to error types"
+      }
+    ],
+    "preCommitHooks": [
+      "Add linting rule to prevent missing .js extensions in ESM imports",
+      "Add type checking pre-commit hook to catch Context vs Effect.Service issues",
+      "Consider strict pre-commit verification (bun run verify) for all packages"
+    ]
+  },
+  "architectureImpact": {
+    "layer2": {
+      "description": "Agent Infrastructure - PARTIALLY COMPROMISED",
+      "status": "40% pass rate (2 of 5 packages)",
+      "passing": [
+        {
+          "package": "effect-supermemory",
+          "status": "STABLE",
+          "note": "Foundation package - no dependencies"
+        },
+        {
+          "package": "effect-ai-sdk",
+          "status": "STABLE",
+          "note": "Independent utility library"
+        }
+      ],
+      "failing": [
+        "effect-actor",
+        "effect-cli-tui",
+        "effect-cockpit"
+      ],
+      "impact": "Layer 2 agent infrastructure is critically compromised with 3 of 5 packages failing"
+    },
+    "layer1": {
+      "description": "Data Foundation - STABLE",
+      "status": "95.7% pass rate (22 of 23 packages)",
+      "failing": [
+        "effect-liquid"
+      ],
+      "impact": "Layer 1 data foundation is largely stable with only one formatting/error handling issue"
+    }
+  },
+  "verificationCommands": {
+    "fullBuild": "bun run build",
+    "individualTests": [
+      "bun run --filter effect-cli-tui build",
+      "bun run --filter effect-actor build",
+      "bun run --filter effect-cockpit build",
+      "bun run --filter effect-liquid build"
+    ]
+  }
+}

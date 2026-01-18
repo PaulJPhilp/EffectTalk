@@ -1,6 +1,6 @@
-import type { Theme } from "@services/theme/types";
+import type { Theme } from "@services/theme/types.js";
 import { Match } from "effect";
-import type { ChalkColor } from "@/types";
+import type { ChalkColor } from "@/types.js";
 
 /** Success/checkmark icon (✓) */
 export const ICON_SUCCESS = "✓";

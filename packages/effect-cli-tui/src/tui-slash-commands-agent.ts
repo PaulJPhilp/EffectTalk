@@ -2,17 +2,17 @@ import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 import { Console, Effect } from "effect";
-import { DEFAULT_HISTORY_LIMIT, SEPARATOR_WIDTH } from "./constants";
-import { KitRegistryService } from "./kits/registry";
-import { ToolCallLogService } from "./services/logs";
-import { ModeService } from "./services/mode";
+import { DEFAULT_HISTORY_LIMIT, SEPARATOR_WIDTH } from "./constants.js";
+import { KitRegistryService } from "./kits/registry.js";
+import { ToolCallLogService } from "./services/logs/index.js";
+import { ModeService } from "./services/mode/index.js";
 import {
   getSessionHistory,
   type SlashCommandContext,
   type SlashCommandResult,
-} from "./tui-slash-commands";
-import type { TUIError } from "./types";
-import { getCurrentBranch, getGitRoot, getStatusSummary } from "./utils/git";
+} from "./tui-slash-commands.js";
+import type { TUIError } from "./types.js";
+import { getCurrentBranch, getGitRoot, getStatusSummary } from "./utils/git.js";
 
 /**
  * Agent harness slash commands

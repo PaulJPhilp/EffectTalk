@@ -11,4 +11,4 @@ export { parse, parseDefault } from "./api.js";
 export { XmpParseError } from "./errors.js";
 
 // Backends (for advanced usage)
-export { XmpBackend } from "./backends/XmpBackend.js";
+export { XmpBackend } from "./backends/xmp-backend.js";

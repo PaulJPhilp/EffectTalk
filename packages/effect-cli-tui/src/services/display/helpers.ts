@@ -1,8 +1,8 @@
-import { applyChalkStyle } from "@core/colors";
-import { getDisplayColor, getDisplayIcon } from "@core/icons";
-import type { Theme } from "@services/theme/types";
-import type { ChalkColor } from "@/types";
-import type { DisplayOptions, DisplayType } from "./types";
+import { applyChalkStyle } from "@core/colors.js";
+import { getDisplayColor, getDisplayIcon } from "@core/icons.js";
+import type { Theme } from "@services/theme/types.js";
+import type { ChalkColor } from "@/types.js";
+import type { DisplayOptions, DisplayType } from "./types.js";
 
 /**
  * Format display output with optional theme

@@ -11,8 +11,8 @@
  * @module core/linter
  */
 
-import type { Ast } from "./ast.js";
-import type { Dialect } from "./emitter.js";
+import type { Ast } from "@/effect-regex/core/ast.js";
+import type { Dialect } from "@/effect-regex/core/emitter.js";
 
 /**
  * Lint issue severity levels

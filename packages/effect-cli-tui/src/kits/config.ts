@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 import { Data, Effect } from "effect";
-import type { KitConfig } from "./types";
+import type { KitConfig } from "./types.js";
 
 export class KitConfigError extends Data.TaggedError("KitConfigError")<{
   readonly message: string;

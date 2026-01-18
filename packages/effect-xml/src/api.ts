@@ -1,7 +1,7 @@
 import { Effect } from "effect";
-import { XmlBackend, XmlBackendLayer } from "./backends/XmlBackend.js";
-import { XmlParseError } from "./errors.js";
-import type { XmlDocument } from "./types.js";
+import { XmlBackend, XmlBackendLayer } from "@/effect-xml/backends/XmlBackend.js";
+import { XmlParseError } from "@/effect-xml/errors.js";
+import type { XmlDocument } from "@/effect-xml/types.js";
 
 export const parseString = (
   text: string

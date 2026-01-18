@@ -5,10 +5,10 @@
  */
 
 // Convenience Functions
-export { parse, parseDefault, stringify, stringifyDefault } from "./api.js";
+export { parse, parseDefault, stringify, stringifyDefault } from "@/effect-yaml/api.js";
 
 // Errors
-export { YamlParseError, YamlStringifyError } from "./errors.js";
+export { YamlParseError, YamlStringifyError } from "@/effect-yaml/errors.js";
 
 // Backends (for advanced usage)
-export { YamlBackend } from "./backends/YamlBackend.js";
+export { YamlBackend } from "@/effect-yaml/backends/YamlBackend.js";

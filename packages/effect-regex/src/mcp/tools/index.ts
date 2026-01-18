@@ -4,10 +4,10 @@
  * @module mcp/tools
  */
 
-export { handleBuildRegex } from "./build-regex.js";
-export { handleConvertRegex } from "./convert-regex.js";
-export { handleExplainRegex } from "./explain-regex.js";
-export { handleLibraryList } from "./library-list.js";
-export { handleLintRegex } from "./lint-regex.js";
-export { handleOptimizePattern } from "./optimize-pattern.js";
-export { handleTestRegex } from "./test-regex.js";
+export { handleBuildRegex } from "@/effect-regex/mcp/tools/build-regex.js";
+export { handleConvertRegex } from "@/effect-regex/mcp/tools/convert-regex.js";
+export { handleExplainRegex } from "@/effect-regex/mcp/tools/explain-regex.js";
+export { handleLibraryList } from "@/effect-regex/mcp/tools/library-list.js";
+export { handleLintRegex } from "@/effect-regex/mcp/tools/lint-regex.js";
+export { handleOptimizePattern } from "@/effect-regex/mcp/tools/optimize-pattern.js";
+export { handleTestRegex } from "@/effect-regex/mcp/tools/test-regex.js";

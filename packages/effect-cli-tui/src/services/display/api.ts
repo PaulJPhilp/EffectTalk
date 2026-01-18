@@ -1,5 +1,5 @@
 import type { Effect } from "effect";
-import type { DisplayOptions, JsonDisplayOptions } from "./types";
+import type { DisplayOptions, JsonDisplayOptions } from "./types.js";
 
 /**
  * Display service API interface

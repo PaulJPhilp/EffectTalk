@@ -6,19 +6,19 @@
  */
 
 import { Effect } from "effect";
-import type { Ast } from "../core/ast.js";
-import type { RegexBuilder, RegexPattern } from "../core/builder.js";
-import type { LintResult } from "../core/linter.js";
+import type { Ast } from "@/effect-regex/core/ast.js";
+import type { RegexBuilder, RegexPattern } from "@/effect-regex/core/builder.js";
+import type { LintResult } from "@/effect-regex/core/linter.js";
 import type {
   OptimizationOptions,
   OptimizationResult,
-} from "../core/optimizer.js";
-import type { RegexTestCase, TestResult } from "../core/tester.js";
-import { EmitError, TestExecutionError } from "../errors/index.js";
-import { emit as coreEmit } from "../core/emitter.js";
-import { lint as coreLint } from "../core/linter.js";
-import { optimize as coreOptimize } from "../core/optimizer.js";
-import { testRegex as coreTestRegex } from "../core/tester.js";
+} from "@/effect-regex/core/optimizer.js";
+import type { RegexTestCase, TestResult } from "@/effect-regex/core/tester.js";
+import { EmitError, TestExecutionError } from "@/effect-regex/errors/types.js";
+import { emit as coreEmit } from "@/effect-regex/core/emitter.js";
+import { lint as coreLint } from "@/effect-regex/core/linter.js";
+import { optimize as coreOptimize } from "@/effect-regex/core/optimizer.js";
+import { testRegex as coreTestRegex } from "@/effect-regex/core/tester.js";
 
 /**
  * Service for regex pattern building and emission

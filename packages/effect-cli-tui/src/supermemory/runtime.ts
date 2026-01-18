@@ -1,7 +1,7 @@
 import { Effect } from "effect";
-import { withSlashCommands } from "@/tui-slash-commands";
-import { SupermemoryLayer } from "../services/supermemory";
-import { SUPERMEMORY_SLASH_COMMANDS } from "./slash-commands";
+import { withSlashCommands } from "@/tui-slash-commands.js";
+import { SupermemoryLayer } from "@services/supermemory.js";
+import { SUPERMEMORY_SLASH_COMMANDS } from "./slash-commands.js";
 
 /**
  * Effect that provides Supermemory functionality with slash commands

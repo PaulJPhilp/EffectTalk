@@ -1,10 +1,10 @@
-import { applyChalkStyle } from "@core/colors";
+import { applyChalkStyle } from "@core/colors.js";
 import chalk from "chalk";
 import { Console, Effect } from "effect";
 import stringWidth from "string-width";
-import type { ChalkColor } from "@/types";
-import type { BoxStyle } from "./box-style";
-import { initializeBoxStyling } from "./box-style";
+import type { ChalkColor } from "@/types.js";
+import type { BoxStyle } from "./box-style.js";
+import { initializeBoxStyling } from "./box-style.js";
 
 /**
  * Calculate the maximum content width needed for the box

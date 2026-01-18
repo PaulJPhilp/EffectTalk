@@ -8,10 +8,10 @@ import {
   SPINNER_DEFAULT_TYPE,
   SPINNER_MESSAGE_DONE,
   SPINNER_MESSAGE_FAILED,
-} from "@core/icons";
+} from "@core/icons.js";
 import cliSpinners from "cli-spinners";
 import { Effect } from "effect";
-import type { ChalkColor } from "@/types";
+import type { ChalkColor } from "@/types.js";
 
 export interface SpinnerOptions {
   message?: string;

@@ -48,7 +48,7 @@
     "@biomejs/biome": "2.3.7",
     "@types/node": "^20.19.25",
     "typescript": "^5.9.3",
-    "ultracite": "6.3.6",
+    "ultracite": "^6.5.0",
     "vitest": "^4.0.15"
   },
   "engines": {

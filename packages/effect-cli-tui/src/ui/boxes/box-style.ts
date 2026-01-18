@@ -1,13 +1,13 @@
-import { COLOR_ERROR, COLOR_SUCCESS, COLOR_WARNING } from "@core/icons";
-import type { DisplayType } from "@services/display/types";
+import { COLOR_ERROR, COLOR_SUCCESS, COLOR_WARNING } from "@core/icons.js";
+import type { DisplayType } from "@services/display/types.js";
 import { Brand, Match } from "effect";
 import {
   BOX_STYLES,
   DEFAULT_DISPLAY_TYPE,
   MAX_TITLE_LENGTH,
   MIN_TITLE_LENGTH,
-} from "@/constants";
-import type { BorderStyle, BoxBorderChars, ChalkColor } from "@/types";
+} from "@/constants.js";
+import type { BorderStyle, BoxBorderChars, ChalkColor } from "@/types.js";
 
 // Branded Title type with validation
 export type Title = string & Brand.Brand<"Title">;
@@ -55,14 +55,19 @@ export function initializeBoxStyling(options?: BoxStyle): BoxStyling {
   const padding = options?.padding || 0;
   const typeColor = getTypeColor(type) as ChalkColor;
 
-  return {
+  const result: BoxStyling = {
     borderStyle,
     style,
     type,
-    title,
     padding,
     typeColor,
   };
+
+  if (title) {
+    result.title = title;
+  }
+
+  return result;
 }
 
 function getTypeColor(type?: "info" | "success" | "error" | "warning"): string {

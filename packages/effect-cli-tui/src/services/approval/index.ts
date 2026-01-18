@@ -2,5 +2,5 @@ export type {
   ApprovalServiceApi,
   OperationKind,
   OperationSummary,
-} from "./service";
-export { ApprovalService } from "./service";
+} from "./service.js";
+export { ApprovalService } from "./service.js";

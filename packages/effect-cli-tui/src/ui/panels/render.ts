@@ -8,7 +8,7 @@
 
 import chalk from "chalk";
 import { Console, Effect } from "effect";
-import type { KeyValuePanelProps, TablePanelProps } from "./Panel";
+import type { KeyValuePanelProps, TablePanelProps } from "./Panel.js";
 
 /**
  * Render a key-value panel as formatted text

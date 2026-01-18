@@ -2,15 +2,15 @@
 import {
   createEffectCliSlashCommand,
   type SlashCommandDefinition,
-} from "@/tui-slash-commands";
-import { TUIError } from "@/types";
-import { redactSecrets } from "@core/redact";
-import { loadConfig } from "@supermemory/config";
+} from "@/tui-slash-commands.js";
+import { TUIError } from "@/types.js";
+import { redactSecrets } from "@core/redact.js";
+import { loadConfig } from "@supermemory/config.js";
 import { Console, Effect } from "effect";
 import { MemoriesService, SearchService } from "effect-supermemory";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import type { Kit } from "./types";
+import type { Kit } from "./types.js";
 
 /**
  * Parse comma-separated tags string into array
@@ -65,7 +65,7 @@ function truncate(text: string, maxLength: number): string {
  * Handle /mem-status command
  */
 function handleMemStatus(
-  _context: import("../tui-slash-commands").SlashCommandContext
+  _context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const config = yield* loadConfig();
@@ -151,7 +151,7 @@ function handleMemStatus(
  * Handle /mem-add-text command
  */
 function handleMemAddText(
-  context: import("../tui-slash-commands").SlashCommandContext
+  context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const text = context.args.join(" ").trim();
@@ -210,7 +210,7 @@ function handleMemAddText(
  * Handle /mem-add-file command
  */
 function handleMemAddFile(
-  context: import("../tui-slash-commands").SlashCommandContext
+  context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const filePath = context.args[0];
@@ -236,7 +236,7 @@ function handleMemAddFile(
       try: () => fs.readFile(resolvedPath, "utf-8"),
       catch: (error) => new Error(`Failed to read file: ${String(error)}`),
     }).pipe(
-      Effect.mapError((error) => new TUIError("RenderError", String(error)))
+      Effect.mapError((error) => new TUIError({ reason: "RenderError", message: String(error) }))
     );
 
     const doc = yield* MemoriesService.add({
@@ -292,7 +292,7 @@ function handleMemAddFile(
  * Handle /mem-add-url command
  */
 function handleMemAddUrl(
-  context: import("../tui-slash-commands").SlashCommandContext
+  context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const url = context.args[0];
@@ -405,7 +405,7 @@ function displaySearchResults(
  * Handle missing API key error
  */
 function handleMissingApiKey(): Effect.Effect<
-  import("../tui-slash-commands").SlashCommandResult
+  import("@/tui-slash-commands.js").SlashCommandResult
 > {
   return Effect.gen(function* () {
     yield* Console.log(
@@ -422,7 +422,7 @@ function handleMissingApiKey(): Effect.Effect<
  */
 function handleGenericSearchError(
   error: unknown
-): Effect.Effect<import("../tui-slash-commands").SlashCommandResult> {
+): Effect.Effect<import("@/tui-slash-commands.js").SlashCommandResult> {
   return Effect.gen(function* () {
     yield* Console.log(`Error: Search failed - ${String(error)}`);
     return { kind: "continue" } as const;
@@ -434,7 +434,7 @@ function handleGenericSearchError(
  */
 function handleSearchError(
   error: unknown
-): Effect.Effect<import("../tui-slash-commands").SlashCommandResult> {
+): Effect.Effect<import("@/tui-slash-commands.js").SlashCommandResult> {
   const unknownError = error as unknown;
   if (
     typeof unknownError === "object" &&
@@ -461,7 +461,7 @@ function handleSearchError(
  * Handle /mem-search command
  */
 function handleMemSearch(
-  context: import("../tui-slash-commands").SlashCommandContext
+  context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const query = context.args.join(" ").trim();
@@ -490,7 +490,7 @@ function handleMemSearch(
  * Handle /mem-show-doc command
  */
 function handleMemShowDoc(
-  context: import("../tui-slash-commands").SlashCommandContext
+  context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const docId = context.args[0];
@@ -573,7 +573,7 @@ function handleMemShowDoc(
  * Handle /mem-show-mem command
  */
 function handleMemShowMem(
-  context: import("../tui-slash-commands").SlashCommandContext
+  context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const memId = context.args[0];
@@ -641,7 +641,7 @@ function handleMemShowMem(
  * Handle /mem-rm-doc command
  */
 function handleMemRmDoc(
-  context: import("../tui-slash-commands").SlashCommandContext
+  context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     const docId = context.args[0];
@@ -707,7 +707,7 @@ function handleMemRmDoc(
  * Handle /mem-stats command
  */
 function handleMemStats(
-  _context: import("../tui-slash-commands").SlashCommandContext
+  _context: import("@/tui-slash-commands.js").SlashCommandContext
 ): any {
   return Effect.gen(function* () {
     // Get all documents/memories

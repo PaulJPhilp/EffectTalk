@@ -1,5 +1,5 @@
-import { defaultTheme } from "./presets";
-import type { PartialTheme, Theme } from "./types";
+import { defaultTheme } from "./presets.js";
+import type { PartialTheme, Theme } from "./types.js";
 
 /**
  * Merge a partial theme with a base theme

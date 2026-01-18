@@ -1,11 +1,11 @@
 import { Effect } from "effect";
 
-import type { PrefixEnforcement } from "./api.js";
+import type { PrefixEnforcement } from "@/effect-env/services/prefix-enforcement/api.js";
 import type {
   PrefixEnforcementConfig,
   PrefixEnforcementOptions,
-} from "./types.js";
-import { PrefixError } from "./errors.js";
+} from "@/effect-env/services/prefix-enforcement/types.js";
+import { PrefixError } from "@/effect-env/services/prefix-enforcement/errors.js";
 
 const makePrefixEnforcement = (
   _config: PrefixEnforcementConfig

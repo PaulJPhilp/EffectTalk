@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import { describe, expect, it } from "vitest";
-import { XmpBackend, XmpBackendLayer } from "../../src/backends/XmpBackend.js";
-import { XmpParseError } from "../../src/errors.js";
+import { XmpBackend, XmpBackendLayer } from "../../src/backends/xmp-backend.js";
+import type { XmpParseError } from "../../src/errors.js";
 
 describe("XmpBackend", () => {
   describe("parse", () => {
@@ -43,7 +43,7 @@ describe("XmpBackend", () => {
     it("should handle null buffer gracefully", async () => {
       const program = Effect.gen(function* () {
         const backend = yield* XmpBackend;
-        // biome-ignore lint/suspicious/noExplicitAny: Testing error handling
+        // biome-ignore lint/suspicious/noExplicitAny
         return yield* backend.parse(null as any);
       }).pipe(Effect.provide(XmpBackendLayer));
 

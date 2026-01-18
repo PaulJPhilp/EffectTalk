@@ -27,13 +27,19 @@ const loadSuperjson = () =>
       );
     },
     catch: (error) => {
-      const message =
-        error instanceof Error && error.message.includes("Cannot find module")
-          ? "superjson is not installed. Install with: bun add superjson\n" +
-            "Alternatively, use Json.parse() with the JSON backend as a fallback."
-          : error instanceof Error
-            ? error.message
-            : String(error);
+      let message: string;
+      if (
+        error instanceof Error &&
+        error.message.includes("Cannot find module")
+      ) {
+        message =
+          "superjson is not installed. Install with: bun add superjson\n" +
+          "Alternatively, use Json.parse() with the JSON backend as a fallback.";
+      } else if (error instanceof Error) {
+        message = error.message;
+      } else {
+        message = String(error);
+      }
 
       return new ParseError({
         message,
@@ -115,10 +121,10 @@ export const superjsonBackend: Backend = {
         error instanceof StringifyError
           ? error
           : new StringifyError({
-              message: error instanceof Error ? error.message : String(error),
-              reason: "unknown",
-              ...(error instanceof Error ? { cause: error } : {}),
-            })
-      )
+            message: error instanceof Error ? error.message : String(error),
+            reason: "unknown",
+            ...(error instanceof Error ? { cause: error } : {}),
+          }),
+      ),
     ),
 };

@@ -1,16 +1,16 @@
-import { ThemeService } from "@services/theme/service";
+import { ThemeService } from "@services/theme/service.js";
 import chalk from "chalk";
 import { Effect } from "effect";
-import { DEFAULT_DISPLAY_TYPE } from "@/constants";
-import type { ChalkBgColor, ChalkColor } from "@/types";
+import { DEFAULT_DISPLAY_TYPE } from "@/constants.js";
+import type { ChalkBgColor, ChalkColor } from "@/types.js";
 
-import { display } from "./display";
+import { display } from "./display.js";
 import {
   COLOR_HIGHLIGHT,
   getDisplayColor,
   getDisplayIcon,
   SYMBOL_BULLET,
-} from "./icons";
+} from "./icons.js";
 
 /**
  * Apply chalk styling based on color options

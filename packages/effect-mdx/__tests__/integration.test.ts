@@ -1,8 +1,8 @@
 import { FileSystem } from "@effect/platform";
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "@effect/vitest";
 import { Effect, Layer } from "effect";
-import { MdxConfigService } from "../src/config";
-import { MdxService } from "../src/service";
+import { MdxConfigService } from "../src/config.js";
+import { MdxService, MdxServiceLayer } from "../src/service.js";
 
 const testBlogContent = `---yaml
 title: "My Blog Post"

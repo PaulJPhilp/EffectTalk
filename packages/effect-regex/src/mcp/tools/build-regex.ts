@@ -6,11 +6,11 @@
 
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import { Effect } from "effect";
-import { buildCommandRegex } from "../../command/command-spec.js";
-import { emit } from "../../core/builder.js";
-import { STANDARD_PATTERNS } from "../../std/patterns.js";
-import type { BuildRegexArgs, ToolHandler } from "../types.js";
-import { toMcpError, validateInputEffect } from "../utils/validation.js";
+import { buildCommandRegex } from "@/effect-regex/command/command-spec.js";
+import { emit } from "@/effect-regex/core/builder.js";
+import { STANDARD_PATTERNS } from "@/effect-regex/std/patterns.js";
+import type { BuildRegexArgs, ToolHandler } from "@/effect-regex/mcp/types.js";
+import { toMcpError, validateInputEffect } from "@/effect-regex/mcp/utils/validation.js";
 
 /**
  * Handle build_regex tool requests

@@ -6,11 +6,12 @@
     "declaration": true,
     "declarationMap": true,
     "composite": true,
-    "baseUrl": ".",
+    "baseUrl": "../../",
     "paths": {
-      "effect": ["../../node_modules/effect"],
-      "effect/*": ["../../node_modules/effect/*"],
-      "effect-json": ["../effect-json/dist/index.d.ts"]
+      "@/effect-env/*": ["./packages/effect-env/src/*"],
+      "effect": ["./node_modules/effect"],
+      "effect/*": ["./node_modules/effect/*"],
+      "effect-json": ["./packages/effect-json/dist/index.d.ts"]
     }
   },
   "references": [

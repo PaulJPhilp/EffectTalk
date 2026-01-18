@@ -6,12 +6,12 @@
 
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import { Effect } from "effect";
-import type { AstNode } from "../../core/ast.js";
-import { emit, RegexBuilder } from "../../core/builder.js";
-import { optimize } from "../../core/optimizer.js";
-import { STANDARD_PATTERNS } from "../../std/patterns.js";
-import type { OptimizePatternArgs, ToolHandler } from "../types.js";
-import { toMcpError, validateInputEffect } from "../utils/validation.js";
+import type { AstNode } from "@/effect-regex/core/ast.js";
+import { emit, RegexBuilder } from "@/effect-regex/core/builder.js";
+import { optimize } from "@/effect-regex/core/optimizer.js";
+import { STANDARD_PATTERNS } from "@/effect-regex/std/patterns.js";
+import type { OptimizePatternArgs, ToolHandler } from "@/effect-regex/mcp/types.js";
+import { toMcpError, validateInputEffect } from "@/effect-regex/mcp/utils/validation.js";
 
 /**
  * Handle optimize_pattern tool requests

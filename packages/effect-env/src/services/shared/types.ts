@@ -1,6 +1,6 @@
 import { Config, Effect } from "effect";
 
-import { EnvSourceError } from "./errors.js";
+import { EnvSourceError } from "@/effect-env/services/shared/errors.js";
 
 /**
  * Canonical shape for raw environment input keyed by variable name. Values are

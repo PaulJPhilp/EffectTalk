@@ -1,13 +1,13 @@
-import { applyChalkStyle } from "@core/colors";
-import { getDisplayIcon } from "@core/icons";
-import { ThemeService } from "@services/theme/service";
-import type { Theme } from "@services/theme/types";
+import { applyChalkStyle } from "@core/colors.js";
+import { getDisplayIcon } from "@core/icons.js";
+import { ThemeService } from "@services/theme/service.js";
+import type { Theme } from "@services/theme/types.js";
 import { Console, Effect } from "effect";
-import { DEFAULT_DISPLAY_TYPE } from "@/constants";
-import type { ChalkStyleOptions } from "@/types";
-import type { DisplayService as DisplayServiceApi } from "./api";
-import { formatDisplayOutput } from "./helpers";
-import type { DisplayOptions, JsonDisplayOptions } from "./types";
+import { DEFAULT_DISPLAY_TYPE } from "@/constants.js";
+import type { ChalkStyleOptions } from "@/types.js";
+import type { DisplayService as DisplayServiceApi } from "./api.js";
+import { formatDisplayOutput } from "./helpers.js";
+import type { DisplayOptions, JsonDisplayOptions } from "./types.js";
 
 /**
  * Get theme from ThemeService if available
@@ -150,8 +150,8 @@ export class DisplayService extends Effect.Service<DisplayService>()(
 
               const prefix = formatJsonPrefix(type, theme, {
                 showPrefix,
-                customPrefix,
-                style: options.style,
+                ...(customPrefix && { customPrefix }),
+                ...(options.style && { style: options.style }),
               });
               const output = formatJsonWithPrefix(
                 jsonString,

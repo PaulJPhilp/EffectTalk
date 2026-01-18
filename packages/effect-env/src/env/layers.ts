@@ -1,6 +1,6 @@
 import { Effect, Layer, Schema as S, ParseResult } from "effect";
-import { EnvService, makeEnv } from "./service.js";
-import { EnvError } from "./errors.js";
+import { EnvService, makeEnv } from "@/effect-env/env/service.js";
+import { EnvError } from "@/effect-env/env/errors.js";
 
 /**
  * @deprecated Use createEnv or createSimpleEnv instead

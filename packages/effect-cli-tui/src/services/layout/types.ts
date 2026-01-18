@@ -2,7 +2,7 @@
  * Layout service types
  */
 
-import type { OutputItem as LayoutOutputItem } from "@ui/layout/TUILayout";
+import type { OutputItem as LayoutOutputItem } from "@ui/layout/TUILayout.js";
 import type React from "react";
 
 /**

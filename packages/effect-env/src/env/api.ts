@@ -1,5 +1,5 @@
-import type { EnvError, MissingVarError } from "./errors.js";
-import type { EffectType } from "../types.js";
+import type { EnvError, MissingVarError } from "@/effect-env/env/errors.js";
+import type { EffectType } from "@/effect-env/types.js";
 
 /**
  * Generic environment service interface, typed by the schema E.

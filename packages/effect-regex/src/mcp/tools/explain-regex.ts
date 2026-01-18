@@ -8,8 +8,8 @@
  */
 
 import { Effect } from "effect";
-import type { ExplainRegexArgs, ToolHandler } from "../types.js";
-import { toMcpError, validateInputEffect } from "../utils/validation.js";
+import type { ExplainRegexArgs, ToolHandler } from "@/effect-regex/mcp/types.js";
+import { toMcpError, validateInputEffect } from "@/effect-regex/mcp/utils/validation.js";
 
 /**
  * Handle explain_regex tool requests

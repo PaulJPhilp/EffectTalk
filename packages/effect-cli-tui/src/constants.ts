@@ -24,9 +24,9 @@ export {
   SPINNER_MESSAGE_DONE,
   SPINNER_MESSAGE_FAILED,
   SYMBOL_BULLET,
-} from "./core/icons";
+} from "./core/icons.js";
 
-import type { DisplayType } from "./types";
+import type { DisplayType } from "./types.js";
 
 // Display constants
 export const DEFAULT_DISPLAY_TYPE = "info" satisfies DisplayType;
@@ -90,7 +90,7 @@ export const SUPERMEMORY_API_KEY_PREFIX = "sk_";
 /** Default limit for history display */
 export const DEFAULT_HISTORY_LIMIT = 20;
 
-import type { BorderStyle, BoxBorderChars } from "./types";
+import type { BorderStyle, BoxBorderChars } from "./types.js";
 
 // ============================================================================
 // Slash Command Constants

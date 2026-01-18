@@ -17,7 +17,7 @@ describe("JsonLines", () => {
 
   type User = Schema.Schema.Type<typeof User>;
 
-  const validUsers: ReadonlyArray<User> = [
+  const validUsers: readonly User[] = [
     { id: 1, name: "Alice", tags: ["admin", "beta"] },
     { id: 2, name: "Bob", tags: ["user"] },
   ];

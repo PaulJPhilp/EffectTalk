@@ -5,8 +5,8 @@
  */
 
 import { Effect } from "effect";
-import type { LintRegexArgs, ToolHandler } from "../types.js";
-import { toMcpError, validateInputEffect } from "../utils/validation.js";
+import type { LintRegexArgs, ToolHandler } from "@/effect-regex/mcp/types.js";
+import { toMcpError, validateInputEffect } from "@/effect-regex/mcp/utils/validation.js";
 
 /**
  * Handle lint_regex tool requests

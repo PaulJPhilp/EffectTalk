@@ -6,9 +6,9 @@
  */
 
 import { Data } from "effect";
-import type { Ast } from "../core/ast.js";
-import type { LintIssue } from "../core/linter.js";
-import type { RegexTestCase } from "../core/tester.js";
+import type { Ast } from "@/effect-regex/core/ast.js";
+import type { LintIssue } from "@/effect-regex/core/linter.js";
+import type { RegexTestCase } from "@/effect-regex/core/tester.js";
 
 /**
  * Dialect types for regex patterns

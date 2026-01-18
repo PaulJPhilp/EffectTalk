@@ -68,7 +68,7 @@ function renderNode(
     ) => Effect.Effect<string, LiquidRenderError>
   >
 ): Effect.Effect<string, LiquidRenderError> {
-  return Effect.gen(function* () {
+  return Effect.gen(function* (): Generator<any, string, any> {
     switch (node.type) {
       case "text": {
         const textNode = node as import("./ast.js").TextNode;
@@ -85,7 +85,15 @@ function renderNode(
           value = numValue;
         } else {
           // It's a variable name, resolve from context
-          value = yield* resolveVariable(context, varNode.name);
+          value = yield* resolveVariable(context, varNode.name).pipe(
+            Effect.mapError(
+              (error) =>
+                new LiquidRenderError({
+                  message: error.message,
+                  cause: error,
+                })
+            )
+          );
         }
         const filtered = varNode.filters
           ? yield* applyFilters(value, varNode.filters, customFilters)
@@ -105,20 +113,25 @@ function renderNode(
           );
         }
 
-        const result = yield* tagFn(
+        const result = yield* (tagFn as any)(
           tagNode.args,
           tagNode.body,
           context,
-          (nodes, ctx) => renderNodes(nodes, ctx, customFilters, customTags)
+          (nodes: readonly AstNode[], ctx: LiquidContext) =>
+            renderNodes(nodes, ctx, customFilters, customTags)
         ).pipe(
-          Effect.mapError(
-            (error) =>
-              new LiquidRenderError({
-                message: `Tag error: ${
-                  error instanceof Error ? error.message : String(error)
-                }`,
-                cause: error,
-              })
+          Effect.mapError((error: unknown) =>
+            error instanceof LiquidTagError
+              ? new LiquidRenderError({
+                  message: `Tag error: ${error.message}`,
+                  cause: error,
+                })
+              : new LiquidRenderError({
+                  message: `Tag error: ${
+                    error instanceof Error ? error.message : String(error)
+                  }`,
+                  cause: error,
+                })
           )
         );
 
@@ -154,20 +167,25 @@ function renderNode(
             })
           );
         }
-        return yield* tagFn(
+        return yield* (tagFn as any)(
           [forNode.variable, "in", forNode.collection],
           forNode.body,
           context,
-          (nodes, ctx) => renderNodes(nodes, ctx, customFilters, customTags)
+          (nodes: readonly AstNode[], ctx: LiquidContext) =>
+            renderNodes(nodes, ctx, customFilters, customTags)
         ).pipe(
-          Effect.mapError(
-            (error) =>
-              new LiquidRenderError({
-                message: `For loop error: ${
-                  error instanceof Error ? error.message : String(error)
-                }`,
-                cause: error,
-              })
+          Effect.mapError((error: unknown) =>
+            error instanceof LiquidTagError
+              ? new LiquidRenderError({
+                  message: `For loop error: ${error.message}`,
+                  cause: error,
+                })
+              : new LiquidRenderError({
+                  message: `For loop error: ${
+                    error instanceof Error ? error.message : String(error)
+                  }`,
+                  cause: error,
+                })
           )
         );
       }
@@ -215,20 +233,24 @@ function renderNode(
             })
           );
         }
-        yield* tagFn(
+        yield* (tagFn as any)(
           [assignNode.variable, "=", assignNode.value],
           [],
           context,
           () => Effect.succeed("")
         ).pipe(
-          Effect.mapError(
-            (error) =>
-              new LiquidRenderError({
-                message: `Assign error: ${
-                  error instanceof Error ? error.message : String(error)
-                }`,
-                cause: error,
-              })
+          Effect.mapError((error: unknown) =>
+            error instanceof LiquidTagError
+              ? new LiquidRenderError({
+                  message: `Assign error: ${error.message}`,
+                  cause: error,
+                })
+              : new LiquidRenderError({
+                  message: `Assign error: ${
+                    error instanceof Error ? error.message : String(error)
+                  }`,
+                  cause: error,
+                })
           )
         );
         return "";
@@ -244,20 +266,25 @@ function renderNode(
             })
           );
         }
-        return yield* tagFn(
+        return yield* (tagFn as any)(
           [captureNode.variable],
           captureNode.body,
           context,
-          (nodes, ctx) => renderNodes(nodes, ctx, customFilters, customTags)
+          (nodes: readonly AstNode[], ctx: LiquidContext) =>
+            renderNodes(nodes, ctx, customFilters, customTags)
         ).pipe(
-          Effect.mapError(
-            (error) =>
-              new LiquidRenderError({
-                message: `Capture error: ${
-                  error instanceof Error ? error.message : String(error)
-                }`,
-                cause: error,
-              })
+          Effect.mapError((error: unknown) =>
+            error instanceof LiquidTagError
+              ? new LiquidRenderError({
+                  message: `Capture error: ${error.message}`,
+                  cause: error,
+                })
+              : new LiquidRenderError({
+                  message: `Capture error: ${
+                    error instanceof Error ? error.message : String(error)
+                  }`,
+                  cause: error,
+                })
           )
         );
       }
@@ -276,17 +303,21 @@ function renderNode(
             })
           );
         }
-        return yield* tagFn([includeNode.template], [], context, () =>
+        return yield* (tagFn as any)([includeNode.template], [], context, () =>
           Effect.succeed("")
         ).pipe(
-          Effect.mapError(
-            (error) =>
-              new LiquidRenderError({
-                message: `Include error: ${
-                  error instanceof Error ? error.message : String(error)
-                }`,
-                cause: error,
-              })
+          Effect.mapError((error: unknown) =>
+            error instanceof LiquidTagError
+              ? new LiquidRenderError({
+                  message: `Include error: ${error.message}`,
+                  cause: error,
+                })
+              : new LiquidRenderError({
+                  message: `Include error: ${
+                    error instanceof Error ? error.message : String(error)
+                  }`,
+                  cause: error,
+                })
           )
         );
       }
@@ -301,17 +332,21 @@ function renderNode(
             })
           );
         }
-        return yield* tagFn([renderNode.template], [], context, () =>
+        return yield* (tagFn as any)([renderNode.template], [], context, () =>
           Effect.succeed("")
         ).pipe(
-          Effect.mapError(
-            (error) =>
-              new LiquidRenderError({
-                message: `Render error: ${
-                  error instanceof Error ? error.message : String(error)
-                }`,
-                cause: error,
-              })
+          Effect.mapError((error: unknown) =>
+            error instanceof LiquidTagError
+              ? new LiquidRenderError({
+                  message: `Render error: ${error.message}`,
+                  cause: error,
+                })
+              : new LiquidRenderError({
+                  message: `Render error: ${
+                    error instanceof Error ? error.message : String(error)
+                  }`,
+                  cause: error,
+                })
           )
         );
       }
@@ -325,7 +360,7 @@ function renderNode(
       }
     }
   }).pipe(
-    Effect.mapError((error) =>
+    Effect.mapError((error: unknown) =>
       error instanceof LiquidRenderError
         ? error
         : new LiquidRenderError({
@@ -336,7 +371,7 @@ function renderNode(
             cause: error,
           })
     )
-  );
+  ) as Effect.Effect<string, LiquidRenderError>;
 }
 
 /**
@@ -367,5 +402,5 @@ export function renderNodes(
     }
 
     return result;
-  });
+  }) as Effect.Effect<string, LiquidRenderError>;
 }

@@ -1,10 +1,10 @@
-import { applyChalkStyle } from "@core/colors";
-import { Terminal } from "@core/terminal";
-import type { DisplayType } from "@services/display/types";
+import { applyChalkStyle } from "@core/colors.js";
+import { Terminal } from "@core/terminal.js";
+import type { DisplayType } from "@services/display/types.js";
 import chalk from "chalk";
 import { Effect } from "effect";
 import { table } from "table";
-import type { ChalkColor, TableAlignment } from "@/types";
+import type { ChalkColor, TableAlignment } from "@/types.js";
 
 export interface TableColumn<T = Record<string, unknown>> {
   key: keyof T | string;

@@ -19,6 +19,8 @@ export default defineConfig({
   }),
   external: [
     "effect",
+    "@effect/platform",
+    "@effect/platform-node",
     "react",
     "ink",
     "ink-spinner",

@@ -32,17 +32,17 @@
  */
 
 import { type Effect, Layer, ManagedRuntime } from "effect";
-import { EffectCLI } from "./cli";
-import { Terminal } from "./core/terminal";
-import { ApprovalService } from "./services/approval";
-import { DisplayService } from "./services/display";
-import { InkService } from "./services/ink";
-import { ToolCallLogService } from "./services/logs";
-import { ModeService } from "./services/mode";
-import { ThemeService } from "./services/theme/service";
-import { TUIHandler } from "./tui";
-import type { SlashCommandDefinition } from "./tui-slash-commands";
-import { withSlashCommands } from "./tui-slash-commands";
+import { EffectCLI } from "./cli.js";
+import { Terminal } from "./core/terminal.js";
+import { ApprovalService } from "./services/approval/index.js";
+import { DisplayService } from "./services/display/index.js";
+import { InkService } from "./services/ink/index.js";
+import { ToolCallLogService } from "./services/logs/index.js";
+import { ModeService } from "./services/mode/index.js";
+import { ThemeService } from "./services/theme/service.js";
+import { TUIHandler } from "./tui.js";
+import type { SlashCommandDefinition } from "./tui-slash-commands.js";
+import { withSlashCommands } from "./tui-slash-commands.js";
 
 /**
  * Combined layer providing all CLI/TUI services

@@ -1,5 +1,5 @@
 export type {
   ToolCallLogEntry,
   ToolCallLogServiceApi,
-} from "./toolCallLog.service";
-export { ToolCallLogService } from "./toolCallLog.service";
+} from "./toolCallLog.service.js";
+export { ToolCallLogService } from "./toolCallLog.service.js";

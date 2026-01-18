@@ -88,15 +88,18 @@ const runTest = <A, E>(effect: Effect.Effect<A, E, any>) => {
 		testAuditLogLayer,
 	);
 
-	// Create the full effect with all dependencies available
-	const effect_with_deps = effect.pipe(
-		Effect.provide(ActorService.Default),
-		Effect.provide(depLayers),
+	// Create the full layer with all dependencies
+	const allLayers = Layer.mergeAll(
+		ActorService.Default as any,
+		depLayers,
 	);
 
-	// Run the effect 
-	return effect_with_deps
-		.pipe(Effect.runPromise as any) as Promise<A>;
+	// Run the effect with all layers provided
+	return Effect.runPromise(
+		effect.pipe(
+			Effect.provide(allLayers),
+		) as Effect.Effect<A, E, never>
+	);
 };
 
 /**

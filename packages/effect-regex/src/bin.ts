@@ -3,11 +3,11 @@
 // Simple CLI for M1/M2 - will upgrade to Effect CLI later
 import { readFileSync } from "node:fs";
 import { Effect } from "effect";
-import { emit, RegexBuilder } from "./core/builder.js";
-import { explain, formatExplanation } from "./core/explainer.js";
-import { optimize } from "./core/optimizer.js";
-import { type RegexTestCase, testRegex } from "./core/tester.js";
-import { STANDARD_PATTERNS } from "./std/patterns.js";
+import { emit, RegexBuilder } from "@/effect-regex/core/builder.js";
+import { explain, formatExplanation } from "@/effect-regex/core/explainer.js";
+import { optimize } from "@/effect-regex/core/optimizer.js";
+import { type RegexTestCase, testRegex } from "@/effect-regex/core/tester.js";
+import { STANDARD_PATTERNS } from "@/effect-regex/std/patterns.js";
 
 const args = process.argv.slice(2);
 

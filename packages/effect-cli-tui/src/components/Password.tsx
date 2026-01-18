@@ -4,7 +4,7 @@
  * Provides hidden password input field.
  */
 
-import { SYMBOL_BULLET } from "@core/icons";
+import { SYMBOL_BULLET } from "../core/icons.js";
 import { Box, Text } from "ink";
 import TextInput from "ink-text-input";
 import type React from "react";

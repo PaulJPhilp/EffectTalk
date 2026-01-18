@@ -8,8 +8,8 @@ import {
   ICON_INFO,
   ICON_SUCCESS,
   ICON_WARNING,
-} from "@core/icons";
-import type { Theme } from "./types";
+} from "@core/icons.js";
+import type { Theme } from "./types.js";
 
 /**
  * Default theme matching current behavior

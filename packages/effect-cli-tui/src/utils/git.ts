@@ -1,8 +1,8 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { Effect } from "effect";
-import { GIT_COMMAND_TIMEOUT_MS } from "../constants";
-import { GIT_COMMANDS } from "../types/system-signals";
+import { GIT_COMMAND_TIMEOUT_MS } from "../constants.js";
+import { GIT_COMMANDS } from "../types/system-signals.js";
 
 const execFileAsync = promisify(execFile);
 

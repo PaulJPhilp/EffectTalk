@@ -5,12 +5,12 @@
  */
 
 // Core Types & Builders
-export * from "./core/ast.js";
-export { RegexBuilder } from "./core/builder.js";
+export * from "@/effect-regex/core/ast.js";
+export { RegexBuilder } from "@/effect-regex/core/builder.js";
 
 // Pattern Emission & Dialects
-export { emit as emitPattern } from "./core/emitter.js";
-export type { Dialect } from "./core/emitter.js";
+export { emit as emitPattern } from "@/effect-regex/core/emitter.js";
+export type { Dialect } from "@/effect-regex/core/emitter.js";
 
 // Services (Dependency Injection)
 export {
@@ -18,10 +18,10 @@ export {
   ValidationService,
   type RegexBuilderService as IRegexBuilderService,
   type ValidationService as IValidationService,
-} from "./services/index.js";
+} from "@/effect-regex/services/index.js";
 
 // Standard Patterns
-export * from "./std/index.js";
+export * from "@/effect-regex/std/index.js";
 
 // Errors
-export * from "./errors/index.js";
+export * from "@/effect-regex/errors/index.js";

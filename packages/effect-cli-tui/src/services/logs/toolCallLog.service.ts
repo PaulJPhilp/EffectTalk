@@ -1,5 +1,5 @@
 import { Effect, Ref } from "effect";
-import { MAX_LOG_ENTRIES } from "../../constants";
+import { MAX_LOG_ENTRIES } from "@/constants.js";
 
 /**
  * Tool call log entry

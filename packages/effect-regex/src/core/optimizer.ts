@@ -8,7 +8,7 @@
  * 4. Alternation Deduplication - Remove duplicate alternatives
  */
 
-import type { Ast as RegexAST } from "./ast.js";
+import type { Ast as RegexAST } from "@/effect-regex/core/ast.js";
 
 /**
  * Result of pattern optimization with performance metrics

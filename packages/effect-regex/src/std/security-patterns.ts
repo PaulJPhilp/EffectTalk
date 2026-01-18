@@ -1,4 +1,4 @@
-import { digit, RegexBuilder } from "../core/builder.js";
+import { digit, RegexBuilder } from "@/effect-regex/core/builder.js";
 
 /**
  * Security-focused and validation patterns

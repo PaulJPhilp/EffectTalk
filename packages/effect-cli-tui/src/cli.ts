@@ -1,10 +1,10 @@
 /** biome-ignore-all assist/source/organizeImports: <> */
 import { Effect } from "effect";
 import { spawn } from "node:child_process";
-import { MILLISECONDS_PER_SECOND } from "./constants";
-import { isErrnoException, isError } from "./core/error-utils";
-import { CLIError, type CLIResult, type CLIRunOptions } from "./types";
-import { ERROR_CODE_ENOENT } from "./types/system-signals";
+import { MILLISECONDS_PER_SECOND } from "./constants.js";
+import { isErrnoException, isError } from "./core/error-utils.js";
+import { CLIError, type CLIResult, type CLIRunOptions } from "./types.js";
+import { ERROR_CODE_ENOENT } from "./types/system-signals.js";
 
 /**
  * EffectCLI Service API
@@ -102,10 +102,11 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
             if (!(child.stdout && child.stderr)) {
               safeResume(
                 Effect.fail(
-                  new CLIError(
-                    "NotFound",
-                    "Unable to start the command. Please check that the command is available and try again."
-                  )
+                  new CLIError({
+                    reason: "NotFound",
+                    message:
+                      "Unable to start the command. Please check that the command is available and try again.",
+                  })
                 )
               );
               return;
@@ -126,12 +127,12 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
                     child.kill();
                     safeResume(
                       Effect.fail(
-                        new CLIError(
-                          "Timeout",
-                          `The command took too long to complete (timeout: ${Math.round(
+                        new CLIError({
+                          reason: "Timeout",
+                          message: `The command took too long to complete (timeout: ${Math.round(
                             timeoutMs / MILLISECONDS_PER_SECOND
-                          )}s). Please try again or increase the timeout.`
-                        )
+                          )}s). Please try again or increase the timeout.`,
+                        })
                       )
                     );
                   }, timeoutMs);
@@ -150,13 +151,13 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
               } else {
                 safeResume(
                   Effect.fail(
-                    new CLIError(
-                      "CommandFailed",
-                      `The command failed (exit code ${exitCode}).\n\nError details:\n${
+                    new CLIError({
+                      reason: "CommandFailed",
+                      message: `The command failed (exit code ${exitCode}).\n\nError details:\n${
                         stderr || "No error details available"
                       }`,
-                      exitCode ?? undefined
-                    )
+                      ...(exitCode && { exitCode }),
+                    })
                   )
                 );
               }
@@ -170,21 +171,21 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
               if (isErrnoException(err) && err.code === ERROR_CODE_ENOENT) {
                 safeResume(
                   Effect.fail(
-                    new CLIError(
-                      "NotFound",
-                      `The command "${command}" was not found. Please verify it is installed and available in your PATH.`
-                    )
+                    new CLIError({
+                      reason: "NotFound",
+                      message: `The command "${command}" was not found. Please verify it is installed and available in your PATH.`,
+                    })
                   )
                 );
               } else {
                 safeResume(
                   Effect.fail(
-                    new CLIError(
-                      "ExecutionError",
-                      `Unable to execute the command: ${
+                    new CLIError({
+                      reason: "ExecutionError",
+                      message: `Unable to execute the command: ${
                         isError(err) ? err.message : globalThis.String(err)
-                      }\n\nPlease verify the command is installed and accessible in your PATH.`
-                    )
+                      }\n\nPlease verify the command is installed and accessible in your PATH.`,
+                    })
                   )
                 );
               }
@@ -224,12 +225,12 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
                     child.kill();
                     safeResume(
                       Effect.fail(
-                        new CLIError(
-                          "Timeout",
-                          `The command took too long to complete (timeout: ${Math.round(
+                        new CLIError({
+                          reason: "Timeout",
+                          message: `The command took too long to complete (timeout: ${Math.round(
                             timeoutMs / MILLISECONDS_PER_SECOND
-                          )}s). Please try again or increase the timeout.`
-                        )
+                          )}s). Please try again or increase the timeout.`,
+                        })
                       )
                     );
                   }, timeoutMs);
@@ -246,11 +247,11 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
               } else {
                 safeResume(
                   Effect.fail(
-                    new CLIError(
-                      "CommandFailed",
-                      `The command failed with exit code ${exitCode}. Please check the command output above for details.`,
-                      exitCode ?? undefined
-                    )
+                    new CLIError({
+                      reason: "CommandFailed",
+                      message: `The command failed with exit code ${exitCode}. Please check the command output above for details.`,
+                      ...(exitCode && { exitCode }),
+                    })
                   )
                 );
               }
@@ -264,21 +265,21 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
               if (isErrnoException(err) && err.code === ERROR_CODE_ENOENT) {
                 safeResume(
                   Effect.fail(
-                    new CLIError(
-                      "NotFound",
-                      `The command "${command}" was not found. Please verify it is installed and available in your PATH.`
-                    )
+                    new CLIError({
+                      reason: "NotFound",
+                      message: `The command "${command}" was not found. Please verify it is installed and available in your PATH.`,
+                    })
                   )
                 );
               } else {
                 safeResume(
                   Effect.fail(
-                    new CLIError(
-                      "ExecutionError",
-                      `Unable to execute the command: ${
+                    new CLIError({
+                      reason: "ExecutionError",
+                      message: `Unable to execute the command: ${
                         isError(err) ? err.message : globalThis.String(err)
-                      }\n\nPlease verify the command is installed and accessible in your PATH.`
-                    )
+                      }\n\nPlease verify the command is installed and accessible in your PATH.`,
+                    })
                   )
                 );
               }

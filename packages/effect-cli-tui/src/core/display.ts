@@ -1,9 +1,9 @@
-import { DisplayService } from "@services/display";
+import { DisplayService } from "@services/display/index.js";
 import type {
   DisplayOptions,
   DisplayType,
   JsonDisplayOptions,
-} from "@services/display/types";
+} from "@services/display/types.js";
 import { Effect } from "effect";
 
 /**

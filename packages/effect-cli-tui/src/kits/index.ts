@@ -1,15 +1,15 @@
 // biome-ignore assist/source/organizeImports: <>
-import type { Kit } from "./types";
-export { KitConfigError, loadKitConfig, saveKitConfig } from "./config";
-export { MemKit } from "./memkit";
-export { KitRegistryService } from "./registry";
-export { disableKit, enableKit, withKit, withKits } from "./runtime";
+import type { Kit } from "./types.js";
+export { KitConfigError, loadKitConfig, saveKitConfig } from "./config.js";
+export { MemKit } from "./memkit.js";
+export { KitRegistryService } from "./registry.js";
+export { disableKit, enableKit, withKit, withKits } from "./runtime.js";
 export {
   KitError,
   type Kit,
   type KitConfig,
   type KitRegistry,
-} from "./types";
+} from "./types.js";
 
 /**
  * Helper function to create a kit
@@ -32,7 +32,7 @@ export function createKit(
   name: string,
   version: string,
   description: string,
-  commands: readonly import("../tui-slash-commands").SlashCommandDefinition[]
+  commands: readonly import("../tui-slash-commands.js").SlashCommandDefinition[]
 ): Kit {
   return {
     id,

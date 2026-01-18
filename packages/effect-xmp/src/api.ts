@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { XmpBackend, XmpBackendLayer } from "./backends/XmpBackend.js";
-import { XmpParseError } from "./errors.js";
+import { XmpBackend, XmpBackendLayer } from "./backends/xmp-backend.js";
+import type { XmpParseError } from "./errors.js";
 
 /**
  * Parses XMP data from a file buffer.

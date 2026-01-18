@@ -9,7 +9,7 @@
 
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import { Effect } from "effect";
-import { LIMITS } from "../types.js";
+import { LIMITS } from "@/effect-regex/mcp/types.js";
 
 /**
  * Validate general tool input constraints

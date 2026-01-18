@@ -17,15 +17,15 @@
 // biome-ignore assist/source/organizeImports: <>
 import { Console, Effect } from "effect";
 import React from "react";
-import { Confirm } from "./components/Confirm";
-import { Input } from "./components/Input";
-import { MultiSelect } from "./components/MultiSelect";
-import { Password } from "./components/Password";
-import { Select } from "./components/Select";
-import { DEFAULT_DISPLAY_TYPE } from "./constants";
-import { getDisplayIcon } from "./core/icons";
-import { InkService } from "./services/ink";
-import { ToolCallLogService } from "./services/logs";
+import { Confirm } from "./components/Confirm.js";
+import { Input } from "./components/Input.js";
+import { MultiSelect } from "./components/MultiSelect.js";
+import { Password } from "./components/Password.js";
+import { Select } from "./components/Select.js";
+import { DEFAULT_DISPLAY_TYPE } from "./constants.js";
+import { getDisplayIcon } from "./core/icons.js";
+import { InkService } from "./services/ink/index.js";
+import { ToolCallLogService } from "./services/logs/index.js";
 import {
   addSlashCommandHistoryEntry,
   applyShortFlagMapping,
@@ -36,13 +36,13 @@ import {
   type SlashCommandRegistry,
   type SlashCommandRequirements,
   type SlashCommandResult,
-} from "./tui-slash-commands";
+} from "./tui-slash-commands.js";
 import {
   InkError,
   TUIError,
   type DisplayType,
   type SelectOption,
-} from "./types";
+} from "./types.js";
 
 /**
  * TUI Handler Service
@@ -72,12 +72,12 @@ export class TUIHandler extends Effect.Service<TUIHandler>()("app/TUIHandler", {
           error.reason === "TerminalError" &&
           error.message.toLowerCase().includes("cancelled")
         ) {
-          return new TUIError("Cancelled", error.message);
+          return new TUIError({ reason: "Cancelled", message: error.message });
         }
-        return new TUIError("RenderError", error.message);
+        return new TUIError({ reason: "RenderError", message: error.message });
       }
 
-      return new TUIError("RenderError", String(error));
+      return new TUIError({ reason: "RenderError", message: String(error) });
     };
 
     const handleSlashCommandResult = (
@@ -93,18 +93,18 @@ export class TUIHandler extends Effect.Service<TUIHandler>()("app/TUIHandler", {
 
       if (result.kind === "abortPrompt") {
         return Effect.fail(
-          new TUIError(
-            "SlashCommandAbort",
-            result.message ?? "Slash command aborted the prompt"
-          )
+          new TUIError({
+            reason: "SlashCommandAbort",
+            message: result.message ?? "Slash command aborted the prompt",
+          })
         );
       }
 
       return Effect.fail(
-        new TUIError(
-          "SlashCommandExit",
-          result.message ?? "Slash command requested session exit"
-        )
+        new TUIError({
+          reason: "SlashCommandExit",
+          message: result.message ?? "Slash command requested session exit",
+        })
       );
     };
 
@@ -152,10 +152,10 @@ export class TUIHandler extends Effect.Service<TUIHandler>()("app/TUIHandler", {
               if (error instanceof TUIError) {
                 return error;
               }
-              return new TUIError(
-                "RenderError",
-                `Slash command failed: ${String(error)}`
-              );
+              return new TUIError({
+                reason: "RenderError",
+                message: `Slash command failed: ${String(error)}`,
+              });
             })
           );
 
@@ -166,23 +166,27 @@ export class TUIHandler extends Effect.Service<TUIHandler>()("app/TUIHandler", {
         const _toolLogResult = yield* Effect.either(
           Effect.gen(function* () {
             const toolLog = yield* ToolCallLogService;
-            yield* toolLog.log({
+            const resultSummary = (() => {
+              if (result?.kind === "continue") {
+                return "continued";
+              }
+              if (result?.kind === "exitSession") {
+                return "exited session";
+              }
+              if (result?.kind === "abortPrompt") {
+                return "aborted prompt";
+              }
+              return undefined;
+            })();
+
+            const logEntry: Parameters<typeof toolLog.log>[0] = {
               timestamp: Date.now(),
               commandName: parsed.command,
               args: parsed.args,
-              resultSummary: (() => {
-                if (result?.kind === "continue") {
-                  return "continued";
-                }
-                if (result?.kind === "exitSession") {
-                  return "exited session";
-                }
-                if (result?.kind === "abortPrompt") {
-                  return "aborted prompt";
-                }
-                return;
-              })(),
-            });
+              ...(resultSummary && { resultSummary }),
+            };
+
+            yield* toolLog.log(logEntry);
           })
         );
         // Ignore errors from tool logging (service might not be available)
@@ -240,7 +244,7 @@ export class TUIHandler extends Effect.Service<TUIHandler>()("app/TUIHandler", {
             let currentValue = options?.default ?? "";
 
             const value = yield* ink.renderWithResult<string>((onComplete) =>
-              React.createElement(Input, {
+              React.createElement(Input as any, {
                 message,
                 defaultValue: currentValue,
                 validate: options?.validate,
@@ -424,7 +428,7 @@ export class TUIHandler extends Effect.Service<TUIHandler>()("app/TUIHandler", {
       ): Effect.Effect<boolean, TUIError> =>
         ink
           .renderWithResult<boolean>((onComplete) =>
-            React.createElement(Confirm, {
+            React.createElement(Confirm as any, {
               message,
               default: options?.default,
               onSubmit: onComplete,
@@ -460,7 +464,7 @@ export class TUIHandler extends Effect.Service<TUIHandler>()("app/TUIHandler", {
             const _history = getSlashCommandHistory();
             const _currentValue = "";
             const value = yield* ink.renderWithResult<string>((onComplete) =>
-              React.createElement(Password, {
+              React.createElement(Password as any, {
                 message,
                 validate: options?.validate,
                 onSubmit: onComplete,

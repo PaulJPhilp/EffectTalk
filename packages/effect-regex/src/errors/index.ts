@@ -4,7 +4,7 @@
  * Centralized export point for all error types.
  */
 
-export type { Dialect, RegexLibraryError } from "./types.js";
+export type { Dialect, RegexLibraryError } from "@/effect-regex/errors/types.js";
 export {
   DialectIncompatibilityError,
   EmitError,
@@ -12,4 +12,4 @@ export {
   RegexCompilationError,
   TestExecutionError,
   ValidationError,
-} from "./types.js";
+} from "@/effect-regex/errors/types.js";

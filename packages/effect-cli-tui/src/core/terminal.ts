@@ -4,7 +4,7 @@ import {
   ANSI_CLEAR_LINE,
   ANSI_HIDE_CURSOR,
   ANSI_SHOW_CURSOR,
-} from "./icons";
+} from "./icons.js";
 
 /**
  * Terminal service for writing to stdout/stderr.

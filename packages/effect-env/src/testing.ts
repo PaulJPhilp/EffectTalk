@@ -32,8 +32,8 @@
  */
 
 import { Schema as S } from "effect";
-import { createSimpleEnv } from "./env/create.js";
-import { EnvError } from "./env/errors.js";
+import { createSimpleEnv } from "@/effect-env/env/create.js";
+import { EnvError } from "@/effect-env/env/errors.js";
 
 /**
  * Create a test environment layer with provided values

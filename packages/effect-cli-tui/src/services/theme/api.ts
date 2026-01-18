@@ -1,5 +1,5 @@
 import type { Effect } from "effect";
-import type { Theme } from "./types";
+import type { Theme } from "./types.js";
 
 /**
  * Theme service API

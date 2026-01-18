@@ -22,10 +22,7 @@ export interface PanelProps {
    */
   body: React.ReactNode | string;
 
-  /**
-   * Optional footer text
-   */
-  footer?: string;
+footer?: string | undefined;
 
   /**
    * Optional border style
@@ -218,7 +215,7 @@ export const KeyValuePanel: React.FC<KeyValuePanelProps> = ({
     </Box>
   );
 
-  return <Panel body={body} footer={footer} title={title} />;
+  return <Panel body={body} footer={footer ?? undefined} title={title} />;
 };
 
 /**
@@ -366,5 +363,5 @@ export const TablePanel: React.FC<TablePanelProps> = ({
     </Box>
   );
 
-  return <Panel body={body} footer={footer} title={title} />;
+  return <Panel body={body} footer={footer ?? undefined} title={title} />;
 };

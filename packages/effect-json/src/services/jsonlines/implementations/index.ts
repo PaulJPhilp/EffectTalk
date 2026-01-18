@@ -9,18 +9,21 @@ import { JsonLinesParseError, ParseError } from "../../../errors.js";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: toString is an intentional utility function name
 import { buildSnippet, getLineColumn, toString } from "../../../utils/index.js";
 
+// Pre-compiled regex for position extraction to avoid repeated compilation
+const POSITION_REGEX = /position (\d+)/;
+
 /**
  * Options for stringifying JSON Lines
  */
-export type JsonLinesStringifyOptions = {
+export interface JsonLinesStringifyOptions {
   readonly indent?: number; // For individual JSON values (usually 0 for JSONL)
-};
+}
 
 /**
  * Split input into lines, normalizing line endings
  * Removes empty/whitespace-only lines
  */
-const splitLines = (input: string): ReadonlyArray<string> => {
+const splitLines = (input: string): readonly string[] => {
   const normalized = input.replace(/\r\n/g, "\n");
   return normalized.split("\n").filter((line) => line.trim().length > 0);
 };
@@ -32,7 +35,7 @@ const splitLines = (input: string): ReadonlyArray<string> => {
  */
 const parseLine = (
   line: string,
-  lineNumber: number
+  lineNumber: number,
 ): Effect.Effect<unknown, JsonLinesParseError> =>
   Effect.try({
     try: () => JSON.parse(line) as unknown,
@@ -41,9 +44,9 @@ const parseLine = (
         error instanceof Error ? error.message : String(error);
 
       // Extract position from error message (if available)
-      const positionMatch = errorMessage.match(/position (\d+)/);
+      const positionMatch = errorMessage.match(POSITION_REGEX);
       const position = positionMatch
-        ? Number.parseInt(positionMatch[1]!, 10)
+        ? Number.parseInt(positionMatch[1] ?? "0", 10)
         : 0;
 
       const { line: _, column } = getLineColumn(line, position);
@@ -66,8 +69,8 @@ const parseLine = (
  * Skips blank lines, fails fast on first error
  */
 export const parseBatch = (
-  input: string | Buffer
-): Effect.Effect<ReadonlyArray<unknown>, JsonLinesParseError> => {
+  input: string | Buffer,
+): Effect.Effect<readonly unknown[], JsonLinesParseError> => {
   const inputStr = toString(input);
   const lines = splitLines(inputStr);
 
@@ -79,7 +82,7 @@ export const parseBatch = (
   // Parse each line and collect results
   return Effect.all(
     lines.map((line, index) => parseLine(line, index + 1)),
-    { concurrency: "unbounded" }
+    { concurrency: "unbounded" },
   );
 };
 
@@ -90,7 +93,7 @@ export const parseBatch = (
  */
 export const stringifyBatch = (
   values: Iterable<unknown>,
-  options?: JsonLinesStringifyOptions
+  options?: JsonLinesStringifyOptions,
 ): Effect.Effect<string, ParseError> => {
   const valuesArray = Array.from(values);
 
@@ -102,7 +105,7 @@ export const stringifyBatch = (
   return Effect.try({
     try: () => {
       const lines = valuesArray.map((value) =>
-        JSON.stringify(value, null, options?.indent ?? 0)
+        JSON.stringify(value, null, options?.indent ?? 0),
       );
       return `${lines.join("\n")}\n`; // Trailing newline is conventional
     },
@@ -133,7 +136,7 @@ class LineBuffer {
    * Process incoming chunk and emit complete lines
    */
   processChunk(
-    chunk: string
+    chunk: string,
   ): ReadonlyArray<{ line: string; lineNumber: number }> {
     this.buffer += chunk;
     const lines: Array<{ line: string; lineNumber: number }> = [];
@@ -180,7 +183,7 @@ class LineBuffer {
  * Handles arbitrary chunk boundaries (may split lines mid-way)
  */
 export const parseStream = <R>(
-  input: Stream.Stream<string, never, R>
+  input: Stream.Stream<string, never, R>,
 ): Stream.Stream<unknown, JsonLinesParseError, R> => {
   const buffer = new LineBuffer();
 
@@ -192,10 +195,10 @@ export const parseStream = <R>(
     Stream.flatMap((lines) => Stream.fromIterable(lines)),
     Stream.concat(
       Stream.fromEffect(Effect.succeed(buffer.flush())).pipe(
-        Stream.flatMap((lines) => Stream.fromIterable(lines))
-      )
+        Stream.flatMap((lines) => Stream.fromIterable(lines)),
+      ),
     ),
-    Stream.mapEffect(({ line, lineNumber }) => parseLine(line, lineNumber))
+    Stream.mapEffect(({ line, lineNumber }) => parseLine(line, lineNumber)),
   );
 };
 
@@ -206,7 +209,7 @@ export const parseStream = <R>(
  */
 export const stringifyStream = <R>(
   values: Stream.Stream<unknown, never, R>,
-  options?: JsonLinesStringifyOptions
+  options?: JsonLinesStringifyOptions,
 ): Stream.Stream<string, ParseError, R> =>
   values.pipe(
     Stream.mapEffect((value) =>
@@ -223,6 +226,6 @@ export const stringifyStream = <R>(
             ...(error instanceof Error ? { cause: error } : {}),
           });
         },
-      })
-    )
+      }),
+    ),
   );

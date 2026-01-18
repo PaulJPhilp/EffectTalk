@@ -6,9 +6,9 @@
 
 import { Effect, Ref } from "effect";
 import type React from "react";
-import type { LayoutService as LayoutServiceApi } from "./api";
-import type { LayoutError } from "./errors";
-import type { OutputItem } from "./types";
+import type { LayoutService as LayoutServiceApi } from "./api.js";
+import type { LayoutError } from "./errors.js";
+import type { OutputItem } from "./types.js";
 
 /**
  * Layout state stored in Ref

@@ -14,12 +14,12 @@ import {
   PASSWORD_MASK,
   SESSION_FILE_PREFIX,
   SHORT_TO_LONG_FLAGS,
-} from "./constants";
-import type { KitRegistryService } from "./kits/registry";
-import type { ToolCallLogService } from "./services/logs";
-import type { ModeService } from "./services/mode";
-import { TUIError, type CLIError, type PromptKind } from "./types";
-import { renderTablePanel } from "./ui/panels/render";
+} from "./constants.js";
+import type { KitRegistryService } from "./kits/registry.js";
+import type { ToolCallLogService } from "./services/logs/index.js";
+import type { ModeService } from "./services/mode/index.js";
+import { TUIError, type CLIError, type PromptKind } from "./types.js";
+import { renderTablePanel } from "./ui/panels/render.js";
 
 /**
  * Union type of all possible slash command service dependencies.
@@ -222,7 +222,12 @@ function parseShortFlagsWithEquals(
   body: string,
   flags: Record<string, string | boolean>
 ): void {
-  const [letters, value] = body.split("=", 2);
+  const parts = body.split("=", 2);
+  const letters = parts[0];
+  const value = parts[1];
+  if (!letters) {
+    return;
+  }
   for (let j = 0; j < letters.length; j++) {
     const letter = letters[j]?.trim().toLowerCase();
     if (!letter) {
@@ -290,7 +295,12 @@ function validateSlashInput(
     return null;
   }
 
-  const commandNameRaw = parts[0].slice(1);
+  const firstPart = parts[0];
+  if (!firstPart) {
+    return null;
+  }
+
+  const commandNameRaw = firstPart.slice(1);
   if (!commandNameRaw) {
     return null;
   }
@@ -676,7 +686,7 @@ export function setGlobalSlashCommandRegistry(
   currentSlashCommandRegistry = createSlashCommandRegistry(definitions);
 }
 
-import { AGENT_HARNESS_SLASH_COMMANDS } from "./tui-slash-commands-agent";
+import { AGENT_HARNESS_SLASH_COMMANDS } from "./tui-slash-commands-agent.js";
 
 /**
  * Built-in slash commands
@@ -805,7 +815,13 @@ export const DEFAULT_SLASH_COMMANDS: readonly SlashCommandDefinition[] = [
           catch: (error) =>
             new Error(`Failed to save history: ${String(error)}`),
         }).pipe(
-          Effect.mapError((error) => new TUIError("RenderError", String(error)))
+          Effect.mapError(
+            (error) =>
+              new TUIError({
+                reason: "RenderError",
+                message: String(error),
+              })
+          )
         );
 
         yield* Console.log(`\nSession history saved to: ${filename}\n`);
@@ -823,7 +839,13 @@ export const DEFAULT_SLASH_COMMANDS: readonly SlashCommandDefinition[] = [
           catch: (error) =>
             new Error(`Failed to read directory: ${String(error)}`),
         }).pipe(
-          Effect.mapError((error) => new TUIError("RenderError", String(error)))
+          Effect.mapError(
+            (error) =>
+              new TUIError({
+                reason: "RenderError",
+                message: String(error),
+              })
+          )
         );
 
         const sessionFiles = (files as string[]).filter((file: string) =>
@@ -854,7 +876,13 @@ export const DEFAULT_SLASH_COMMANDS: readonly SlashCommandDefinition[] = [
           try: () => fs.readFile(filepath, "utf-8"),
           catch: (error) => new Error(`Failed to read file: ${String(error)}`),
         }).pipe(
-          Effect.mapError((error) => new TUIError("RenderError", String(error)))
+          Effect.mapError(
+            (error) =>
+              new TUIError({
+                reason: "RenderError",
+                message: String(error),
+              })
+          )
         );
 
         const tempHistory = new SessionHistory();
@@ -931,7 +959,7 @@ export function createEffectCliSlashCommand<
   return {
     name: options.name,
     description: options.description,
-    aliases: options.aliases,
+    ...(options.aliases && { aliases: options.aliases }),
     run: (context: SlashCommandContext) =>
       options.effect(context) as SlashCommandEffect,
   };

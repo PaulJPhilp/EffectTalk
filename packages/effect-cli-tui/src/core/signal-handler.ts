@@ -1,11 +1,11 @@
 import { Effect } from "effect";
-import { SIGNAL_SIGINT, SIGNAL_SIGTERM } from "../types/system-signals";
+import { SIGNAL_SIGINT, SIGNAL_SIGTERM } from "@/types/system-signals.js";
 import {
   ANSI_CARRIAGE_RETURN_CLEAR,
   ANSI_SHOW_CURSOR,
   EXIT_CODE_SIGINT,
   EXIT_CODE_SIGTERM,
-} from "./icons";
+} from "./icons.js";
 
 /**
  * Signal handler for graceful shutdown on SIGINT/SIGTERM.

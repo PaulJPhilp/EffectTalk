@@ -19,11 +19,11 @@
  * ```
  */
 
-export { Confirm, type ConfirmProps } from "./Confirm";
-export { Input, type InputProps } from "./Input";
-export { Message, type MessageProps } from "./Message";
-export { MultiSelect, type MultiSelectProps } from "./MultiSelect";
-export { Password, type PasswordProps } from "./Password";
-export { ProgressBar, type ProgressBarProps } from "./ProgressBar";
-export { Select, type SelectProps } from "./Select";
-export { SpinnerComponent, type SpinnerComponentProps } from "./Spinner";
+export { Confirm, type ConfirmProps } from "./Confirm.js";
+export { Input, type InputProps } from "./Input.js";
+export { Message, type MessageProps } from "./Message.js";
+export { MultiSelect, type MultiSelectProps } from "./MultiSelect.js";
+export { Password, type PasswordProps } from "./Password.js";
+export { ProgressBar, type ProgressBarProps } from "./ProgressBar.js";
+export { Select, type SelectProps } from "./Select.js";
+export { SpinnerComponent, type SpinnerComponentProps } from "./Spinner.js";

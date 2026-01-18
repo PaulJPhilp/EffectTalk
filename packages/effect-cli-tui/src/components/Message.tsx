@@ -14,11 +14,11 @@ import {
   ICON_INFO,
   ICON_SUCCESS,
   ICON_WARNING,
-} from "@core/icons";
+} from "../core/icons.js";
 import { Box, Text } from "ink";
 import type React from "react";
-import { DEFAULT_DISPLAY_TYPE } from "@/constants";
-import type { DisplayTypeColor } from "@/types";
+import { DEFAULT_DISPLAY_TYPE } from "../constants.js";
+import type { DisplayTypeColor } from "../types.js";
 
 export interface MessageProps {
   message: string;

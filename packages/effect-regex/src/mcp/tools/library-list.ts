@@ -5,9 +5,9 @@
  */
 
 import { Effect } from "effect";
-import { STANDARD_PATTERNS } from "../../std/patterns.js";
-import type { LibraryListArgs, ToolHandler } from "../types.js";
-import { toMcpError } from "../utils/validation.js";
+import { STANDARD_PATTERNS } from "@/effect-regex/std/patterns.js";
+import type { LibraryListArgs, ToolHandler } from "@/effect-regex/mcp/types.js";
+import { toMcpError } from "@/effect-regex/mcp/utils/validation.js";
 
 /**
  * Handle library_list tool requests

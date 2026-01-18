@@ -1,5 +1,5 @@
-import { spawn } from "node:child_process";
 import { describe, expect, it } from "@effect/vitest";
+import { spawn } from "node:child_process";
 
 // MCP protocol message types
 interface MCPMessage {
@@ -25,7 +25,7 @@ class MCPClient {
   >();
 
   constructor() {
-    this.process = spawn("node", ["dist/mcp/server.cjs"], {
+    this.process = spawn("node", ["dist/mcp/server.js"], {
       stdio: ["pipe", "pipe", "pipe"],
       cwd: process.cwd(),
     });

@@ -1,0 +1,126 @@
+================================================================================
+EFFECTTALK MONOREPO - BUILD FAILURES SUMMARY
+================================================================================
+
+Test Date: 2026-01-18
+Total Packages Tested: 27
+Passing: 23 (85.2%)
+Failing: 4 (14.8%)
+
+================================================================================
+FAILING PACKAGES & QUICK REFERENCE
+================================================================================
+
+1. EFFECT-ACTOR (Layer 2 - Agent Infrastructure)
+   Status: CRITICAL - Layer 2 package failure
+   Error: TypeScript compilation error in service.test.ts
+   File: src/actor/service.test.ts:93
+   Issue: Incompatible type signatures - Layer return type doesn't match 
+           ManagedRuntime<unknown, unknown> expectation
+   Fix Time: 5-10 minutes
+   Priority: HIGH (Layer 2 foundational component)
+
+2. EFFECT-CLI-TUI (Layer 2 - Agent Infrastructure)
+   Status: CRITICAL - Layer 2 package failure
+   Error: ESM module resolution - missing .js file extensions
+   File: src/index.ts (24+ import statements)
+   Issue: Multiple relative imports lack .js extensions required for 
+          node16/nodenext moduleResolution
+   Fix Time: 1-2 minutes (mechanical fix)
+   Priority: HIGH (Layer 2 foundational component)
+   Quick Fix: Add .js extension to all relative imports in src/index.ts
+
+3. EFFECT-COCKPIT (Layer 2 - Agent Infrastructure)
+   Status: CRITICAL - Layer 2 package failure
+   Error: TypeScript type safety violation
+   File: src/index.ts:59
+   Issue: Effect with 'any' context requirements passed where 'never' expected
+   Fix Time: 5-10 minutes
+   Priority: HIGH (Layer 2 foundational component)
+
+4. EFFECT-LIQUID (Layer 1 - Data Foundation)
+   Status: CRITICAL - Type system collapse
+   Error: Complex type incompatibility from error union handling
+   File: src/renderer.ts (multiple lines: 71, 108, 112, 114, 118, 157, 161, 
+         163, 167, 218, 224, 228, 247, 251, 253)
+   Issues:
+     - Effect context uses 'unknown' instead of 'never'
+     - Error union (LiquidRenderError & LiquidTagError) reduces to 'never'
+     - Conditional logic on 'never' type is invalid
+     - Type narrowing fails due to incompatible discriminators
+   Fix Time: 15-30 minutes (requires refactoring)
+   Priority: MEDIUM (Layer 1 component, but complex fix needed)
+   Root Cause: Error type design flaw - conflicting discriminators
+
+================================================================================
+QUICK FIX STRATEGY (Recommended Order)
+================================================================================
+
+1. EFFECT-CLI-TUI (Easiest, 1-2 min)
+   - Add .js extensions to src/index.ts imports
+   - Example: import X from "./path" → import X from "./path.js"
+
+2. EFFECT-ACTOR (Medium, 5-10 min)
+   - Review service.test.ts line 93
+   - Likely need to adjust how Layer is passed to ManagedRuntime
+   - May need Effect.runTest() pattern instead
+
+3. EFFECT-COCKPIT (Medium, 5-10 min)
+   - Fix Effect at line 59
+   - Replace 'any' context requirements with explicit types
+   - Use 'never' for effects with no context dependencies
+
+4. EFFECT-LIQUID (Most Complex, 15-30 min)
+   - Redesign error handling to avoid incompatible error unions
+   - Consider separate render methods for different error types
+   - OR refactor error types to have compatible discriminators
+
+================================================================================
+ARCHITECTURE IMPACT
+================================================================================
+
+Layer 2 Status: 2 of 5 packages failing (60% pass rate)
+  - effect-supermemory: ✓ PASS (foundation stable)
+  - effect-ai-sdk: ✓ PASS (utility library stable)
+  - effect-actor: ✗ FAIL (orchestration broken)
+  - effect-cli-tui: ✗ FAIL (TUI broken)
+  - effect-cockpit: ✗ FAIL (dashboard broken)
+
+Layer 1 Status: 22 of 23 packages passing (96% pass rate)
+  - effect-liquid: ✗ FAIL (only Layer 1 failure)
+
+Impact: Layer 2 (agent infrastructure) is compromised. Layer 1 (data 
+foundation) is stable except for one package.
+
+================================================================================
+VERIFICATION AFTER FIXES
+================================================================================
+
+To verify all packages build successfully:
+  cd /Users/paul/Projects/EffectTalk
+  bun run build
+
+To test individual packages:
+  bun run --filter <package-name> build
+
+Example:
+  bun run --filter effect-cli-tui build
+  bun run --filter effect-actor build
+  bun run --filter effect-cockpit build
+  bun run --filter effect-liquid build
+
+================================================================================
+FULL REPORT LOCATION
+================================================================================
+
+Detailed analysis available in:
+/Users/paul/Projects/EffectTalk/BUILD_TEST_REPORT.md
+
+This file contains:
+- Complete package-by-package results
+- Detailed error messages and stack traces
+- Root cause analysis for each failure
+- Specific line numbers and file locations
+- Recommendations for each fix
+
+================================================================================

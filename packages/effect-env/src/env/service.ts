@@ -2,9 +2,9 @@ import { Effect, Data } from "effect";
 
 import { jsonBackend } from "effect-json";
 
-import type { EffectType } from "../types.js";
-import type { Env } from "./api.js";
-import { EnvError, MissingVarError } from "./errors.js";
+import type { EffectType } from "@/effect-env/types.js";
+import type { Env } from "@/effect-env/env/api.js";
+import { EnvError, MissingVarError } from "@/effect-env/env/errors.js";
 
 /**
  * Create an Env instance from parsed and raw values.

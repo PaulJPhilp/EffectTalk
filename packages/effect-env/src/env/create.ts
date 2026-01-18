@@ -15,10 +15,10 @@
 
 import { Effect, Layer, Schema as S, ParseResult } from "effect";
 
-import type { Env } from "./api.js";
-import { EnvError } from "./errors.js";
-import { EnvService, makeEnv } from "./service.js";
-import { PrefixError } from "../services/prefix-enforcement/errors.js";
+import type { Env } from "@/effect-env/env/api.js";
+import { EnvError } from "@/effect-env/env/errors.js";
+import { EnvService, makeEnv } from "@/effect-env/env/service.js";
+import { PrefixError } from "@/effect-env/services/prefix-enforcement/errors.js";
 
 /**
  * Configuration for createEnv with server/client separation.
