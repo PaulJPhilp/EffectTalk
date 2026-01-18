@@ -1,332 +1,841 @@
 # EffectTalk
 
-**EffectTalk** is a unified Effect-native monorepo that combines agent infrastructure and data foundation capabilities into a cohesive toolkit for building AI-powered applications.
+> **Unified Effect-native monorepo for building AI-powered applications with type-safe, functionally-driven infrastructure**
+
+[![Version](https://img.shields.io/badge/version-0.5.0--beta-blue)](https://github.com/PaulJPhilp/EffectTalk/releases/tag/effecttalk-v0.5.0-beta)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-blue)](https://www.typescriptlang.org/)
+[![Effect.js](https://img.shields.io/badge/Effect.js-3.19+-purple)](https://effect.website)
+[![Bun](https://img.shields.io/badge/Bun-1.1+-orange)](https://bun.sh)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ## Overview
 
-EffectTalk merges two complementary projects into a single monorepo:
+**EffectTalk** is a comprehensive monorepo that combines AI agent infrastructure and data foundation capabilities into a cohesive, type-safe toolkit for building sophisticated AI-powered applications.
 
-- **Layer 2: Agent Infrastructure** (McLuhan packages)
-  - AI agent orchestration, state machines, and workflows
-  - Memory management and semantic search
-  - CLI/TUI components and interactive prompts
-  - AI provider integrations and LLM operations
+Built on [Effect.js](https://effect.website), EffectTalk provides functional programming patterns, powerful error handling, and dependency injection out of the box—without requiring in-depth knowledge of category theory or advanced FP concepts.
 
-- **Layer 1: Data Foundation** (Hume packages)
-  - Type-safe data parsing and validation
-  - Format transformations (JSON, YAML, XML, CSV, MDX, etc.)
-  - Template processing and prompt management
-  - External service integrations
+### Core Layers
 
-## Quick Start
-
-```bash
-# Install dependencies
-bun install
-
-# Build all packages
-bun run build
-
-# Type checking
-bun run typecheck
-
-# Run all tests
-bun run test
-
-# Watch mode for tests
-bun run test:watch
-
-# Lint and format
-bun run lint
-bun run format:fix
-
-# Full verification (format → lint → typecheck → build → test)
-bun run verify
+```
+┌─────────────────────────────────────────────────────────┐
+│  Your AI Applications & Agents                          │
+└────────────────────┬────────────────────────────────────┘
+                     │
+        ┌────────────▼──────────────┐
+        │   Layer 2: McLuhan        │
+        │ Agent Infrastructure      │
+        ├──────────────────────────┤
+        │ • AI Orchestration       │
+        │ • Memory & Search        │
+        │ • CLI/TUI Components     │
+        │ • LLM Integrations       │
+        └────────────┬─────────────┘
+                     │
+        ┌────────────▼──────────────┐
+        │   Layer 1: Hume          │
+        │ Data Foundation          │
+        ├──────────────────────────┤
+        │ • Format Parsing         │
+        │ • Type-Safe Validation   │
+        │ • Content Processing     │
+        │ • External Integrations  │
+        └────────────┬─────────────┘
+                     │
+        ┌────────────▼──────────────┐
+        │   Effect.js Runtime      │
+        │   TypeScript/Node.js      │
+        └──────────────────────────┘
 ```
 
-## Project Structure
+**Key Principle:** Strict downward dependencies only. Layer 2 can depend on Layer 1, but never the reverse. This maintains architectural integrity and enables independent, reusable components.
+
+---
+
+## ✨ Key Features
+
+### 🏗️ **Functional Architecture**
+- Effect.js-based services for composable, type-safe effects
+- Automatic dependency injection via Effect.Service pattern
+- Powerful error handling with discriminated unions (Data.TaggedError)
+- Type-safe effect composition and async orchestration
+
+### 🤖 **AI Agent Infrastructure**
+- **effect-supermemory** — Long-term memory with semantic search
+- **effect-ai-sdk** — 8+ LLM provider integration (OpenAI, Anthropic, Google, Groq, DeepSeek, etc.)
+- **effect-actor** — Statechart-based state machines for workflow orchestration
+- **effect-cli-tui** — Rich terminal UI with interactive prompts and components
+- **effect-cockpit** — Agent dashboard for monitoring and control
+
+### 📦 **Data Foundation (17 Packages)**
+- **Parsing:** JSON, YAML, XML, CSV, MDX, HTML, PDF, TOML, XMP
+- **Templates:** Shopify Liquid engine with semantic template processing
+- **Validation:** Effect.Schema-based type-safe validation (no Zod)
+- **Integration:** LLM models (OpenRouter, HuggingFace), Git repositories, prompt management
+
+### 🛡️ **Type Safety**
+- Strict TypeScript with `exactOptionalPropertyTypes: true`
+- Zero implicit `any` — all types explicit
+- Compile-time guarantees for error handling
+- Full discriminated union support for runtime type safety
+
+### 🎨 **Code Quality**
+- Biome linting with Ultracite preset (zero-config, opinionated)
+- 85%+ test coverage across all packages
+- Automated formatting and error detection
+- Architecture validation (dependency rule enforcement)
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Bun 1.1.33+** (https://bun.sh)
+- **Node.js 18.18+** (for development)
+- **Git** (for cloning)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/PaulJPhilp/EffectTalk.git
+cd EffectTalk
+
+# Install dependencies using Bun
+bun install
+
+# Verify setup
+bun run typecheck
+```
+
+### Common Commands
+
+```bash
+# Development
+bun run build              # Build all packages
+bun run typecheck         # Type checking with strict mode
+bun run test              # Run all tests
+bun run test:watch        # Watch mode for development
+bun run lint              # Biome linting
+bun run format:fix        # Auto-fix formatting issues
+
+# Full verification pipeline (runs before commits)
+bun run verify            # format → lint → typecheck → build → test
+
+# Individual package operations
+bun run --filter effect-supermemory build
+bun run --filter effect-json test
+bun run --filter effect-cli-tui test:watch
+```
+
+---
+
+## 📚 Usage Examples
+
+### Using Effect-AI-SDK (LLM Operations)
+
+```typescript
+import * as Effect from "effect/Effect";
+import { generateText, streamText } from "effect-ai-sdk";
+
+// Generate text with Claude
+const generateAnswer = Effect.gen(function* () {
+  const result = yield* generateText({
+    model: "claude-3.5-sonnet",
+    system: "You are a helpful assistant.",
+    prompt: "Explain quantum computing in simple terms",
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  });
+
+  return result.text;
+});
+
+// Stream text response
+const streamingAnswer = Effect.gen(function* () {
+  yield* streamText({
+    model: "gpt-4",
+    prompt: "Write a poem about functional programming",
+    apiKey: process.env.OPENAI_API_KEY,
+    onText: (chunk) => console.log(chunk),
+  });
+});
+
+// Execute with error handling
+Effect.runPromise(generateAnswer)
+  .then(answer => console.log(answer))
+  .catch(error => console.error("Generation failed:", error));
+```
+
+### Using Effect-Supermemory (Long-Term Memory)
+
+```typescript
+import * as Effect from "effect/Effect";
+import { SupermemoryClient } from "effect-supermemory";
+
+// Initialize memory client
+const memoryProgram = Effect.gen(function* () {
+  const memory = yield* SupermemoryClient;
+
+  // Store a memory
+  yield* memory.put("user:alice:preferences", {
+    theme: "dark",
+    language: "en",
+  });
+
+  // Retrieve memory
+  const preferences = yield* memory.get("user:alice:preferences");
+
+  // Search semantically
+  const results = yield* memory.search(
+    "user preferences and settings",
+    { limit: 5 }
+  );
+
+  return { preferences, results };
+});
+
+// Create layer with API configuration
+const layer = SupermemoryClient.Default({
+  namespace: "my-app",
+  baseUrl: "https://api.supermemory.dev",
+  apiKey: process.env.SUPERMEMORY_API_KEY,
+});
+
+// Run with dependency injection
+Effect.runPromise(
+  memoryProgram.pipe(Effect.provide(layer))
+).catch(error => console.error("Memory operation failed:", error));
+```
+
+### Using Effect-CLI-TUI (Interactive Prompts)
+
+```typescript
+import * as Effect from "effect/Effect";
+import {
+  prompt,
+  selectOption,
+  multiSelect,
+  confirm,
+  spinner
+} from "effect-cli-tui";
+
+const interactiveProgram = Effect.gen(function* () {
+  // Text input
+  const name = yield* prompt("What's your name?");
+
+  // Single select
+  const theme = yield* selectOption(
+    "Choose a theme:",
+    ["light", "dark", "auto"]
+  );
+
+  // Multiple select
+  const features = yield* multiSelect(
+    "Select features:",
+    ["memory", "api", "ui", "telemetry"]
+  );
+
+  // Confirmation
+  const confirmed = yield* confirm(
+    `Continue with ${features.length} features?`
+  );
+
+  // Spinner for async operations
+  yield* spinner(
+    "Processing setup...",
+    Effect.sleep(2000)
+  );
+
+  return { name, theme, features, confirmed };
+});
+
+// Run and get user input
+Effect.runPromise(interactiveProgram)
+  .then(config => console.log("Config:", config))
+  .catch(error => console.error("Setup failed:", error));
+```
+
+### Using Effect-JSON (Type-Safe Parsing)
+
+```typescript
+import * as Effect from "effect/Effect";
+import { Schema } from "effect";
+import { parseJson } from "effect-json";
+
+// Define type-safe schema
+const UserSchema = Schema.Struct({
+  name: Schema.String,
+  age: Schema.Number,
+  email: Schema.String.pipe(Schema.minLength(5)),
+});
+
+const parseUserJson = Effect.gen(function* () {
+  const jsonString = '{"name": "Alice", "age": 30, "email": "alice@example.com"}';
+
+  // Parse with validation
+  const user = yield* parseJson(jsonString, UserSchema);
+
+  return user;
+});
+
+// Run and get parsed user object with type safety
+Effect.runPromise(parseUserJson)
+  .then(user => console.log("User:", user))
+  .catch(error => console.error("Parse error:", error));
+```
+
+### Using Effect-YAML (Configuration Files)
+
+```typescript
+import * as Effect from "effect/Effect";
+import { parseYaml, stringifyYaml } from "effect-yaml";
+
+const configProgram = Effect.gen(function* () {
+  const yamlString = `
+    server:
+      port: 3000
+      host: localhost
+    database:
+      url: postgres://localhost/myapp
+  `;
+
+  // Parse YAML
+  const config = yield* parseYaml(yamlString);
+
+  // Stringify back to YAML
+  const updated = { ...config, debug: true };
+  const yamlOutput = yield* stringifyYaml(updated);
+
+  return yamlOutput;
+});
+
+Effect.runPromise(configProgram)
+  .then(yaml => console.log(yaml))
+  .catch(error => console.error("YAML error:", error));
+```
+
+---
+
+## 📁 Project Structure
 
 ```
 EffectTalk/
-├── packages/              # 27 unified packages
-│   ├── effect-actor/      # State machine orchestration
-│   ├── effect-ai-sdk/     # Vercel AI SDK wrapper
-│   ├── effect-cli-tui/    # Terminal UI and CLI
-│   ├── effect-cockpit/    # Agent dashboard
-│   ├── effect-supermemory/ # Long-term memory client
-│   └── ... (22 more Hume packages)
-├── scripts/               # Validation and automation utilities
-│   ├── architecture-check.ts
-│   ├── validate-test-structure.ts
+├── packages/                    # 28 workspace packages
+│   ├── McLuhan/ (Agent Infrastructure - 5 packages)
+│   │   ├── effect-supermemory/ # Long-term memory API client
+│   │   ├── effect-ai-sdk/      # Vercel AI SDK wrapper with 8+ providers
+│   │   ├── effect-cli-tui/     # Terminal UI and interactive prompts
+│   │   ├── effect-actor/       # Statechart-based orchestration
+│   │   └── effect-cockpit/     # Agent dashboard
+│   │
+│   └── Hume/ (Data Foundation - 23 packages)
+│       ├── Resources/ (zero external dependencies)
+│       │   ├── effect-env/     # Environment variable validation
+│       │   ├── effect-json/    # Type-safe JSON parsing
+│       │   ├── effect-regex/   # Pattern matching and validation
+│       │   └── effect-schema-utils/ # Schema utilities
+│       │
+│       ├── Content/ (format parsing and processing)
+│       │   ├── effect-yaml/    # YAML parsing
+│       │   ├── effect-xml/     # XML parsing
+│       │   ├── effect-csv/     # CSV parsing
+│       │   ├── effect-mdx/     # MDX processing
+│       │   ├── effect-html/    # HTML manipulation
+│       │   ├── effect-pdf/     # PDF extraction
+│       │   ├── effect-liquid/  # Liquid templates
+│       │   ├── effect-prompt/  # Prompt management
+│       │   ├── effect-models/  # LLM integration
+│       │   └── ... (4 more)
+│       │
+│       └── Services/ (external integrations)
+│           ├── effect-repository/ # Git operations
+│           ├── effect-artifact/   # Artifact extraction
+│           ├── effect-storage/    # File operations
+│           ├── effect-telemetry/  # Observability
+│           └── ... (more)
+│
+├── scripts/                     # Validation and automation
+│   ├── architecture-check.ts   # Enforce layer dependencies
 │   ├── check-coverage-threshold.ts
 │   ├── aggregate-coverage.ts
 │   └── consumer-smoke-test.ts
-├── package.json          # Workspace root configuration
-├── tsconfig.json         # Unified TypeScript configuration
-├── biome.jsonc           # Unified code quality rules (Ultracite preset)
-├── vitest.config.shared.ts # Shared test configuration
-└── CLAUDE.md             # Development guidance
+│
+├── package.json               # Workspace root
+├── tsconfig.json              # Unified TypeScript config
+├── biome.jsonc                # Code quality rules (Ultracite)
+├── vitest.config.shared.ts    # Test configuration
+├── CLAUDE.md                  # Development guidance
+└── README.md                  # This file
 ```
 
-## Architecture
+---
 
-### Layered Dependency Structure
+## 🏛️ Architecture
+
+### Design Principles
+
+1. **Strict Layering** — Downward dependencies only (Layer 2 → Layer 1, never upward)
+2. **Functional Effects** — All async operations use Effect.js for composability
+3. **Type Safety** — Strict TypeScript with compile-time guarantees
+4. **Error Transparency** — Discriminated unions for type-safe error handling
+5. **No Mocking** — Tests use real implementations for accuracy
+6. **Workspace Integration** — Live development without publishing
+
+### Layer 2: McLuhan (Agent Infrastructure)
+
+| Package | Purpose | Key Exports |
+|---------|---------|------------|
+| `effect-supermemory` | Long-term memory with semantic search | `SupermemoryClient`, `SearchService`, `MemoriesService` |
+| `effect-ai-sdk` | Multi-provider LLM integration | `generateText()`, `streamText()`, `generateObject()` |
+| `effect-cli-tui` | Terminal UI and interactive prompts | `prompt()`, `selectOption()`, `spinner()`, `Table` |
+| `effect-actor` | State machine orchestration | `createActor()`, `interpret()` |
+| `effect-cockpit` | Agent monitoring and control | Dashboard components and APIs |
+
+**Dependencies:** effect-supermemory, effect-ai-sdk, effect-env, effect-json, effect-cli-tui
+
+### Layer 1: Hume (Data Foundation)
+
+#### Resources (No External Dependencies)
+- **effect-env** — Environment variable parsing and validation
+- **effect-json** — JSON parsing with multiple backends (toon, jsonlines, superjson)
+- **effect-regex** — Composable regex patterns and validation
+- **effect-schema-utils** — Schema utilities and refinements
+
+#### Content Capabilities (Format Processing)
+- **Structured:** effect-yaml, effect-xml, effect-csv, effect-toml
+- **Documents:** effect-mdx, effect-html, effect-pdf
+- **AI:** effect-prompt (templates), effect-models (LLM integration), effect-liquid (Shopify templates)
+- **Media:** effect-image (image processing), effect-xmp (metadata)
+
+#### Services (External Integrations)
+- **effect-repository** — Git operations and repository management
+- **effect-artifact** — Artifact extraction and versioning
+- **effect-attachment** — File attachment handling
+- **effect-storage** — File system operations
+- **effect-telemetry** — Observability and metrics collection
+
+### Dependency Graph
 
 ```
-Applications / AI Agents
-        ↓
-    Layer 2: Agent Infrastructure (McLuhan)
-    - effect-actor (orchestration)
-    - effect-ai-sdk (AI operations)
-    - effect-cli-tui (terminal UI)
-    - effect-cockpit (dashboard)
-    - effect-supermemory (memory)
-        ↓
-    Layer 1: Data Foundation (Hume)
-    - Resources: effect-env, effect-json, effect-regex, effect-schema-utils
-    - Content: effect-yaml, effect-xml, effect-csv, effect-mdx, effect-html,
-               effect-pdf, effect-liquid, effect-prompt, effect-models, etc.
-    - Services: effect-repository, effect-telemetry, effect-artifact, etc.
-        ↓
-    Effect.js + TypeScript Runtime
+Your App
+  ↓
+effect-cockpit → effect-actor, effect-cli-tui
+  ↓
+effect-cli-tui → effect-supermemory, effect-env, effect-json
+  ↓
+effect-supermemory → effect-json, effect-env
+  ↓
+effect-ai-sdk (independent)
+  ↓
+effect-* (Hume Layer 1) → None (internal Hume deps only)
 ```
 
-**Key Principle:** Strict downward dependencies only. Layer 2 can depend on Layer 1, but never the reverse.
+---
 
-## Development Guidelines
+## 🧪 Testing & Quality
 
-### Building a Specific Package
+### Test Coverage
+
+All packages maintain **85%+ coverage** across:
+- **Lines** — Code execution coverage
+- **Functions** — Function coverage
+- **Branches** — Conditional branch coverage
+- **Statements** — Individual statement coverage
+
+### Running Tests
 
 ```bash
-# Build a single package
-bun run --filter effect-supermemory build
+# All packages
+bun run test
 
-# Test a single package
+# Specific package
 bun run --filter effect-json test
 
-# Watch tests for a package
-bun run --filter effect-cli-tui test:watch
+# Watch mode
+bun run test:watch
 
-# Lint a single package
-bun run --filter effect-ai-sdk lint
+# Coverage report
+bun run test:coverage
+bun run test:coverage:aggregate
+bun run test:coverage:check
+```
+
+### Testing Patterns
+
+EffectTalk uses **real implementations** without mocking:
+
+```typescript
+import { describe, it, expect } from "vitest";
+import * as Effect from "effect/Effect";
+import { MyService } from "../service.js";
+
+describe("MyService", () => {
+  const testLayer = MyService.Default(/* config */);
+
+  it("performs operation", async () => {
+    const program = Effect.gen(function* () {
+      const service = yield* MyService;
+      return yield* service.operation();
+    }).pipe(Effect.provide(testLayer));
+
+    const result = await Effect.runPromise(program);
+    expect(result).toBe(expectedValue);
+  });
+});
+```
+
+---
+
+## 🔧 Development Workflow
+
+### Setting Up a New Feature
+
+```bash
+# 1. Create branch
+git checkout -b feature/my-feature
+
+# 2. Make changes in affected package(s)
+# 3. Test the package
+bun run --filter my-package test
+
+# 4. Type check
+bun run typecheck
+
+# 5. Format and lint
+bun run format:fix
+bun run lint
+
+# 6. Full verification before commit
+bun run verify
+
+# 7. Commit with conventional style
+git commit -m "feat: Add new feature to my-package"
+```
+
+### Conventional Commits
+
+```bash
+feat:      # New feature
+fix:       # Bug fix
+chore:     # Build, dependencies, docs
+refactor:  # Code restructuring
+perf:      # Performance improvements
+test:      # Test additions/fixes
+style:     # Formatting only
+docs:      # Documentation
+```
+
+Example:
+```
+feat: Add semantic search to effect-supermemory
+
+- Implement vector search with reranking
+- Add RRF (Reciprocal Rank Fusion) algorithm
+- Update SearchService with new queryOptions
+
+Closes #123
 ```
 
 ### Code Quality Standards
 
-- **TypeScript:** Strict mode with `noUncheckedIndexedAccess: true` and `exactOptionalPropertyTypes: true`
-- **Linting/Formatting:** Biome with Ultracite preset for zero-config code quality
-- **Testing:** Vitest with 85% coverage threshold (configurable per package)
-- **Error Handling:** Type-safe `Data.TaggedError` for discriminated unions
-- **Validation:** Effect.Schema (not Zod) for all input validation
+**TypeScript Strictness:**
+- `strict: true` — All strict checking enabled
+- `exactOptionalPropertyTypes: true` — Correct optional handling
+- `noUncheckedIndexedAccess: true` — Safe array/object access
+- `noImplicitOverride: true` — Explicit override keywords
 
-### Essential Patterns
+**Biome (Ultracite Preset):**
+- Zero-config opinionated linting
+- Automatic formatting fixes
+- Performance and security checks
+- Accessibility validation
 
-**Effect.Service Pattern (Mandatory):**
+**Error Handling:**
 ```typescript
+// ✅ Correct - Type-safe discriminated errors
+export class ValidationError extends Data.TaggedError("ValidationError")<{
+  readonly field: string;
+  readonly value: unknown;
+  readonly cause?: Error;
+}> {}
+
+// ❌ Wrong - Generic Error
+throw new Error("Invalid field");
+```
+
+**Service Pattern:**
+```typescript
+// ✅ Correct - Effect.Service with Effect.fn()
 export class MyService extends Effect.Service<MyService>()(
   "MyService",
   {
-    effect: Effect.fn(function* (config: ConfigType) {
+    effect: Effect.fn(function* (config: Config) {
       return {
         method: (arg) => Effect.sync(() => { /* ... */ }),
       } satisfies MyServiceApi;
     }),
   }
 ) {}
+
+// ❌ Wrong - Direct instantiation or Context.Tag
+const service = new MyService(config);  // FORBIDDEN
 ```
-
-**Error Handling:**
-```typescript
-export class MyError extends Data.TaggedError("MyError")<{
-  readonly field: string;
-  readonly cause?: Error;
-}> {}
-```
-
-**Workspace Dependencies:**
-```json
-{
-  "dependencies": {
-    "effect-supermemory": "workspace:*"
-  }
-}
-```
-
-## Packages by Layer
-
-### Layer 2: Agent Infrastructure
-
-| Package | Purpose | Dependencies |
-|---------|---------|--------------|
-| `effect-supermemory` | Supermemory API client for long-term memory | effect-env, effect-json |
-| `effect-cli-tui` | Terminal UI, prompts, and CLI utilities | effect-supermemory, effect-env, effect-json |
-| `effect-ai-sdk` | Vercel AI SDK wrapper (8+ providers) | None |
-| `effect-actor` | Statechart-based state machine orchestration | None |
-| `effect-cockpit` | Agent dashboard and monitoring | Other Layer 2 packages |
-
-### Layer 1: Data Foundation
-
-**Resources (Zero External Dependencies):**
-- `effect-env` — Environment variable management and validation
-- `effect-json` — Type-safe JSON parsing with multiple backends
-- `effect-regex` — Composable pattern matching and validation
-- `effect-schema-utils` — Effect.Schema utilities and helpers
-
-**Content Capabilities:**
-- `effect-mdx` — MDX parsing and processing
-- `effect-yaml` — YAML parsing and serialization
-- `effect-xml` — XML parsing and transformation
-- `effect-xmp` — XMP metadata extraction
-- `effect-toml` — TOML configuration parsing
-- `effect-csv` — CSV parsing and generation
-- `effect-html` — HTML parsing and manipulation
-- `effect-pdf` — PDF extraction and generation
-- `effect-liquid` — Shopify Liquid template engine
-- `effect-prompt` — Prompt management and templating
-- `effect-models` — LLM integration (OpenRouter, HuggingFace)
-- `effect-image` — Image processing and metadata
-
-**Service Providers:**
-- `effect-repository` — Git repository operations
-- `effect-artifact` — Artifact extraction and management
-- `effect-attachment` — File attachment handling
-- `effect-storage` — File system operations
-- `effect-telemetry` — Observability and metrics
-- `effect-models-website` — Website integration for models
-
-## Validation Scripts
-
-```bash
-# Check architecture rules (layer dependencies, service patterns)
-bun run check:architecture
-
-# Validate test structure (unit/, integration/, fixtures/)
-bun run check:test-structure
-
-# Check dependency violations
-bun run check:dependencies
-
-# Aggregate and check coverage across all packages
-bun run test:coverage:aggregate
-bun run test:coverage:check
-
-# Consumer smoke tests (compatibility verification)
-bun run smoke:consumer
-
-# Full verification pipeline
-bun run verify
-```
-
-## Configuration Files
-
-### `package.json`
-Workspace root with monorepo-wide scripts and dependencies. All packages defined as workspaces under `packages/*`.
-
-### `tsconfig.json`
-Unified TypeScript configuration with:
-- Strict mode enabled
-- NodeNext module resolution for npm compatibility
-- Path aliases: `@/*` → `packages/*`
-- Declaration maps and source maps enabled
-
-### `biome.jsonc`
-Code quality configuration using Ultracite preset:
-- Enforces modern TypeScript patterns
-- Barrel file exceptions for `index.ts`
-- Disabled linting for Markdown files
-
-### `vitest.config.shared.ts`
-Shared Vitest configuration:
-- 85% coverage thresholds for all metrics
-- Global test utilities
-- Test file patterns: `__tests__/**/*.test.ts` and `test/**/*.test.ts`
-
-## Migration from Separate Repos
-
-EffectTalk was created by merging two independent repositories (McLuhan and Hume) into a unified monorepo. Benefits include:
-
-✅ **Unified version control** — Single git history for atomic commits
-✅ **Simplified development** — One `bun install`, one dependency graph
-✅ **Workspace integration** — Live development without publishing
-✅ **Consistent tooling** — Shared configurations and standards
-✅ **Better architecture validation** — Layer dependencies enforced across all packages
-✅ **Simplified CI/CD** — Single pipeline for all packages
-
-## Next Steps
-
-After this initial merge, the following work items are planned:
-
-### Phase 2: CI/CD Modernization
-- [ ] Migrate GitHub Actions to single unified pipeline
-- [ ] Set up changesets for coordinated versioning
-- [ ] Configure automated npm publishing
-
-### Phase 3: Documentation
-- [ ] Consolidate CLAUDE.md files into unified architecture guide
-- [ ] Create migration guide for consumers
-- [ ] Update package READMEs with new repo URLs
-
-### Phase 4: Quality Gates
-- [ ] Run full `bun run verify` pipeline
-- [ ] Achieve consistent test coverage across all packages
-- [ ] Archive old repositories with deprecation notices
-
-### Phase 5: Beta Release
-- [ ] Publish beta versions from unified monorepo
-- [ ] Test in external projects
-- [ ] Gather feedback on monorepo structure
-
-## TypeScript Configuration Notes
-
-The unified `tsconfig.json` adopts the strictest settings from both projects:
-
-- `noUncheckedIndexedAccess: true` — Safer array/object access
-- `exactOptionalPropertyTypes: true` — Correct optional property handling
-- `NodeNext` module resolution — Better npm compatibility
-- Declaration maps and source maps — Improved debugging
-
-Some packages may require gradual migration if they have incompatible code. Use package-level `tsconfig.json` overrides during migration if needed.
-
-## Testing & Coverage
-
-- **Framework:** Vitest with v8 coverage provider
-- **Coverage Target:** 85% for all metrics (lines, functions, branches, statements)
-- **Organization:** Tests in `__tests__/` (unit/, integration/) and `test/` directories
-- **Patterns:** Real implementations (no mocking), Effect dependency injection for services
-- **Anti-Mocking Policy:** Tests use real services or skip gracefully if dependencies unavailable
-
-## Contributing
-
-When working with EffectTalk:
-
-1. Make changes in appropriate package(s)
-2. Run `bun run test --filter [package]` to verify tests
-3. Run `bun run typecheck` for type safety
-4. Run `bun run lint && bun run format:fix` for code quality
-5. Run `bun run verify` for full verification before committing
-6. Use conventional commit style: `feat:`, `fix:`, `chore:`, etc.
-
-## Key Resources
-
-- **Effect.js Documentation:** https://effect.website
-- **Biome:** https://biomejs.dev
-- **Ultracite Preset:** https://github.com/Phylogenic/ultracite
-- **Bun:** https://bun.sh
-
-## Architecture Decision Records
-
-See individual package CLAUDE.md files and `/packages/[package]/docs/` for:
-- Detailed service patterns
-- Error handling strategies
-- Test structure guidelines
-- API design principles
-
-## License
-
-MIT
 
 ---
 
+## 📖 Detailed Package Guide
+
+### Effect-Supermemory
+
+Long-term memory with semantic search. Store, retrieve, and search memories with vector embeddings.
+
+**Key Classes:**
+- `SupermemoryClient` — HTTP client for Supermemory API
+- `SearchService` — Semantic search with reranking
+- `MemoriesService` — CRUD operations for memories
+
+**Example:**
+```typescript
+const memoryOps = Effect.gen(function* () {
+  const memories = yield* MemoriesService;
+
+  // Store
+  yield* memories.put("key", { data: "value" });
+
+  // Retrieve
+  const item = yield* memories.get("key");
+
+  // Search
+  const results = yield* memories.search("query");
+});
+```
+
+### Effect-AI-SDK
+
+Multi-provider LLM integration. Generate text, objects, embeddings from 8+ providers.
+
+**Supported Providers:**
+- OpenAI (GPT-4, GPT-3.5)
+- Anthropic (Claude)
+- Google (Gemini)
+- Groq
+- DeepSeek
+- Perplexity
+- xAI
+- Qwen
+
+**Example:**
+```typescript
+const result = yield* generateText({
+  model: "claude-3-sonnet",
+  prompt: "Explain quantum computing",
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+```
+
+### Effect-JSON
+
+Type-safe JSON parsing with multiple backend options.
+
+**Features:**
+- Schema-based validation
+- Multiple parsing backends (toon, jsonlines, superjson)
+- Error recovery with fallbacks
+- Streaming JSON parsing
+
+**Example:**
+```typescript
+const UserSchema = Schema.Struct({
+  name: Schema.String,
+  age: Schema.Number,
+});
+
+const user = yield* parseJson(jsonString, UserSchema);
+```
+
+### Effect-CLI-TUI
+
+Terminal UI components and interactive prompts for CLI applications.
+
+**Components:**
+- `prompt()` — Text input
+- `selectOption()` — Single selection
+- `multiSelect()` — Multiple selections
+- `confirm()` — Yes/no confirmation
+- `spinner()` — Loading indicator
+- `Table` — Formatted data display
+- `Panel` — Box with border
+- `Box` — Simple container
+
+---
+
+## 🌐 External Integrations
+
+### Effect-Models (LLM Integration)
+
+Access OpenRouter and HuggingFace models through unified interface.
+
+### Effect-Prompt (Prompt Management)
+
+Template-based prompt management with variable substitution and validation.
+
+### Effect-Repository (Git Operations)
+
+Clone, commit, push repositories programmatically.
+
+### Effect-Liquid (Template Engine)
+
+Shopify Liquid template engine for dynamic content generation.
+
+---
+
+## 🔒 Security Considerations
+
+1. **API Keys** — Use environment variables, never hardcode
+2. **Input Validation** — All user input validated with Effect.Schema
+3. **Error Messages** — Sensitive info not exposed in error messages
+4. **Dependencies** — Regular audit with `bun audit`
+5. **Type Safety** — Compile-time guarantees prevent many vulnerabilities
+
+---
+
+## ⚡ Performance Tips
+
+1. **Effect.Stream** — Use for large datasets to avoid loading into memory
+2. **Batch Operations** — Batch multiple operations into single HTTP request
+3. **Caching** — Implement caching layer for frequently accessed data
+4. **Lazy Evaluation** — Effects compose lazily; execution is explicit
+5. **Parallel Effects** — Use `Effect.all()` for concurrent operations
+
+---
+
+## 🐛 Troubleshooting
+
+### Build Fails with TypeScript Errors
+
+```bash
+# Clear cache and rebuild
+rm -rf node_modules dist
+bun install
+bun run build
+```
+
+### Tests Not Running
+
+```bash
+# Check Vitest configuration
+bun run test -- --reporter=verbose
+
+# Run specific test file
+bun run test -- packages/effect-json/__tests__/unit.test.ts
+```
+
+### Dependency Resolution Issues
+
+```bash
+# Verify workspace links
+bun run test:smoke
+
+# Check dependency graph
+bun pm ls
+
+# Rebuild lock file
+rm bun.lock
+bun install
+```
+
+### Type Errors in IDE
+
+```bash
+# Regenerate type definitions
+bun run build
+
+# Force IDE reload (VS Code)
+# - Restart TypeScript server (Cmd+Shift+P → "TypeScript: Restart TS Server")
+# - Reload window (Cmd+Shift+P → "Developer: Reload Window")
+```
+
+---
+
+## 📚 Additional Resources
+
+### Official Documentation
+- **Effect.js** — https://effect.website
+- **Biome** — https://biomejs.dev
+- **Bun** — https://bun.sh
+- **TypeScript** — https://www.typescriptlang.org
+
+### Architectural Guides
+- **Root CLAUDE.md** — Overall architecture and patterns
+- **Package CLAUDE.md files** — Package-specific guidance
+- **ADR (Architecture Decision Records)** — Design decisions and rationale
+
+### Community
+- **Effect Discord** — https://discord.gg/effect-ts
+- **GitHub Issues** — https://github.com/PaulJPhilp/EffectTalk/issues
+- **Discussions** — https://github.com/PaulJPhilp/EffectTalk/discussions
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+1. **Fork and branch** — Create a feature branch from `main`
+2. **Make changes** — Focus on a single concern per commit
+3. **Test thoroughly** — Maintain 85%+ coverage
+4. **Follow patterns** — Use existing conventions
+5. **Write clear commits** — Use conventional commit format
+6. **Submit PR** — Include description of changes and motivation
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+---
+
+## 📋 Roadmap
+
+### Current (v0.5.0-beta)
+- ✅ Unified monorepo with 28 packages
+- ✅ Complete type safety with strict TypeScript
+- ✅ Multi-provider LLM integration
+- ✅ Long-term memory with semantic search
+- ✅ Terminal UI and CLI components
+- ✅ 17 data format parsers and processors
+
+### Next (v0.6.0)
+- [ ] Persistent memory store (PostgreSQL backend)
+- [ ] Advanced workflow orchestration
+- [ ] Real-time streaming operations
+- [ ] Enhanced monitoring and observability
+- [ ] Browser compatibility (Wasm support)
+
+### Future (v1.0.0)
+- [ ] Visual workflow builder
+- [ ] Agent marketplace
+- [ ] Enhanced caching layers
+- [ ] Production hardening
+- [ ] Performance optimizations
+
+---
+
+## 📄 License
+
+EffectTalk is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🙏 Acknowledgments
+
+- **Effect.js** team for the powerful effect system
+- **Biome** team for opinionated code quality
+- **Bun** team for fast Node.js tooling
+- All contributors and community members
+
+---
+
+**Status:** ✅ v0.5.0-beta (Active Development)
 **Last Updated:** January 2026
-**Status:** ✅ Unified Monorepo (Phase 1 Complete)
-**Next:** GitHub Actions & Changesets Integration
+**Repository:** https://github.com/PaulJPhilp/EffectTalk
+
+---
+
+Built with ❤️ for the functional programming community.
