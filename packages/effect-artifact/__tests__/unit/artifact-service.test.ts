@@ -1,6 +1,6 @@
 import { Effect, Layer } from "effect"
 import { describe, expect, it } from "vitest"
-import { ArtifactService } from "../../src/services/artifact-service.js"
+import { ArtifactService } from "../../src/services/index.js"
 import type { Artifact } from "../../src/types.js"
 
 describe("ArtifactService", () => {

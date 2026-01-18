@@ -332,7 +332,7 @@ function renderNode(
             message: `Render error: ${
               error instanceof Error ? error.message : String(error)
             }`,
-            position: node.position,
+            ...(node.position !== undefined && { position: node.position }),
             cause: error,
           })
     )
