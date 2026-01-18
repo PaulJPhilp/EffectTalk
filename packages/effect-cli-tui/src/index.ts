@@ -105,8 +105,8 @@ export {
   getGitRoot,
   getStatusSummary,
   isGitClean,
-} from "./utils/git";
-export { showOnboardingIfNeeded } from "./utils/onboarding";
+} from "./utils/git.js";
+export { showOnboardingIfNeeded } from "./utils/onboarding.js";
 
 // Core types
 export type {
@@ -117,7 +117,7 @@ export type {
   JsonDisplayOptions,
   PromptOptions,
   SelectOption,
-} from "./types";
+} from "./types.js";
 
 // Error types
-export { CLIError, InkError, TUIError } from "./types";
+export { CLIError, InkError, TUIError } from "./types.js";

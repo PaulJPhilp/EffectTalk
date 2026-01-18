@@ -1,2 +1,2 @@
 // This file is the entry point for UI components.
-export * from "./components/index";
+export * from "./components/index.js";

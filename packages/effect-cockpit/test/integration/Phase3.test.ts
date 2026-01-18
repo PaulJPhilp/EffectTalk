@@ -3,31 +3,15 @@ import { describe, it, expect, afterAll } from "vitest";
 import path from "node:path";
 import os from "node:os";
 import fs from "node:fs";
-import {
-	SessionStore,
-	SessionStoreLive,
-} from "../../src/state/SessionStore.js";
-import { BlockService, BlockServiceLive } from "../../src/core/BlockService.js";
-import {
-	ProcessRuntime,
-	ProcessRuntimeLive,
-} from "../../src/core/ProcessRuntime.js";
-import {
-	CommandExecutor,
-	CommandExecutorLive,
-} from "../../src/core/CommandExecutor.js";
-import { Persistence, PersistenceLive } from "../../src/state/Persistence.js";
-import {
-	PluginManager,
-	PluginManagerLive,
-} from "../../src/core/PluginManager.js";
+import { SessionStore } from "../../src/state/SessionStore.js";
+import { BlockService } from "../../src/core/BlockService.js";
+import { ProcessRuntime } from "../../src/core/ProcessRuntime.js";
+import { CommandExecutor } from "../../src/core/CommandExecutor.js";
+import { Persistence } from "../../src/state/Persistence.js";
+import { PluginManager } from "../../src/core/PluginManager.js";
 import type { Session } from "../../src/types/session.js";
 import type { Plugin } from "../../src/types/plugin.js";
-
-import {
-	SlashCommands,
-	SlashCommandsLive,
-} from "../../src/core/SlashCommands.js";
+import { SlashCommands } from "../../src/core/SlashCommands.js";
 
 const TEST_DB_PATH = path.join(
 	os.tmpdir(),
@@ -47,32 +31,14 @@ const initialSession: Session = {
 	},
 };
 
-const sessionStore = SessionStoreLive(initialSession);
-const persistence = PersistenceLive(TEST_DB_PATH);
-const processRuntime = ProcessRuntimeLive;
-const pluginManager = PluginManagerLive;
-const slashCommands = SlashCommandsLive.pipe(
-	Layer.provideMerge(sessionStore),
-	Layer.provideMerge(persistence),
-);
-const blockService = BlockServiceLive.pipe(
-	Layer.provideMerge(sessionStore),
-	Layer.provideMerge(processRuntime),
-);
-const commandExecutor = CommandExecutorLive.pipe(
-	Layer.provideMerge(blockService),
-	Layer.provideMerge(sessionStore),
-	Layer.provideMerge(slashCommands),
-);
-
 const MainLayer = Layer.mergeAll(
-	sessionStore,
-	persistence,
-	processRuntime,
-	pluginManager,
-	slashCommands,
-	blockService,
-	commandExecutor,
+	SessionStore.Default(initialSession),
+	Persistence.Default(TEST_DB_PATH),
+	ProcessRuntime.Default(),
+	PluginManager.Default(),
+	SlashCommands.Default(),
+	BlockService.Default(),
+	CommandExecutor.Default(),
 );
 
 describe("Phase 3 Integration (Snapshots & Plugins)", () => {

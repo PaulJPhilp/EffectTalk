@@ -143,7 +143,7 @@ export type { Tool, ToolDefinition } from "./tools/types.js";
 export {
   FetchContentInputSchema,
   FetchContentOutputSchema,
-  fetchContentImpl,
+  fetchContent,
 } from "./tools/fetch-content.js";
 export type {
   FetchContentInput,

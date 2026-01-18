@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## EffectTalk Monorepo Overview
 
-**EffectTalk** is a unified, Effect-native monorepo for building AI-powered applications. It combines agent infrastructure and data foundation into 28 coordinated packages with strict architectural boundaries.
+**EffectTalk** is a unified, Effect-native monorepo for building AI-powered applications. It combines agent infrastructure and data foundation into 27 coordinated packages with strict architectural boundaries.
 
 ```
 EffectTalk (Root)
@@ -15,7 +15,7 @@ EffectTalk (Root)
 │   ├── effect-actor                   State machine orchestration
 │   └── effect-cockpit                 Agent dashboard & monitoring
 │
-├── Layer 1: Hume (23 packages)        Data Foundation
+├── Layer 1: Hume (22 packages)        Data Foundation
 │   ├── Resources                      JSON, YAML, Regex, Env, Schema utilities
 │   ├── Content                        Format parsing (XML, CSV, MDX, HTML, PDF, etc.)
 │   ├── Services                       External integrations (Git, Artifacts, Telemetry)
@@ -36,7 +36,7 @@ All packages use **Bun** as the package manager. Commands run from the **root di
 # Install dependencies
 bun install
 
-# Build all 28 packages
+# Build all 27 packages
 bun run build
 
 # Type checking with strict mode

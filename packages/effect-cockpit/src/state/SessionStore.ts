@@ -1,8 +1,8 @@
-import { Context, Effect, Layer, Ref } from "effect";
+import { Effect, Ref } from "effect";
 import type { Block } from "../types/block.js";
 import type { Session } from "../types/session.js";
 
-export interface SessionStore {
+export interface SessionStoreApi {
 	readonly get: Effect.Effect<Session>;
 	readonly update: (
 		updateFn: (session: Session) => Session,
@@ -22,14 +22,10 @@ export interface SessionStore {
 	readonly focusPrev: Effect.Effect<void>;
 }
 
-export const SessionStore = Context.GenericTag<SessionStore>(
+export class SessionStore extends Effect.Service<SessionStore>()(
 	"effect-cockpit/SessionStore",
-);
-
-export const SessionStoreLive = (initialSession: Session) =>
-	Layer.scoped(
-		SessionStore,
-		Effect.gen(function* () {
+	{
+		effect: Effect.fn(function* (initialSession: Session) {
 			const state = yield* Ref.make(initialSession);
 
 			const get = Ref.get(state);
@@ -106,7 +102,7 @@ export const SessionStoreLive = (initialSession: Session) =>
 					: session;
 			});
 
-			return SessionStore.of({
+			return {
 				get,
 				update,
 				addBlock,
@@ -115,6 +111,7 @@ export const SessionStoreLive = (initialSession: Session) =>
 				setFocus,
 				focusNext,
 				focusPrev,
-			});
+			} satisfies SessionStoreApi;
 		}),
-	);
+	}
+) {}

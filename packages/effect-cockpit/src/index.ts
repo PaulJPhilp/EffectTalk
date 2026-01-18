@@ -2,15 +2,12 @@ import { Effect, Layer, Scope, Stream } from "effect";
 import { render } from "ink";
 import React from "react";
 import { App } from "./ui/App.js";
-import { SessionStore, SessionStoreLive } from "./state/SessionStore.js";
-import { BlockService, BlockServiceLive } from "./core/BlockService.js";
-import { ProcessRuntime, ProcessRuntimeLive } from "./core/ProcessRuntime.js";
-import {
-	CommandExecutor,
-	CommandExecutorLive,
-} from "./core/CommandExecutor.js";
-import { SlashCommands, SlashCommandsLive } from "./core/SlashCommands.js";
-import { Persistence, PersistenceLive } from "./state/Persistence.js";
+import { SessionStore } from "./state/SessionStore.js";
+import { BlockService } from "./core/BlockService.js";
+import { ProcessRuntime } from "./core/ProcessRuntime.js";
+import { CommandExecutor } from "./core/CommandExecutor.js";
+import { SlashCommands } from "./core/SlashCommands.js";
+import { Persistence } from "./state/Persistence.js";
 import type { Session } from "./types/session.js";
 import path from "node:path";
 import os from "node:os";
@@ -30,30 +27,13 @@ const initialSession: Session = {
 	},
 };
 
-const sessionStore = SessionStoreLive(initialSession);
-const persistence = PersistenceLive(DB_PATH);
-const processRuntime = ProcessRuntimeLive;
-const slashCommands = SlashCommandsLive.pipe(
-	Layer.provideMerge(sessionStore),
-	Layer.provideMerge(persistence),
-);
-const blockService = BlockServiceLive.pipe(
-	Layer.provideMerge(sessionStore),
-	Layer.provideMerge(processRuntime),
-);
-const commandExecutor = CommandExecutorLive.pipe(
-	Layer.provideMerge(blockService),
-	Layer.provideMerge(sessionStore),
-	Layer.provideMerge(slashCommands),
-);
-
 const MainLayer = Layer.mergeAll(
-	sessionStore,
-	persistence,
-	processRuntime,
-	slashCommands,
-	blockService,
-	commandExecutor,
+	SessionStore.Default(initialSession),
+	Persistence.Default(DB_PATH),
+	ProcessRuntime.Default(),
+	SlashCommands.Default(),
+	BlockService.Default(),
+	CommandExecutor.Default(),
 );
 
 const program = Effect.gen(function* () {

@@ -289,8 +289,3 @@ export class EffectCLI extends Effect.Service<EffectCLI>()("app/EffectCLI", {
   ),
   dependencies: [],
 }) {}
-
-/**
- * @deprecated Use `EffectCLI.Default` instead. This alias is provided for backward compatibility.
- */
-export const EffectCLILive = EffectCLI.Default;

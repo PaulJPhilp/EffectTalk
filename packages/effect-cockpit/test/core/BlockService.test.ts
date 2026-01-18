@@ -1,8 +1,8 @@
 import { Effect, Layer, Scope } from "effect";
 import { describe, it, expect } from "vitest";
-import { BlockService, BlockServiceLive } from "../../src/core/BlockService.js";
-import { SessionStoreLive } from "../../src/state/SessionStore.js";
-import { ProcessRuntimeLive } from "../../src/core/ProcessRuntime.js";
+import { BlockService } from "../../src/core/BlockService.js";
+import { SessionStore } from "../../src/state/SessionStore.js";
+import { ProcessRuntime } from "../../src/core/ProcessRuntime.js";
 import type { Session } from "../../src/types/session.js";
 
 const initialSession: Session = {
@@ -18,9 +18,10 @@ const initialSession: Session = {
 	},
 };
 
-const TestLayer = Layer.provide(
-	BlockServiceLive,
-	Layer.merge(SessionStoreLive(initialSession), ProcessRuntimeLive),
+const TestLayer = Layer.mergeAll(
+	SessionStore.Default(initialSession),
+	ProcessRuntime.Default(),
+	BlockService.Default(),
 );
 
 describe("BlockService", () => {

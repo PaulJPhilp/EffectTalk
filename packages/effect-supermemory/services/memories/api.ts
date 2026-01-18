@@ -36,7 +36,7 @@ import type {
  *
  * @since 1.0.0
  */
-export type MemoriesServiceApi = {
+export interface MemoriesServiceApi {
   /**
    * Add a new memory/document with any content type (text, URL, etc.).
    *
@@ -193,4 +193,4 @@ export type MemoriesServiceApi = {
   readonly uploadFile: (
     params: MemoryUploadFileParams
   ) => Effect.Effect<MemoryUploadFileResponse, SupermemoryError>;
-};
+}

@@ -33,7 +33,7 @@ export type FetchContentOutput = Schema.Schema.Type<
 
 // --- Implementation ---
 
-export const fetchContentImpl = (
+export const fetchContent = (
   input: unknown
 ): Effect.Effect<FetchContentOutput, Error> =>
   Effect.gen(function* () {

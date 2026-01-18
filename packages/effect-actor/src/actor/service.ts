@@ -121,8 +121,7 @@ export interface TransitionCheck {
 export class ActorService extends Effect.Service<ActorService>()(
 	"effect-actor/ActorService",
 	{
-		accessors: true,
-		effect: Effect.gen(function* () {
+		effect: Effect.fn(function* () {
 			const storage = yield* StorageProvider;
 			const specRegistry = yield* SpecRegistry;
 			const auditLog = yield* AuditLog;
@@ -265,13 +264,3 @@ export class ActorService extends Effect.Service<ActorService>()(
 		}),
 	},
 ) {}
-
-/**
- * Default live implementation of ActorService with all dependencies wired up
- */
-export const ActorServiceLive = ActorService.Default.pipe(
-	Layer.provide(StorageProvider.Default),
-	Layer.provide(ComputeProvider.Default),
-	Layer.provide(SpecRegistry.Default),
-	Layer.provide(AuditLog.Default),
-);

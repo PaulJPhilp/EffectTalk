@@ -1,9 +1,6 @@
 import { Effect, Layer } from "effect";
 import { describe, it, expect } from "vitest";
-import {
-	SessionStore,
-	SessionStoreLive,
-} from "../../src/state/SessionStore.js";
+import { SessionStore } from "../../src/state/SessionStore.js";
 import type { Session } from "../../src/types/session.js";
 
 const initialSession: Session = {
@@ -26,7 +23,7 @@ describe("SessionStore", () => {
 			const session = yield* store.get;
 			expect(session.id).toBe("test-session");
 		}).pipe(
-			Effect.provide(SessionStoreLive(initialSession)),
+			Effect.provide(SessionStore.Default(initialSession)),
 			Effect.runPromise,
 		));
 
@@ -47,7 +44,7 @@ describe("SessionStore", () => {
 			expect(session.blocks).toHaveLength(1);
 			expect(session.blocks[0]?.id).toBe("block-1");
 		}).pipe(
-			Effect.provide(SessionStoreLive(initialSession)),
+			Effect.provide(SessionStore.Default(initialSession)),
 			Effect.runPromise,
 		));
 
@@ -113,7 +110,7 @@ describe("SessionStore", () => {
 			session = yield* store.get;
 			expect(session.focusedBlockId).toBe("1");
 		}).pipe(
-			Effect.provide(SessionStoreLive(initialSession)),
+			Effect.provide(SessionStore.Default(initialSession)),
 			Effect.runPromise,
 		));
 });

@@ -68,72 +68,67 @@ export interface AuditLogApi {
 /**
  * AuditLog service - manages the audit trail and state reconstruction
  */
-export class AuditLog extends Effect.Service<AuditLog>()("effect-actor/AuditLog", {
-	effect: Effect.gen(function* () {
-		const storage = yield* StorageProvider;
-		const specRegistry = yield* SpecRegistry;
+export class AuditLog extends Effect.Service<AuditLog>()(
+	"effect-actor/AuditLog",
+	{
+		effect: Effect.fn(function* () {
+			const storage = yield* StorageProvider;
+			const specRegistry = yield* SpecRegistry;
 
-		return {
-			record: (entry: AuditEntry) =>
-				// For now, recording is handled atomically by StorageProvider.save in ActorService
-				// This could be used for secondary indexing or external audit logs
-				Effect.void,
+			return {
+				record: (entry: AuditEntry) =>
+					// For now, recording is handled atomically by StorageProvider.save in ActorService
+					// This could be used for secondary indexing or external audit logs
+					Effect.void,
 
-			query: (actorType, actorId, filters) =>
-				storage.getHistory(actorType, actorId, filters?.limit, filters?.offset),
+				query: (actorType, actorId, filters) =>
+					storage.getHistory(actorType, actorId, filters?.limit, filters?.offset),
 
-			replay: (actorType, actorId, upToTimestamp) =>
-				Effect.gen(function* () {
-					const spec = yield* specRegistry.get(actorType);
-					const history = yield* storage.getHistory(actorType, actorId);
+				replay: (actorType, actorId, upToTimestamp) =>
+					Effect.gen(function* () {
+						const spec = yield* specRegistry.get(actorType);
+						const history = yield* storage.getHistory(actorType, actorId);
 
-					const filteredHistory = upToTimestamp
-						? history.filter((e: AuditEntry) => e.timestamp <= upToTimestamp)
-						: history;
+						const filteredHistory = upToTimestamp
+							? history.filter((e: AuditEntry) => e.timestamp <= upToTimestamp)
+							: history;
 
-					// Replay logic: start from initial state and apply successful transitions
-					let currentState: ActorState = {
-						id: actorId,
-						actorType,
-						state: spec.initial,
-						context: {},
-						version: 0,
-						createdAt: history[history.length - 1]?.timestamp ?? new Date(),
-						updatedAt: history[history.length - 1]?.timestamp ?? new Date(),
-					};
+						// Replay logic: start from initial state and apply successful transitions
+						let currentState: ActorState = {
+							id: actorId,
+							actorType,
+							state: spec.initial,
+							context: {},
+							version: 0,
+							createdAt: history[history.length - 1]?.timestamp ?? new Date(),
+							updatedAt: history[history.length - 1]?.timestamp ?? new Date(),
+						};
 
-					// History is newest first, so we reverse it for replay
-					const chronological = [...filteredHistory].reverse();
+						// History is newest first, so we reverse it for replay
+						const chronological = [...filteredHistory].reverse();
 
-					for (const entry of chronological) {
-						if (entry.result === "success") {
-							const result = yield* executeCommand(spec, currentState, {
-								event: entry.event,
-								data: entry.data,
-							});
+						for (const entry of chronological) {
+							if (entry.result === "success") {
+								const result = yield* executeCommand(spec, currentState, {
+									event: entry.event,
+									data: entry.data,
+								});
 
-							currentState = {
-								id: actorId,
-								actorType,
-								state: result.to,
-								context: result.newContext,
-								version: currentState.version + 1,
-								createdAt: currentState.createdAt,
-								updatedAt: entry.timestamp,
-							};
+								currentState = {
+									id: actorId,
+									actorType,
+									state: result.to,
+									context: result.newContext,
+									version: currentState.version + 1,
+									createdAt: currentState.createdAt,
+									updatedAt: entry.timestamp,
+								};
+							}
 						}
-					}
 
-					return currentState;
-				}),
-		} satisfies AuditLogApi;
-	}),
-}) {}
-
-/**
- * Default live implementation of AuditLog with all dependencies wired up
- */
-export const AuditLogLive = AuditLog.Default.pipe(
-	Layer.provide(StorageProvider.Default),
-	Layer.provide(SpecRegistry.Default),
-);
+						return currentState;
+					}),
+			} satisfies AuditLogApi;
+		}),
+	}
+) {}

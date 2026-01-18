@@ -1,4 +1,4 @@
-import { Context, Effect, Layer, Stream, Scope } from "effect";
+import { Effect, Stream, Scope } from "effect";
 import { spawn } from "node:child_process";
 import os from "node:os";
 
@@ -17,7 +17,7 @@ export interface ProcessOptions {
 	readonly rows?: number;
 }
 
-export interface ProcessRuntime {
+export interface ProcessRuntimeApi {
 	readonly spawn: (
 		command: string,
 		args: string[],
@@ -25,82 +25,82 @@ export interface ProcessRuntime {
 	) => Effect.Effect<Process, Error, Scope.Scope>;
 }
 
-export const ProcessRuntime = Context.GenericTag<ProcessRuntime>(
+export class ProcessRuntime extends Effect.Service<ProcessRuntime>()(
 	"effect-cockpit/ProcessRuntime",
-);
+	{
+		effect: Effect.fn(function* () {
+			return {
+				spawn: (command, args, options) =>
+					Effect.gen(function* () {
+						// Use shell for better compatibility
+						const shell =
+							os.platform() === "win32" ? "powershell.exe" : "/bin/bash";
+						const shellArgs = ["-c", `${command} ${args.join(" ")}`];
 
-export const ProcessRuntimeLive = Layer.succeed(
-	ProcessRuntime,
-	ProcessRuntime.of({
-		spawn: (command, args, options) =>
-			Effect.gen(function* () {
-				// Use shell for better compatibility
-				const shell =
-					os.platform() === "win32" ? "powershell.exe" : "/bin/bash";
-				const shellArgs = ["-c", `${command} ${args.join(" ")}`];
+						const child = spawn(shell, shellArgs, {
+							cwd: options?.cwd ?? process.cwd(),
+							env: { ...process.env, ...options?.env },
+							stdio: ["pipe", "pipe", "pipe"],
+						});
 
-				const child = spawn(shell, shellArgs, {
-					cwd: options?.cwd ?? process.cwd(),
-					env: { ...process.env, ...options?.env },
-					stdio: ["pipe", "pipe", "pipe"],
-				});
-
-				const onData = Stream.merge(
-					Stream.async<string, Error>((emit) => {
-						child.stdout!.setEncoding("utf8");
-						child.stdout!.on("data", (chunk) => emit.single(chunk));
-						child.stdout!.on("end", () => emit.end());
-						child.stdout!.on("error", (err) => emit.fail(err));
-					}),
-					Stream.async<string, Error>((emit) => {
-						child.stderr!.setEncoding("utf8");
-						child.stderr!.on("data", (chunk) => emit.single(chunk));
-						child.stderr!.on("end", () => emit.end());
-						child.stderr!.on("error", (err) => emit.fail(err));
-					}),
-				);
-
-				const onExit = Effect.async<
-					{ exitCode: number; signal?: number },
-					Error
-				>((resume) => {
-					child.on("close", (code, signal) => {
-						resume(
-							Effect.succeed({
-								exitCode: code ?? 0,
-								signal: signal === null ? undefined : 0,
+						const onData = Stream.merge(
+							Stream.async<string, Error>((emit) => {
+								child.stdout!.setEncoding("utf8");
+								child.stdout!.on("data", (chunk) => emit.single(chunk));
+								child.stdout!.on("end", () => emit.end());
+								child.stdout!.on("error", (err) => emit.fail(err));
+							}),
+							Stream.async<string, Error>((emit) => {
+								child.stderr!.setEncoding("utf8");
+								child.stderr!.on("data", (chunk) => emit.single(chunk));
+								child.stderr!.on("end", () => emit.end());
+								child.stderr!.on("error", (err) => emit.fail(err));
 							}),
 						);
-					});
-					child.on("error", (err) => {
-						// If spawn fails immediately
-						resume(Effect.fail(err));
-					});
-				});
 
-				const write = (data: string) =>
-					Effect.sync(() => {
-						if (child.stdin) {
-							child.stdin.write(data);
-						}
-					});
+						const onExit = Effect.async<
+							{ exitCode: number; signal?: number },
+							Error
+						>((resume) => {
+							child.on("close", (code, signal) => {
+								resume(
+									Effect.succeed({
+										exitCode: code ?? 0,
+										signal: signal === null ? undefined : 0,
+									}),
+								);
+							});
+							child.on("error", (err) => {
+								// If spawn fails immediately
+								resume(Effect.fail(err));
+							});
+						});
 
-				const resize = (cols: number, rows: number) => Effect.void; // child_process doesn't support resize
+						const write = (data: string) =>
+							Effect.sync(() => {
+								if (child.stdin) {
+									child.stdin.write(data);
+								}
+							});
 
-				const kill = (signal?: string) =>
-					Effect.sync(() => {
-						child.kill(signal as NodeJS.Signals);
-					});
+						const resize = (cols: number, rows: number) => Effect.void; // child_process doesn't support resize
 
-				yield* Effect.addFinalizer(() =>
-					Effect.sync(() => {
-						if (!child.killed) {
-							child.kill();
-						}
+						const kill = (signal?: string) =>
+							Effect.sync(() => {
+								child.kill(signal as NodeJS.Signals);
+							});
+
+						yield* Effect.addFinalizer(() =>
+							Effect.sync(() => {
+								if (!child.killed) {
+									child.kill();
+								}
+							}),
+						);
+
+						return { write, resize, kill, onData, onExit };
 					}),
-				);
-
-				return { write, resize, kill, onData, onExit };
-			}),
-	}),
-);
+			} satisfies ProcessRuntimeApi;
+		}),
+	}
+) {}

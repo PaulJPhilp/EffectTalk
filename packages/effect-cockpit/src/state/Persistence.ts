@@ -29,7 +29,7 @@ export interface DatabaseSchema {
 	};
 }
 
-export interface Persistence {
+export interface PersistenceApi {
 	readonly saveSession: (session: Session) => Effect.Effect<void>;
 	readonly loadLastSession: Effect.Effect<Session | null>;
 	readonly createSnapshot: (
@@ -42,14 +42,10 @@ export interface Persistence {
 	readonly loadSnapshot: (name: string) => Effect.Effect<Session | null>;
 }
 
-export const Persistence = Context.GenericTag<Persistence>(
+export class Persistence extends Effect.Service<Persistence>()(
 	"effect-cockpit/Persistence",
-);
-
-export const PersistenceLive = (dbPath: string) =>
-	Layer.scoped(
-		Persistence,
-		Effect.gen(function* () {
+	{
+		effect: Effect.fn(function* (dbPath: string) {
 			const isBun = !!(globalThis as any).Bun;
 
 			let dialect: any;
@@ -170,7 +166,7 @@ export const PersistenceLive = (dbPath: string) =>
 					}
 				});
 
-			return Persistence.of({
+			return {
 				saveSession: saveSessionImpl,
 				loadLastSession: Effect.gen(function* () {
 					const sessionRow = yield* Effect.promise(() =>
@@ -279,6 +275,7 @@ export const PersistenceLive = (dbPath: string) =>
 							},
 						} as Session;
 					}),
-			});
+			} satisfies PersistenceApi;
 		}),
-	);
+	}
+) {}

@@ -19,7 +19,7 @@ import type { HttpPath, HttpRequestOptions, HttpResponse } from "./types.js";
  * @since 1.0.0
  * @category Services
  */
-export type HttpClientApi = {
+export interface HttpClientApi {
   /**
    * Sends an HTTP request and returns the response body as JSON.
    * Automatically handles error status codes (>= 400) by transforming to HttpClientError.
@@ -45,4 +45,4 @@ export type HttpClientApi = {
     Stream.Stream<Uint8Array, HttpClientError>,
     HttpClientError
   >;
-};
+}
