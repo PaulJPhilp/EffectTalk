@@ -1,3 +1,4 @@
+import type { ChalkColor } from "@/types.js";
 import {
   ANSI_CARRIAGE_RETURN,
   ANSI_HIDE_CURSOR,
@@ -11,7 +12,6 @@ import {
 } from "@core/icons.js";
 import cliSpinners from "cli-spinners";
 import { Effect } from "effect";
-import type { ChalkColor } from "@/types.js";
 
 export interface SpinnerOptions {
   message?: string;
@@ -20,7 +20,7 @@ export interface SpinnerOptions {
   hideCursor?: boolean;
 }
 
-let currentSpinner: NodeJS.Timer | null = null;
+let currentSpinner: ReturnType<typeof setInterval> | null = null;
 let spinnerFrames: string[] = [];
 let currentFrame = 0;
 let spinnerMessage = "";
@@ -31,7 +31,7 @@ let spinnerMessage = "";
 export function spinnerEffect<A, E, R>(
   message: string,
   effect: Effect.Effect<A, E, R>,
-  options?: SpinnerOptions
+  options?: SpinnerOptions,
 ): Effect.Effect<A, E, R> {
   return Effect.gen(function* () {
     yield* startSpinner(message, options);
@@ -41,8 +41,8 @@ export function spinnerEffect<A, E, R>(
         Effect.gen(function* () {
           yield* stopSpinner(SPINNER_MESSAGE_FAILED, "error");
           return yield* Effect.fail(error);
-        })
-      )
+        }),
+      ),
     );
     return result;
   });
@@ -53,7 +53,7 @@ export function spinnerEffect<A, E, R>(
  */
 export function startSpinner(
   message: string,
-  options?: SpinnerOptions
+  options?: SpinnerOptions,
 ): Effect.Effect<void> {
   return Effect.sync(() => {
     spinnerMessage = message;
@@ -91,7 +91,7 @@ export function updateSpinner(message: string): Effect.Effect<void> {
  */
 export function stopSpinner(
   message?: string,
-  type: "success" | "error" = "success"
+  type: "success" | "error" = "success",
 ): Effect.Effect<void> {
   return Effect.sync(() => {
     if (currentSpinner) {
