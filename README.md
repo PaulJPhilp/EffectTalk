@@ -54,12 +54,14 @@ Built on [Effect.js](https://effect.website), EffectTalk provides functional pro
 ## ✨ Key Features
 
 ### 🏗️ **Functional Architecture**
+
 - Effect.js-based services for composable, type-safe effects
 - Automatic dependency injection via Effect.Service pattern
 - Powerful error handling with discriminated unions (Data.TaggedError)
 - Type-safe effect composition and async orchestration
 
 ### 🤖 **AI Agent Infrastructure**
+
 - **effect-supermemory** — Long-term memory with semantic search
 - **effect-ai-sdk** — 8+ LLM provider integration (OpenAI, Anthropic, Google, Groq, DeepSeek, etc.)
 - **effect-actor** — Statechart-based state machines for workflow orchestration
@@ -67,18 +69,21 @@ Built on [Effect.js](https://effect.website), EffectTalk provides functional pro
 - **effect-cockpit** — Agent dashboard for monitoring and control
 
 ### 📦 **Data Foundation (17 Packages)**
+
 - **Parsing:** JSON, YAML, XML, CSV, MDX, HTML, PDF, TOML, XMP
 - **Templates:** Shopify Liquid engine with semantic template processing
 - **Validation:** Effect.Schema-based type-safe validation (no Zod)
 - **Integration:** LLM models (OpenRouter, HuggingFace), Git repositories, prompt management
 
 ### 🛡️ **Type Safety**
+
 - Strict TypeScript with `exactOptionalPropertyTypes: true`
 - Zero implicit `any` — all types explicit
 - Compile-time guarantees for error handling
 - Full discriminated union support for runtime type safety
 
 ### 🎨 **Code Quality**
+
 - Biome linting with Ultracite preset (zero-config, opinionated)
 - 85%+ test coverage across all packages
 - Automated formatting and error detection
@@ -89,6 +94,7 @@ Built on [Effect.js](https://effect.website), EffectTalk provides functional pro
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Bun 1.1.33+** (https://bun.sh)
 - **Node.js 18.18+** (for development)
 - **Git** (for cloning)
@@ -161,8 +167,8 @@ const streamingAnswer = Effect.gen(function* () {
 
 // Execute with error handling
 Effect.runPromise(generateAnswer)
-  .then(answer => console.log(answer))
-  .catch(error => console.error("Generation failed:", error));
+  .then((answer) => console.log(answer))
+  .catch((error) => console.error("Generation failed:", error));
 ```
 
 ### Using Effect-Supermemory (Long-Term Memory)
@@ -185,10 +191,9 @@ const memoryProgram = Effect.gen(function* () {
   const preferences = yield* memory.get("user:alice:preferences");
 
   // Search semantically
-  const results = yield* memory.search(
-    "user preferences and settings",
-    { limit: 5 }
-  );
+  const results = yield* memory.search("user preferences and settings", {
+    limit: 5,
+  });
 
   return { preferences, results };
 });
@@ -201,9 +206,9 @@ const layer = SupermemoryClient.Default({
 });
 
 // Run with dependency injection
-Effect.runPromise(
-  memoryProgram.pipe(Effect.provide(layer))
-).catch(error => console.error("Memory operation failed:", error));
+Effect.runPromise(memoryProgram.pipe(Effect.provide(layer))).catch((error) =>
+  console.error("Memory operation failed:", error),
+);
 ```
 
 ### Using Effect-CLI-TUI (Interactive Prompts)
@@ -215,7 +220,7 @@ import {
   selectOption,
   multiSelect,
   confirm,
-  spinner
+  spinner,
 } from "effect-cli-tui";
 
 const interactiveProgram = Effect.gen(function* () {
@@ -223,35 +228,35 @@ const interactiveProgram = Effect.gen(function* () {
   const name = yield* prompt("What's your name?");
 
   // Single select
-  const theme = yield* selectOption(
-    "Choose a theme:",
-    ["light", "dark", "auto"]
-  );
+  const theme = yield* selectOption("Choose a theme:", [
+    "light",
+    "dark",
+    "auto",
+  ]);
 
   // Multiple select
-  const features = yield* multiSelect(
-    "Select features:",
-    ["memory", "api", "ui", "telemetry"]
-  );
+  const features = yield* multiSelect("Select features:", [
+    "memory",
+    "api",
+    "ui",
+    "telemetry",
+  ]);
 
   // Confirmation
   const confirmed = yield* confirm(
-    `Continue with ${features.length} features?`
+    `Continue with ${features.length} features?`,
   );
 
   // Spinner for async operations
-  yield* spinner(
-    "Processing setup...",
-    Effect.sleep(2000)
-  );
+  yield* spinner("Processing setup...", Effect.sleep(2000));
 
   return { name, theme, features, confirmed };
 });
 
 // Run and get user input
 Effect.runPromise(interactiveProgram)
-  .then(config => console.log("Config:", config))
-  .catch(error => console.error("Setup failed:", error));
+  .then((config) => console.log("Config:", config))
+  .catch((error) => console.error("Setup failed:", error));
 ```
 
 ### Using Effect-JSON (Type-Safe Parsing)
@@ -269,7 +274,8 @@ const UserSchema = Schema.Struct({
 });
 
 const parseUserJson = Effect.gen(function* () {
-  const jsonString = '{"name": "Alice", "age": 30, "email": "alice@example.com"}';
+  const jsonString =
+    '{"name": "Alice", "age": 30, "email": "alice@example.com"}';
 
   // Parse with validation
   const user = yield* parseJson(jsonString, UserSchema);
@@ -279,8 +285,8 @@ const parseUserJson = Effect.gen(function* () {
 
 // Run and get parsed user object with type safety
 Effect.runPromise(parseUserJson)
-  .then(user => console.log("User:", user))
-  .catch(error => console.error("Parse error:", error));
+  .then((user) => console.log("User:", user))
+  .catch((error) => console.error("Parse error:", error));
 ```
 
 ### Using Effect-YAML (Configuration Files)
@@ -309,8 +315,8 @@ const configProgram = Effect.gen(function* () {
 });
 
 Effect.runPromise(configProgram)
-  .then(yaml => console.log(yaml))
-  .catch(error => console.error("YAML error:", error));
+  .then((yaml) => console.log(yaml))
+  .catch((error) => console.error("YAML error:", error));
 ```
 
 ---
@@ -382,31 +388,34 @@ EffectTalk/
 
 ### Layer 2: McLuhan (Agent Infrastructure)
 
-| Package | Purpose | Key Exports |
-|---------|---------|------------|
+| Package              | Purpose                               | Key Exports                                             |
+| -------------------- | ------------------------------------- | ------------------------------------------------------- |
 | `effect-supermemory` | Long-term memory with semantic search | `SupermemoryClient`, `SearchService`, `MemoriesService` |
-| `effect-ai-sdk` | Multi-provider LLM integration | `generateText()`, `streamText()`, `generateObject()` |
-| `effect-cli-tui` | Terminal UI and interactive prompts | `prompt()`, `selectOption()`, `spinner()`, `Table` |
-| `effect-actor` | State machine orchestration | `createActor()`, `interpret()` |
-| `effect-cockpit` | Agent monitoring and control | Dashboard components and APIs |
+| `effect-ai-sdk`      | Multi-provider LLM integration        | `generateText()`, `streamText()`, `generateObject()`    |
+| `effect-cli-tui`     | Terminal UI and interactive prompts   | `prompt()`, `selectOption()`, `spinner()`, `Table`      |
+| `effect-actor`       | State machine orchestration           | `createActor()`, `interpret()`                          |
+| `effect-cockpit`     | Agent monitoring and control          | Dashboard components and APIs                           |
 
 **Dependencies:** effect-supermemory, effect-ai-sdk, effect-env, effect-json, effect-cli-tui
 
 ### Layer 1: Hume (Data Foundation)
 
 #### Resources (No External Dependencies)
+
 - **effect-env** — Environment variable parsing and validation
 - **effect-json** — JSON parsing with multiple backends (toon, jsonlines, superjson)
 - **effect-regex** — Composable regex patterns and validation
 - **effect-schema-utils** — Schema utilities and refinements
 
 #### Content Capabilities (Format Processing)
+
 - **Structured:** effect-yaml, effect-xml, effect-csv, effect-toml
 - **Documents:** effect-mdx, effect-html, effect-pdf
 - **AI:** effect-prompt (templates), effect-models (LLM integration), effect-liquid (Shopify templates)
 - **Media:** effect-image (image processing), effect-xmp (metadata)
 
 #### Services (External Integrations)
+
 - **effect-repository** — Git operations and repository management
 - **effect-artifact** — Artifact extraction and versioning
 - **effect-attachment** — File attachment handling
@@ -436,6 +445,7 @@ effect-* (Hume Layer 1) → None (internal Hume deps only)
 ### Test Coverage
 
 All packages maintain **85%+ coverage** across:
+
 - **Lines** — Code execution coverage
 - **Functions** — Function coverage
 - **Branches** — Conditional branch coverage
@@ -525,6 +535,7 @@ docs:      # Documentation
 ```
 
 Example:
+
 ```
 feat: Add semantic search to effect-supermemory
 
@@ -537,19 +548,40 @@ Closes #123
 
 ### Code Quality Standards
 
+**Import Path Standardization:**
+
+- **Package-relative paths only** — Use `./` and `../` for internal imports
+- **No monorepo @/ paths** — Avoid `@/package-name` absolute paths
+- **Consistent patterns** — All packages follow the same import structure
+- **Build reliability** — Package-relative paths ensure consistent builds
+
+```typescript
+// ✅ Correct - Package-relative imports
+import { MyService } from "./service.js";
+import { Types } from "../types/index.js";
+import { Utils } from "./utils/helpers.js";
+
+// ❌ Wrong - Monorepo absolute paths
+import { MyService } from "@/my-package/service.js";
+import { Types } from "@/my-package/types/index.js";
+```
+
 **TypeScript Strictness:**
+
 - `strict: true` — All strict checking enabled
 - `exactOptionalPropertyTypes: true` — Correct optional handling
 - `noUncheckedIndexedAccess: true` — Safe array/object access
 - `noImplicitOverride: true` — Explicit override keywords
 
 **Biome (Ultracite Preset):**
+
 - Zero-config opinionated linting
 - Automatic formatting fixes
 - Performance and security checks
 - Accessibility validation
 
 **Error Handling:**
+
 ```typescript
 // ✅ Correct - Type-safe discriminated errors
 export class ValidationError extends Data.TaggedError("ValidationError")<{
@@ -563,21 +595,22 @@ throw new Error("Invalid field");
 ```
 
 **Service Pattern:**
+
 ```typescript
 // ✅ Correct - Effect.Service with Effect.fn()
-export class MyService extends Effect.Service<MyService>()(
-  "MyService",
-  {
-    effect: Effect.fn(function* (config: Config) {
-      return {
-        method: (arg) => Effect.sync(() => { /* ... */ }),
-      } satisfies MyServiceApi;
-    }),
-  }
-) {}
+export class MyService extends Effect.Service<MyService>()("MyService", {
+  effect: Effect.fn(function* (config: Config) {
+    return {
+      method: (arg) =>
+        Effect.sync(() => {
+          /* ... */
+        }),
+    } satisfies MyServiceApi;
+  }),
+}) {}
 
 // ❌ Wrong - Direct instantiation or Context.Tag
-const service = new MyService(config);  // FORBIDDEN
+const service = new MyService(config); // FORBIDDEN
 ```
 
 ---
@@ -589,11 +622,13 @@ const service = new MyService(config);  // FORBIDDEN
 Long-term memory with semantic search. Store, retrieve, and search memories with vector embeddings.
 
 **Key Classes:**
+
 - `SupermemoryClient` — HTTP client for Supermemory API
 - `SearchService` — Semantic search with reranking
 - `MemoriesService` — CRUD operations for memories
 
 **Example:**
+
 ```typescript
 const memoryOps = Effect.gen(function* () {
   const memories = yield* MemoriesService;
@@ -614,6 +649,7 @@ const memoryOps = Effect.gen(function* () {
 Multi-provider LLM integration. Generate text, objects, embeddings from 8+ providers.
 
 **Supported Providers:**
+
 - OpenAI (GPT-4, GPT-3.5)
 - Anthropic (Claude)
 - Google (Gemini)
@@ -624,12 +660,15 @@ Multi-provider LLM integration. Generate text, objects, embeddings from 8+ provi
 - Qwen
 
 **Example:**
+
 ```typescript
-const result = yield* generateText({
-  model: "claude-3-sonnet",
-  prompt: "Explain quantum computing",
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+const result =
+  yield *
+  generateText({
+    model: "claude-3-sonnet",
+    prompt: "Explain quantum computing",
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  });
 ```
 
 ### Effect-JSON
@@ -637,19 +676,21 @@ const result = yield* generateText({
 Type-safe JSON parsing with multiple backend options.
 
 **Features:**
+
 - Schema-based validation
 - Multiple parsing backends (toon, jsonlines, superjson)
 - Error recovery with fallbacks
 - Streaming JSON parsing
 
 **Example:**
+
 ```typescript
 const UserSchema = Schema.Struct({
   name: Schema.String,
   age: Schema.Number,
 });
 
-const user = yield* parseJson(jsonString, UserSchema);
+const user = yield * parseJson(jsonString, UserSchema);
 ```
 
 ### Effect-CLI-TUI
@@ -657,6 +698,7 @@ const user = yield* parseJson(jsonString, UserSchema);
 Terminal UI components and interactive prompts for CLI applications.
 
 **Components:**
+
 - `prompt()` — Text input
 - `selectOption()` — Single selection
 - `multiSelect()` — Multiple selections
@@ -759,17 +801,20 @@ bun run build
 ## 📚 Additional Resources
 
 ### Official Documentation
+
 - **Effect.js** — https://effect.website
 - **Biome** — https://biomejs.dev
 - **Bun** — https://bun.sh
 - **TypeScript** — https://www.typescriptlang.org
 
 ### Architectural Guides
+
 - **Root CLAUDE.md** — Overall architecture and patterns
 - **Package CLAUDE.md files** — Package-specific guidance
 - **ADR (Architecture Decision Records)** — Design decisions and rationale
 
 ### Community
+
 - **Effect Discord** — https://discord.gg/effect-ts
 - **GitHub Issues** — https://github.com/PaulJPhilp/EffectTalk/issues
 - **Discussions** — https://github.com/PaulJPhilp/EffectTalk/discussions
@@ -794,14 +839,17 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 ## 📋 Roadmap
 
 ### Current (v0.5.0-beta)
+
 - ✅ Unified monorepo with 28 packages
 - ✅ Complete type safety with strict TypeScript
 - ✅ Multi-provider LLM integration
 - ✅ Long-term memory with semantic search
 - ✅ Terminal UI and CLI components
 - ✅ 17 data format parsers and processors
+- ✅ Package-relative import path standardization across all packages
 
 ### Next (v0.6.0)
+
 - [ ] Persistent memory store (PostgreSQL backend)
 - [ ] Advanced workflow orchestration
 - [ ] Real-time streaming operations
@@ -809,6 +857,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 - [ ] Browser compatibility (Wasm support)
 
 ### Future (v1.0.0)
+
 - [ ] Visual workflow builder
 - [ ] Agent marketplace
 - [ ] Enhanced caching layers
