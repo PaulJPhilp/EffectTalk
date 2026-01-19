@@ -20,6 +20,7 @@
 ## Failing Packages at a Glance
 
 ### Priority 1: effect-cli-tui (1-2 minutes)
+
 - **Layer:** Layer 2 (Agent Infrastructure)
 - **Error:** TS2835 - Missing .js file extensions
 - **Location:** `src/index.ts` (24+ imports)
@@ -27,6 +28,7 @@
 - **Impact:** Blocks TUI layer
 
 ### Priority 2: effect-actor (5-10 minutes)
+
 - **Layer:** Layer 2 (Agent Infrastructure)
 - **Error:** TS2769 - Service type incompatibility
 - **Location:** `src/actor/service.test.ts:93`
@@ -34,6 +36,7 @@
 - **Impact:** Blocks orchestration
 
 ### Priority 3: effect-cockpit (5-10 minutes)
+
 - **Layer:** Layer 2 (Agent Infrastructure)
 - **Error:** TS2345 - Effect context type mismatch
 - **Location:** `src/index.ts:59`
@@ -41,6 +44,7 @@
 - **Impact:** Blocks dashboard
 
 ### Priority 4: effect-liquid (15-30 minutes)
+
 - **Layer:** Layer 1 (Data Foundation)
 - **Error:** TS2375+ - Complex error type union collapse
 - **Location:** `src/renderer.ts` (15 error lines)
@@ -52,9 +56,11 @@
 ## Documentation Files
 
 ### 1. BUILD_TEST_REPORT.md
+
 **Purpose:** Comprehensive technical analysis  
 **Audience:** Developers who need full details  
 **Contents:**
+
 - Complete error messages for each package
 - Root cause analysis
 - Detailed recommendations
@@ -64,9 +70,11 @@
 **When to use:** For in-depth understanding and detailed fix guidance
 
 ### 2. BUILD_FAILURES_SUMMARY.txt
+
 **Purpose:** Quick reference guide  
 **Audience:** Team leads, developers doing quick lookups  
 **Contents:**
+
 - Executive summary
 - Failing packages with error types
 - Quick fix strategy
@@ -76,9 +84,11 @@
 **When to use:** For quick understanding or sharing with team
 
 ### 3. build-test-results.json
+
 **Purpose:** Machine-readable structured data  
 **Audience:** Automation scripts, CI/CD systems  
 **Contents:**
+
 - Structured test metadata
 - Complete failure information
 - Estimated fix times and priorities
@@ -98,6 +108,7 @@ bun run --filter <package-name> build
 ```
 
 Each test captured:
+
 - Exit code (0 = pass, non-zero = fail)
 - Full error output
 - Line numbers and error codes
@@ -141,17 +152,20 @@ Pass Rate: 95.7% (22 of 23) - STABLE
 ## Next Steps
 
 ### 1. Read the Full Report
+
 ```bash
 cat /Users/paul/Projects/EffectTalk/BUILD_TEST_REPORT.md
 ```
 
 ### 2. Fix in Recommended Order
+
 1. effect-cli-tui (fastest)
 2. effect-actor
 3. effect-cockpit
 4. effect-liquid (most complex)
 
 ### 3. Test Each Fix
+
 ```bash
 # Test individual package
 bun run --filter effect-cli-tui build
@@ -161,6 +175,7 @@ bun run build
 ```
 
 ### 4. Verify Success
+
 ```bash
 bun run build  # Should complete without errors
 ```
@@ -170,16 +185,19 @@ bun run build  # Should complete without errors
 ## Key Insights
 
 ### What's Working Well
+
 - 85% of packages build successfully
 - Layer 1 (data foundation) is stable (95.7% pass)
 - Foundation packages (supermemory, ai-sdk) are solid
 
 ### What Needs Attention
+
 - Layer 2 (agent infrastructure) is compromised (40% pass)
 - Three Layer 2 packages need fixes before they can be used
 - All failures are fixable with targeted changes
 
 ### Estimated Effort
+
 - **Total fix time:** 40-60 minutes
 - **Complexity:** Low to Medium
 - **Risk:** Low (all changes are isolated to individual packages)
@@ -200,9 +218,11 @@ All reports generated in `/Users/paul/Projects/EffectTalk/`:
 ## References
 
 ### Passing Packages (23)
+
 effect-ai-sdk, effect-artifact, effect-attachment, effect-csv, effect-env, effect-html, effect-image, effect-json, effect-mdx, effect-models, effect-models-website, effect-pdf, effect-prompt, effect-regex, effect-repository, effect-schema-utils, effect-storage, effect-supermemory, effect-telemetry, effect-toml, effect-xml, effect-xmp, effect-yaml
 
 ### Failing Packages (4)
+
 effect-actor, effect-cli-tui, effect-cockpit, effect-liquid
 
 ---
@@ -214,5 +234,3 @@ For quick reference, see: `BUILD_FAILURES_SUMMARY.txt`
 For programmatic access, see: `build-test-results.json`
 
 ---
-
-*Analysis completed on 2026-01-18 by systematic build testing of all 27 packages*

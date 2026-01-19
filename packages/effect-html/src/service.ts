@@ -1,30 +1,29 @@
+// biome-ignore lint: cheerio requires namespace import for tree shaking
 import * as cheerio from "cheerio";
 import { Effect } from "effect";
 import { JsonService, validateAgainstSchema } from "effect-json";
-import { HtmlError } from "@/effect-html/errors.js";
-import { HtmlMetadataSchema, type HtmlMetadata } from "@/effect-html/schemas.js";
+import { HtmlError } from "./errors.js";
+import { type HtmlMetadata, HtmlMetadataSchema } from "./schemas.js";
 
 export interface HtmlServiceSchema {
   /**
    * Parse HTML content into a CheerioAPI instance
    */
   readonly parse: (
-    html: string
+    html: string,
   ) => Effect.Effect<cheerio.CheerioAPI, HtmlError>;
 
   /**
    * Extract metadata (title, description, etc.) from HTML content
    */
   readonly extractMetadata: (
-    html: string
+    html: string,
   ) => Effect.Effect<HtmlMetadata, HtmlError>;
 
   /**
    * Extract JSON-LD data from HTML content
    */
-  readonly extractJsonLd: (
-    html: string
-  ) => Effect.Effect<Array<unknown>, HtmlError>;
+  readonly extractJsonLd: (html: string) => Effect.Effect<unknown[], HtmlError>;
 }
 
 export class HtmlService extends Effect.Service<HtmlServiceSchema>()(
@@ -77,15 +76,15 @@ export class HtmlService extends Effect.Service<HtmlServiceSchema>()(
 
           return yield* validateAgainstSchema(
             HtmlMetadataSchema,
-            rawMetadata
+            rawMetadata,
           ).pipe(
             Effect.mapError(
               (error) =>
                 new HtmlError({
                   reason: `Metadata validation failed: ${error instanceof Error ? error.message : String(error)}`,
                   cause: error,
-                })
-            )
+                }),
+            ),
           );
         });
 
@@ -93,7 +92,7 @@ export class HtmlService extends Effect.Service<HtmlServiceSchema>()(
         Effect.gen(function* () {
           const $ = yield* parse(html);
           const scripts = $('script[type="application/ld+json"]');
-          const results: Array<unknown> = [];
+          const results: unknown[] = [];
 
           for (const element of scripts.toArray()) {
             const content = $(element).text();
@@ -104,8 +103,8 @@ export class HtmlService extends Effect.Service<HtmlServiceSchema>()(
                     new HtmlError({
                       reason: `Failed to parse JSON-LD: ${error instanceof Error ? error.message : String(error)}`,
                       cause: error,
-                    })
-                )
+                    }),
+                ),
               );
               results.push(parsed);
             }
@@ -120,7 +119,7 @@ export class HtmlService extends Effect.Service<HtmlServiceSchema>()(
         extractJsonLd,
       };
     }),
-  }
-) {}
+  },
+) { }
 
 export const HtmlServiceLayer = HtmlService.Default;

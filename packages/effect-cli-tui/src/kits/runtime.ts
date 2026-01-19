@@ -1,8 +1,8 @@
 import { Effect } from "effect";
 
-import { withSlashCommands } from "@/tui-slash-commands.js";
-import { KitRegistryService } from "@kits/registry.js";
-import type { Kit } from "@kits/types.js";
+import { withSlashCommands } from "../tui-slash-commands.js";
+import { KitRegistryService } from "./registry.js";
+import type { Kit } from "./types.js";
 
 /**
  * Enable a kit for the duration of an effect
@@ -26,7 +26,7 @@ import type { Kit } from "@kits/types.js";
  */
 export function withKit<A, E, R>(
   kit: Kit,
-  effect: Effect.Effect<A, E, R>
+  effect: Effect.Effect<A, E, R>,
 ): Effect.Effect<A, E, R> {
   return withSlashCommands(kit.commands, effect);
 }
@@ -53,7 +53,7 @@ export function withKit<A, E, R>(
  */
 export function withKits<A, E, R>(
   kits: readonly Kit[],
-  effect: Effect.Effect<A, E, R>
+  effect: Effect.Effect<A, E, R>,
 ): Effect.Effect<A, E, R> {
   const allCommands = kits.flatMap((kit) => kit.commands);
   return withSlashCommands(allCommands, effect);
@@ -75,7 +75,7 @@ export function withKits<A, E, R>(
  * ```
  */
 export function enableKit(
-  kitId: string
+  kitId: string,
 ): Effect.Effect<
   void,
   import("@kits/types.js").KitError,
@@ -101,7 +101,7 @@ export function enableKit(
  * ```
  */
 export function disableKit(
-  kitId: string
+  kitId: string,
 ): Effect.Effect<
   void,
   import("@kits/types.js").KitError,

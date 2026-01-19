@@ -10,8 +10,14 @@
  * @module backends/sharp
  */
 
-import { Effect, Layer } from "effect";
+import { Effect } from "effect";
 import sharp from "sharp";
+import {
+  BackendError,
+  ImageDecodeError,
+  ImageEncodeError,
+  ImageProcessError,
+} from "../errors.js";
 import type {
   CropOptions,
   EncodeOptions,
@@ -20,18 +26,12 @@ import type {
   ImageMetadata,
   ResizeOptions,
 } from "../types.js";
-import {
-  BackendError,
-  ImageDecodeError,
-  ImageEncodeError,
-  ImageProcessError,
-} from "../errors.js";
 import type { ImageBackend } from "./types.js";
 
 /**
  * Helper to convert Error to BackendError
  */
-const toBackendError = (error: unknown, operation: string): BackendError => {
+const _toBackendError = (error: unknown, operation: string): BackendError => {
   const message = error instanceof Error ? error.message : String(error);
   return new BackendError({
     message: `Sharp ${operation} failed: ${message}`,
@@ -62,7 +62,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 new ImageDecodeError({
                   message: "Buffer is empty or invalid",
                   ...(format ? { format } : {}),
-                })
+                }),
               );
             }
 
@@ -72,7 +72,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 const metadata = await image.metadata();
 
                 // Validate that we got valid dimensions
-                if (!metadata.width || !metadata.height) {
+                if (!(metadata.width && metadata.height)) {
                   throw new Error("Could not determine image dimensions");
                 }
 
@@ -111,7 +111,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
               return yield* Effect.fail(
                 new ImageDecodeError({
                   message: "Buffer is empty or invalid",
-                })
+                }),
               );
             }
 
@@ -119,7 +119,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
               try: async () => {
                 const metadata = await sharp(buffer).metadata();
 
-                if (!metadata.width || !metadata.height) {
+                if (!(metadata.width && metadata.height)) {
                   throw new Error("Could not determine image dimensions");
                 }
 
@@ -164,7 +164,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
         encode: (
           image: ImageData,
           format: ImageFormat,
-          options?: EncodeOptions
+          options?: EncodeOptions,
         ) =>
           Effect.gen(function* () {
             return yield* Effect.tryPromise({
@@ -227,15 +227,15 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
           image: ImageData,
           width: number,
           height: number,
-          options?: ResizeOptions
+          options?: ResizeOptions,
         ) =>
           Effect.gen(function* () {
-            if (!Number.isFinite(width) || !Number.isFinite(height)) {
+            if (!(Number.isFinite(width) && Number.isFinite(height))) {
               return yield* Effect.fail(
                 new ImageProcessError({
                   message: "Invalid dimensions for resize",
                   operation: "resize",
-                })
+                }),
               );
             }
 
@@ -251,7 +251,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                   },
                 })
                   .resize(width, height, {
-                    fit: fit as any, // Sharp's fit matches our type
+                    fit: fit as keyof sharp.FitEnum, // Sharp's fit options
                     position: "center",
                   })
                   .ensureAlpha()
@@ -259,8 +259,8 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                   .toBuffer({ resolveWithObject: true });
 
                 return {
-                  width: width,
-                  height: height,
+                  width,
+                  height,
                   channels: 4,
                   format: image.format,
                   data: resized.data,
@@ -292,7 +292,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 new ImageProcessError({
                   message: "Crop region exceeds image bounds",
                   operation: "crop",
-                })
+                }),
               );
             }
 
@@ -384,7 +384,7 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
                 new ImageProcessError({
                   message: "Invalid rotation angle",
                   operation: "rotate",
-                })
+                }),
               );
             }
 
@@ -506,8 +506,8 @@ export class SharpBackend extends Effect.Service<SharpBackend>()(
           }),
       } satisfies ImageBackend;
     }),
-  }
-) {}
+  },
+) { }
 
 /**
  * Default Sharp Backend Layer

@@ -13,12 +13,11 @@
  * - Both are covered by comprehensive test suites
  */
 
-import { Effect, Layer, Schema as S, ParseResult } from "effect";
-
-import type { Env } from "@/effect-env/env/api.js";
-import { EnvError } from "@/effect-env/env/errors.js";
-import { EnvService, makeEnv } from "@/effect-env/env/service.js";
-import { PrefixError } from "@/effect-env/services/prefix-enforcement/errors.js";
+import { Effect, Layer, ParseResult, Schema as S } from "effect";
+import { PrefixError } from "../services/prefix-enforcement/errors.js";
+import type { Env } from "./api.js";
+import { EnvError } from "./errors.js";
+import { EnvService, makeEnv } from "./service.js";
 
 /**
  * Configuration for createEnv with server/client separation.
@@ -50,7 +49,11 @@ export const createEnvInternal = <Server, Client>({
   EnvError | PrefixError
 > =>
   Layer.effect(
-    EnvService as any,
+    // NOTE: 'as any' is necessary here because EnvService is a generic class
+    // and the actual type (Env<Server & Client>) is determined at layer creation time.
+    // This is a standard pattern for generic services in Effect-TS.
+    // biome-ignore lint/suspicious/noExplicitAny: <>
+                EnvService as any,
     Effect.gen(function* () {
       // 1. Validate server schema
       const serverParsed = yield* S.decodeUnknown(server)(runtimeEnv).pipe(
@@ -64,7 +67,7 @@ export const createEnvInternal = <Server, Client>({
             return Effect.succeed({} as Server);
           }
           return Effect.fail(envError);
-        })
+        }),
       );
 
       // 2. Validate client schema
@@ -79,19 +82,19 @@ export const createEnvInternal = <Server, Client>({
             return Effect.succeed({} as Client);
           }
           return Effect.fail(envError);
-        })
+        }),
       );
 
       // 3. Enforce prefix on client keys (only if client schema defined non-empty keys)
       // Skip prefix enforcement for empty client schema (used in createSimpleEnv wrapper)
       const clientKeys = Object.keys(
-        clientParsed as Record<string, unknown>
-      ) as ReadonlyArray<string>;
+        clientParsed as Record<string, unknown>,
+      ) as readonly string[];
 
       // Only enforce prefix if we have actual client variables to validate
       if (clientKeys.length > 0) {
         const violations = clientKeys.filter(
-          (key) => !key.startsWith(clientPrefix)
+          (key) => !key.startsWith(clientPrefix),
         );
 
         if (violations.length > 0) {
@@ -113,38 +116,8 @@ export const createEnvInternal = <Server, Client>({
 
       // 5. Return the env instance
       return makeEnv(merged, runtimeEnv);
-    })
+    }),
   );
-
-/**
- * Create a typed environment layer with server/client separation.
- *
- * @example
- * ```typescript
- * import { Schema as S } from "effect"
- * import { createEnv, EnvService } from "effect-env"
- *
- * const env = createEnv({
- *   server: S.Struct({
- *     DATABASE_URL: S.String,
- *     API_SECRET: S.String
- *   }),
- *   client: S.Struct({
- *     PUBLIC_API_URL: S.String
- *   }),
- *   clientPrefix: "PUBLIC_"
- * })
- *
- * const program = Effect.gen(function* () {
- *   const envService = yield* EnvService
- *   const dbUrl = yield* envService.get("DATABASE_URL")
- *   const apiUrl = yield* envService.get("PUBLIC_API_URL")
- * })
- *
- * Effect.runPromise(Effect.provide(program, env))
- * ```
- */
-export const createEnv = createEnvInternal;
 
 /**
  * Create a simple typed environment layer (no server/client separation).
@@ -178,7 +151,7 @@ export const createSimpleEnv = <T>(
   schema: S.Schema<T>,
   runtimeEnv?: Record<string, string | undefined>,
   skipValidation?: boolean,
-  onValidationError?: (error: EnvError) => void
+  onValidationError?: (error: EnvError) => void,
 ): Layer.Layer<Env<T>, EnvError> => {
   // Wrapper around createEnvInternal:
   // - Use the provided schema as the server schema
@@ -190,6 +163,7 @@ export const createSimpleEnv = <T>(
   const env = runtimeEnv ?? process.env;
 
   return Layer.effect(
+    // biome-ignore lint: any type necessary for generic service pattern
     EnvService as any,
     Effect.gen(function* () {
       const parsed = yield* S.decodeUnknown(schema)(env).pipe(
@@ -203,10 +177,10 @@ export const createSimpleEnv = <T>(
             return Effect.succeed({} as T);
           }
           return Effect.fail(envError);
-        })
+        }),
       );
 
       return makeEnv(parsed, env);
-    })
+    }),
   );
 };

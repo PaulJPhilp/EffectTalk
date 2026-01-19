@@ -1,7 +1,7 @@
-import { describe, it, expect } from "vitest";
 import { Effect, Layer } from "effect";
 import { JsonService } from "effect-json";
-import { HtmlService, HtmlServiceLayer } from "@/effect-html/service.js";
+import { describe, expect, it } from "vitest";
+import { HtmlService, HtmlServiceLayer } from "../service.js";
 
 describe("HtmlService", () => {
   const htmlContent = `

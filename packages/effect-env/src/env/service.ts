@@ -1,10 +1,9 @@
-import { Effect, Data } from "effect";
+import { Effect } from "effect";
 
-import { jsonBackend } from "effect-json";
-
-import type { EffectType } from "@/effect-env/types.js";
 import type { Env } from "@/effect-env/env/api.js";
 import { EnvError, MissingVarError } from "@/effect-env/env/errors.js";
+import type { EffectType } from "@/effect-env/types.js";
+import { jsonBackend } from "effect-json";
 
 /**
  * Create an Env instance from parsed and raw values.
@@ -15,7 +14,7 @@ import { EnvError, MissingVarError } from "@/effect-env/env/errors.js";
  */
 export const makeEnv = <E>(
   parsed: E,
-  raw: Record<string, string | undefined>
+  raw: Record<string, string | undefined>,
 ): Env<E> => ({
   get: <K extends keyof E>(key: K) => Effect.succeed(parsed[key]),
 
@@ -37,7 +36,7 @@ export const makeEnv = <E>(
         new EnvError({
           message: `Environment variable ${key} not found`,
           key,
-        })
+        }),
       );
     }
     const trimmed = value.trim();
@@ -48,7 +47,7 @@ export const makeEnv = <E>(
         new EnvError({
           message: `Invalid number for ${key}: ${snippet}${trimmed.length > 60 ? "..." : ""}`,
           key,
-        })
+        }),
       );
     }
     return Effect.succeed(num);
@@ -64,7 +63,7 @@ export const makeEnv = <E>(
         new EnvError({
           message: `Environment variable ${key} not found`,
           key,
-        })
+        }),
       );
     }
     const normalized = value.toLowerCase().trim();
@@ -78,7 +77,7 @@ export const makeEnv = <E>(
       new EnvError({
         message: `Expected boolean (true|false|1|0|yes|no|on|off), got '${normalized}' for ${key}`,
         key,
-      })
+      }),
     );
   },
 
@@ -92,14 +91,15 @@ export const makeEnv = <E>(
         new EnvError({
           message: `Environment variable ${key} not found`,
           key,
-        })
+        }),
       );
     }
 
+    // biome-ignore lint/suspicious/noExplicitAny: <>
     return (jsonBackend.parse(value) as any).pipe(
       Effect.map((json: unknown) => json as T),
       Effect.mapError((error: unknown) => {
-        const snippet = value.length > 60 ? value.slice(0, 60) + "..." : value;
+        const snippet = value.length > 60 ? `${value.slice(0, 60)}...` : value;
         const message =
           error instanceof Error ? error.message : `Invalid JSON for ${key}`;
         return new EnvError({
@@ -107,31 +107,32 @@ export const makeEnv = <E>(
           key,
           ...(error instanceof Error ? { cause: error } : {}),
         });
-      })
+      }),
     );
   },
 
   all: () =>
     Effect.succeed(
       Object.fromEntries(
-        Object.entries(raw).filter(([, value]) => value !== undefined)
-      ) as Record<string, string>
+        Object.entries(raw).filter(([, value]) => value !== undefined),
+      ) as Record<string, string>,
     ),
 
   withOverride:
     <K extends string, A, E2, R>(key: K, value: string) =>
-    (fa: EffectType<A, E2, R>): EffectType<A, EnvError | E2, R> => {
-      if (process.env.NODE_ENV === "production") {
-        return Effect.fail(
-          new EnvError({
-            message: "withOverride is not allowed in production",
-          })
-        );
-      }
-      const newRaw = { ...raw, [key]: value };
-      const nextEnv = makeEnv(parsed, newRaw);
-      return Effect.provideService(fa, EnvService as any, nextEnv);
-    },
+      (fa: EffectType<A, E2, R>): EffectType<A, EnvError | E2, R> => {
+        if (process.env.NODE_ENV === "production") {
+          return Effect.fail(
+            new EnvError({
+              message: "withOverride is not allowed in production",
+            }),
+          );
+        }
+        const newRaw = { ...raw, [key]: value };
+        const nextEnv = makeEnv(parsed, newRaw);
+        // biome-ignore lint/suspicious/noExplicitAny: any type necessary for generic service pattern
+        return Effect.provideService(fa, EnvService as any, nextEnv);
+      },
 });
 
 /**
@@ -150,12 +151,15 @@ export const makeEnv = <E>(
  * createEnv or createSimpleEnv. The 'as any' cast is necessary because
  * the service type is determined at layer creation time (Env<T> for various T).
  */
+
+// biome-ignore lint/suspicious/noExplicitAny: <>
 export class EnvService extends (Effect.Service<Env<any>>()("EnvService", {
   effect: Effect.gen(function* () {
     return yield* Effect.fail(
       new Error(
-        "EnvService not provided - must be created with createEnv or createSimpleEnv"
-      )
+        "EnvService not provided - must be created with createEnv or createSimpleEnv",
+      ),
     );
   }),
-}) as any) {}
+  // biome-ignore lint/suspicious/noExplicitAny: <  >
+}) as any) { }

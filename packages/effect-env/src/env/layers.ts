@@ -1,6 +1,6 @@
-import { Effect, Layer, Schema as S, ParseResult } from "effect";
-import { EnvService, makeEnv } from "@/effect-env/env/service.js";
-import { EnvError } from "@/effect-env/env/errors.js";
+import { Effect, Layer, ParseResult, Schema as S } from "effect";
+import { EnvError } from "./errors.js";
+import { EnvService, makeEnv } from "./service.js";
 
 /**
  * @deprecated Use createEnv or createSimpleEnv instead
@@ -8,19 +8,21 @@ import { EnvError } from "@/effect-env/env/errors.js";
  * Layer that parses process.env with the given schema.
  */
 export const fromProcess = <E>(schema: S.Schema<E>) =>
+
   Layer.effect(
+    // biome-ignore lint: any type necessary for generic service pattern
     EnvService as any,
     Effect.gen(function* () {
       const parsed = yield* S.decodeUnknown(schema)(process.env).pipe(
         Effect.mapError(
           (error) =>
             new EnvError(
-              `Schema validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`
-            )
-        )
+              `Schema validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`,
+            ),
+        ),
       );
       return makeEnv(parsed, process.env);
-    })
+    }),
   );
 
 /**
@@ -29,7 +31,9 @@ export const fromProcess = <E>(schema: S.Schema<E>) =>
  * Layer that loads .env file and parses with schema.
  */
 export const fromDotenv = <E>(schema: S.Schema<E>, opts?: { path?: string }) =>
+
   Layer.effect(
+    // biome-ignore lint: any type necessary for generic service pattern
     EnvService as any,
     Effect.gen(function* () {
       // Import dotenv dynamically to avoid bundling if not used
@@ -37,19 +41,19 @@ export const fromDotenv = <E>(schema: S.Schema<E>, opts?: { path?: string }) =>
       const config = dotenv.config(opts);
       if (config.error) {
         return yield* Effect.fail(
-          new EnvError(`Dotenv config error: ${config.error.message}`)
+          new EnvError(`Dotenv config error: ${config.error.message}`),
         );
       }
       const parsed = yield* S.decodeUnknown(schema)(process.env).pipe(
         Effect.mapError(
           (error) =>
             new EnvError(
-              `Schema validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`
-            )
-        )
+              `Schema validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`,
+            ),
+        ),
       );
       return makeEnv(parsed, process.env);
-    })
+    }),
   );
 
 /**
@@ -59,19 +63,21 @@ export const fromDotenv = <E>(schema: S.Schema<E>, opts?: { path?: string }) =>
  */
 export const fromRecord = <E>(
   schema: S.Schema<E>,
-  record: Record<string, string | undefined>
+  record: Record<string, string | undefined>,
 ) =>
+
   Layer.effect(
+    // biome-ignore lint: any type necessary for generic service pattern
     EnvService as any,
     Effect.gen(function* () {
       const parsed = yield* S.decodeUnknown(schema)(record).pipe(
         Effect.mapError(
           (error) =>
             new EnvError(
-              `Schema validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`
-            )
-        )
+              `Schema validation failed: ${ParseResult.TreeFormatter.formatErrorSync(error)}`,
+            ),
+        ),
       );
       return makeEnv(parsed, record);
-    })
+    }),
   );

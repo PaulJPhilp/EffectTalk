@@ -4,12 +4,11 @@
  * @packageDocumentation
  */
 
-// Services (Dependency Injection)
-export { HtmlService, type HtmlServiceSchema } from "@/effect-html/service.js";
+// Errors
+export { HtmlError } from "./errors.js";
 
 // Types and Schemas
-export type { HtmlMetadata } from "@/effect-html/schemas.js";
-export { HtmlMetadataSchema } from "@/effect-html/schemas.js";
-
-// Errors
-export { HtmlError } from "@/effect-html/errors.js";
+export { HtmlMetadataSchema } from "./schemas.js";
+export type { HtmlMetadata } from "./schemas.js";
+// Services (Dependency Injection)
+export { HtmlService, type HtmlServiceSchema } from "./service.js";
