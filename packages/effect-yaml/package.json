@@ -1,6 +1,6 @@
 {
   "name": "effect-yaml",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Type-safe, composable YAML parser for TypeScript using Effect",
   "type": "module",
   "main": "./dist/index.js",

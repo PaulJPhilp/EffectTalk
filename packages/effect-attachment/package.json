@@ -1,6 +1,6 @@
 {
   "name": "effect-attachment",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "type": "module",
   "description": "Chat attachment management for Effect",
   "main": "./dist/index.js",

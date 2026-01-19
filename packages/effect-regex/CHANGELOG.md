@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.6.1
+
+### Patch Changes
+
+- [`6412d74`](https://github.com/PaulJPhilp/EffectTalk/commit/6412d7433d0efb905f75f9e2cc319bf3a2ae4239) Thanks [@PaulJPhilp](https://github.com/PaulJPhilp)! - Monorepo consistency and quality remediation patch release
+
+  - Removed all merge artifacts (15+ files)
+  - Modernized all Effect.Service patterns to use Effect.fn()
+  - Standardized API interfaces to use interface keyword
+  - Fixed TypeScript configuration inheritance
+  - Updated documentation with accurate package count
+  - Architecture validation: 0 violations
+
+  All packages are compatible and ready for use.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -10,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Core Regex Engine
+
 - **Fluent Builder API**: Chainable methods for building regex patterns
 - **Multi-Dialect Support**: Compile to JavaScript, RE2, or PCRE with automatic compatibility checks
 - **AST-Based Architecture**: Deterministic pattern generation from abstract syntax tree
@@ -20,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Pattern Optimization**: AST-based optimization passes (constant folding, quantifier simplification, character class merging, alternation deduplication)
 
 #### Standard Pattern Library (40+ patterns)
+
 - **General Patterns**: email, URL, UUID v4, semantic versions, phone numbers (US/international)
 - **Colors**: hex, CSS named colors, RGB/RGBA, HSL/HSLA
 - **Network**: IPv4, IPv6, MAC addresses, domains, hostnames
@@ -29,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Text**: quoted strings, identifiers, alphanumeric
 
 #### Security Patterns
+
 - **Input Validation**: alphanumeric, safe text, whitelist/blacklist character sets
 - **SQL Injection Detection**: SQL metacharacters and comment patterns
 - **Path Traversal Prevention**: directory traversal attempt detection
@@ -36,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Network Security**: safe URL patterns, hostname validation
 
 #### MCP Server Integration
+
 - **8 MCP Tools** for AI assistant integration:
   - `build_regex`: Build from standard library or CommandSpec
   - `test_regex`: Test patterns with timeout protection
@@ -50,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Error Handling**: Type-safe McpError with detailed error codes
 
 #### CLI Tools
+
 - Pattern building from standard library
 - Pattern linting and validation
 - Pattern optimization
@@ -57,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CommandSpec-based CLI pattern generation
 
 #### Testing & Quality
+
 - **473 tests** across 21 test files
 - **83.5% test coverage** (statements)
 - **84 MCP-specific tests**: 20 E2E + 31 unit (handlers) + 33 unit (validation)
@@ -64,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security testing**: 45 tests for AI code interpreter safety patterns
 
 #### Documentation
+
 - **Comprehensive TSDoc**: Full API documentation with @module, @param, @returns, @example tags
 - **README**: Complete usage guide with examples
 - **Pattern Library Reference**: All 40+ patterns documented

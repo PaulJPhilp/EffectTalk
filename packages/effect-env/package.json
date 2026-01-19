@@ -1,6 +1,6 @@
 {
   "name": "effect-env",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Typed, testable, policy-aware env management for Effect apps",
   "type": "module",
   "main": "./dist/index.js",
