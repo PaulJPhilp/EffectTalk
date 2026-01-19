@@ -10,7 +10,7 @@ import { Effect } from "effect";
 import type { BlobMetadata, RepositoryBackend } from "effect-repository";
 import type { Buffer } from "node:buffer";
 import {
-  type AttachmentNotFoundError,
+  AttachmentNotFoundError,
   AttachmentSizeLimitError,
   InvalidAttachmentError,
   UnsupportedAttachmentTypeError,
@@ -97,11 +97,18 @@ export const createAttachmentService = (
     const customMetadata: Record<string, string> = {
       filename,
     };
-    if (options?.chatId) { customMetadata.chatId = options.chatId; }
-    if (options?.userId) { customMetadata.userId = options.userId; }
+    if (options?.chatId) {
+      customMetadata.chatId = options.chatId;
+    }
+    if (options?.userId) {
+      customMetadata.userId = options.userId;
+    }
+    if (options?.userId) {
+      customMetadata.userId = options.userId;
+    }
 
     // Extract save operation outside generator (before any type-problematic operations)
-    // biome-ignore lint/suspicious/noExplicitAny: TypeScript Effect.gen type inference limitation
+  
     const saveOptions: Record<string, unknown> = { customMetadata };
     if (options?.id !== undefined) {
       saveOptions.id = options.id;
@@ -153,7 +160,19 @@ export const createAttachmentService = (
     const getBlob: any = backend.get(id);
 
     return Effect.gen(function* () {
-      const blob = yield* getBlob;
+      const blob = yield* getBlob.pipe(
+        Effect.catchAll((error: any) => {
+          if (error && error._tag === "BlobNotFoundError") {
+            return Effect.fail(
+              new AttachmentNotFoundError({
+                message: `Attachment not found: ${id}`,
+                id,
+              }),
+            );
+          }
+          return Effect.fail(error);
+        }),
+      );
       return {
         ...blobMetadataToAttachment(blob.metadata),
         data: blob.data,
@@ -166,7 +185,19 @@ export const createAttachmentService = (
     const getMetadata: any = backend.getMetadata(id);
 
     return Effect.gen(function* () {
-      const metadata = yield* getMetadata;
+      const metadata = yield* getMetadata.pipe(
+        Effect.catchAll((error: any) => {
+          if (error && error._tag === "BlobNotFoundError") {
+            return Effect.fail(
+              new AttachmentNotFoundError({
+                message: `Attachment not found: ${id}`,
+                id,
+              }),
+            );
+          }
+          return Effect.fail(error);
+        }),
+      );
       return blobMetadataToAttachment(metadata);
     }) as any;
   };
@@ -176,7 +207,19 @@ export const createAttachmentService = (
     const deleteBlob: any = backend.delete(id);
 
     return Effect.gen(function* () {
-      yield* deleteBlob;
+      yield* deleteBlob.pipe(
+        Effect.catchAll((error: any) => {
+          if (error && error._tag === "BlobNotFoundError") {
+            return Effect.fail(
+              new AttachmentNotFoundError({
+                message: `Attachment not found: ${id}`,
+                id,
+              }),
+            );
+          }
+          return Effect.fail(error);
+        }),
+      );
     }) as any;
   };
 

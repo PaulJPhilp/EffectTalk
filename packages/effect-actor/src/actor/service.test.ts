@@ -89,9 +89,10 @@ const runTest = <A, E>(effect: Effect.Effect<A, E, any>) => {
 	);
 
 	// Create the full layer with all dependencies
+	// ActorService.Default() requires StorageProvider, SpecRegistry, and AuditLog
 	const allLayers = Layer.mergeAll(
-		ActorService.Default as any,
 		depLayers,
+		ActorService.Default,
 	);
 
 	// Run the effect with all layers provided
