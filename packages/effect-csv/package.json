@@ -1,6 +1,6 @@
 {
   "name": "effect-csv",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Type-safe, schema-driven CSV parsing and stringification for Effect",
   "type": "module",
   "main": "./dist/index.js",

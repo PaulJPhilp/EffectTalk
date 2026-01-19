@@ -1,6 +1,6 @@
 {
   "name": "effect-regex",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Type-safe, composable regex builder for TypeScript using Effect",
   "type": "module",
   "main": "./dist/index.js",
