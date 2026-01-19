@@ -5,6 +5,7 @@
  */
 
 import type { BlobId } from "effect-repository";
+import type { Buffer } from "node:buffer";
 
 /**
  * Attachment metadata without binary data

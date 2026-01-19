@@ -7,20 +7,21 @@
  */
 
 import { Effect } from "effect";
-import type { RepositoryBackend, BlobMetadata } from "effect-repository";
+import type { BlobMetadata, RepositoryBackend } from "effect-repository";
+import type { Buffer } from "node:buffer";
 import {
-  AttachmentNotFoundError,
-  InvalidAttachmentError,
+  type AttachmentNotFoundError,
   AttachmentSizeLimitError,
+  InvalidAttachmentError,
   UnsupportedAttachmentTypeError,
 } from "./errors.js";
 import type {
   Attachment,
-  AttachmentWithData,
-  AttachmentServiceConfig,
-  UploadOptions,
   AttachmentListOptions,
   AttachmentListResult,
+  AttachmentServiceConfig,
+  AttachmentWithData,
+  UploadOptions,
 } from "./types.js";
 
 /**
@@ -47,7 +48,7 @@ export interface AttachmentServiceSchema {
     filename: string,
     data: Buffer,
     mimeType: string,
-    options?: UploadOptions
+    options?: UploadOptions,
   ) => Effect.Effect<
     Attachment,
     | InvalidAttachmentError
@@ -57,19 +58,19 @@ export interface AttachmentServiceSchema {
   >;
 
   readonly download: (
-    id: string
+    id: string,
   ) => Effect.Effect<AttachmentWithData, AttachmentNotFoundError | Error>;
 
   readonly get: (
-    id: string
+    id: string,
   ) => Effect.Effect<Attachment, AttachmentNotFoundError | Error>;
 
   readonly delete: (
-    id: string
+    id: string,
   ) => Effect.Effect<void, AttachmentNotFoundError | Error>;
 
   readonly list: (
-    options?: AttachmentListOptions
+    options?: AttachmentListOptions,
   ) => Effect.Effect<AttachmentListResult, Error>;
 }
 
@@ -81,7 +82,7 @@ export interface AttachmentServiceSchema {
  */
 export const createAttachmentService = (
   backend: RepositoryBackend,
-  config?: AttachmentServiceConfig
+  config?: AttachmentServiceConfig,
 ): AttachmentServiceSchema => {
   const maxSizeBytes = config?.maxSizeBytes ?? 10 * 1024 * 1024; // 10MB default
   const allowedMimeTypes = config?.allowedMimeTypes ?? [];
@@ -90,14 +91,14 @@ export const createAttachmentService = (
     filename: string,
     data: Buffer,
     mimeType: string,
-    options?: UploadOptions
+    options?: UploadOptions,
   ) => {
     // Build custom metadata outside generator
     const customMetadata: Record<string, string> = {
       filename,
     };
-    if (options?.chatId) customMetadata.chatId = options.chatId;
-    if (options?.userId) customMetadata.userId = options.userId;
+    if (options?.chatId) { customMetadata.chatId = options.chatId; }
+    if (options?.userId) { customMetadata.userId = options.userId; }
 
     // Extract save operation outside generator (before any type-problematic operations)
     // biome-ignore lint/suspicious/noExplicitAny: TypeScript Effect.gen type inference limitation
@@ -115,7 +116,7 @@ export const createAttachmentService = (
             message: "Filename cannot be empty",
             reason: "empty_filename",
             filename,
-          })
+          }),
         );
       }
 
@@ -127,7 +128,7 @@ export const createAttachmentService = (
             filename,
             sizeBytes: data.length,
             limitBytes: maxSizeBytes,
-          })
+          }),
         );
       }
 
@@ -138,7 +139,7 @@ export const createAttachmentService = (
             message: `MIME type not allowed: ${mimeType}`,
             mimeType,
             allowedTypes: allowedMimeTypes,
-          })
+          }),
         );
       }
 
