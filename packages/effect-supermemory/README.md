@@ -2,7 +2,8 @@
 
 Effect-native client abstractions for Supermemory long-term memory API.
 
-> **Note**: This package is part of the [McLuhan monorepo](https://github.com/PaulJPhilp/mcluhan). For monorepo development, see the root README.
+[![npm version](https://img.shields.io/npm/v/effect-supermemory)](https://www.npmjs.com/package/effect-supermemory)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Quick Start
 

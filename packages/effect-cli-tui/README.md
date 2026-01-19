@@ -2,8 +2,6 @@
 
 Effect-native CLI wrapper with interactive prompts and display utilities for building powerful terminal user interfaces.
 
-> **Note**: This package is part of the [McLuhan monorepo](https://github.com/PaulJPhilp/mcluhan). For monorepo development, see the root README.
-
 [![npm version](https://img.shields.io/npm/v/effect-cli-tui)](https://www.npmjs.com/package/effect-cli-tui)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

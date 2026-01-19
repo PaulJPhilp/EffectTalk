@@ -1,4 +1,19 @@
-# GEMINI.md
+# GEMINI.md - Your AI Assistant's Guide to `effect-cli-tui`
+
+This document provides context for AI assistants to understand and interact with the `effect-cli-tui` project.
+
+## 📖 Table of Contents
+
+- [Project Overview](#project-overview)
+- [Building and Running](#building-and-running)
+- [Development Conventions](#development-conventions)
+- [Ultracite Code Standards](#ultracite-code-standards)
+  - [Core Principles](#core-principles)
+  - [TypeScript Rules & Effect-TS Patterns](#typescript-rules--effect-ts-patterns)
+  - [Testing](#testing)
+  - [When Biome Can't Help](#when-biome-cant-help)
+
+---
 
 ## Project Overview
 

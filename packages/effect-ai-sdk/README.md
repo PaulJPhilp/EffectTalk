@@ -150,8 +150,8 @@ bun run format:fix
 
 ## Support
 
-- **Issues**: Report bugs on [GitHub](https://github.com/PaulJPhilp/McLuhan/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/PaulJPhilp/McLuhan/discussions)
+- **Issues**: Report bugs on [GitHub](https://github.com/PaulJPhilp/EffectTalk/issues)
+- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/PaulJPhilp/EffectTalk/discussions)
 - **Documentation**: See [CLAUDE.md](./CLAUDE.md)
 
 ## License

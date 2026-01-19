@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📖 Table of Contents
+
+- [Build, Test, and Development Commands](#build-test-and-development-commands)
+  - [Running Individual Tests](#running-individual-tests)
+- [Architecture Overview](#architecture-overview)
+- [Code Quality & Standards](#code-quality--standards)
+- [Code Style and Conventions](#code-style-and-conventions)
+- [Important Implementation Notes](#important-implementation-notes)
+- [ADR References](#adr-references)
+
+---
+
 ## Build, Test, and Development Commands
 
 All commands use **Bun** as the package manager.

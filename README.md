@@ -51,6 +51,34 @@ Built on [Effect.js](https://effect.website), EffectTalk provides functional pro
 
 ---
 
+## 📖 Table of Contents
+
+- [Overview](#overview)
+- [Key Features](#-key-features)
+- [Quick Start](#-quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Common Commands](#common-commands)
+- [Usage Examples](#-usage-examples)
+- [Project Structure](#-project-structure)
+- [Architecture](#-architecture)
+- [Testing & Quality](#-testing--quality)
+- [Development Workflow](#-development-workflow)
+- [Detailed Package Guide](#-detailed-package-guide)
+  - [Agent Infrastructure](#agent-infrastructure)
+  - [Data Foundation](#data-foundation)
+- [External Integrations](#-external-integrations)
+- [Security Considerations](#-security-considerations)
+- [Performance Tips](#-performance-tips)
+- [Troubleshooting](#-troubleshooting)
+- [Additional Resources](#-additional-resources)
+- [Contributing](#-contributing)
+- [Roadmap](#-roadmap)
+- [License](#-license)
+- [Acknowledgments](#-acknowledgments)
+
+---
+
 ## ✨ Key Features
 
 ### 🏗️ **Functional Architecture**

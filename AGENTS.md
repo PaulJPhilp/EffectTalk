@@ -4,6 +4,46 @@
 
 ---
 
+## 📖 Table of Contents
+
+- [Overview](#-overview)
+- [Agent Architecture](#-agent-architecture)
+  - [Design Principles](#design-principles)
+  - [Core Agent Pattern](#core-agent-pattern)
+- [Agent Capabilities](#-agent-capabilities)
+  - [LLM Integration (effect-ai-sdk)](#1-llm-integration-effect-ai-sdk)
+  - [Memory & Search (effect-supermemory)](#2-memory--search-effect-supermemory)
+  - [CLI/TUI Interface (effect-cli-tui)](#3-clitui-interface-effect-cli-tui)
+  - [State Machine Orchestration (effect-actor)](#4-state-machine-orchestration-effect-actor)
+- [Agent Patterns](#-agent-patterns)
+  - [Conversational Agent](#1-conversational-agent)
+  - [Task-Oriented Agent](#2-task-oriented-agent)
+  - [Multi-Agent System](#3-multi-agent-system)
+- [Agent Development Workflow](#-agent-development-workflow)
+  - [Agent Definition](#1-agent-definition)
+  - [Agent Implementation](#2-agent-implementation)
+  - [Agent Registration](#3-agent-registration)
+- [Agent Monitoring & Observability](#-agent-monitoring--observability)
+  - [Agent Metrics](#1-agent-metrics)
+  - [Agent Logging](#2-agent-logging)
+- [Agent Deployment](#-agent-deployment)
+  - [Local Development](#1-local-development)
+  - [Production Deployment](#2-production-deployment)
+- [Agent Testing](#-agent-testing)
+  - [Unit Testing](#1-unit-testing)
+  - [Integration Testing](#2-integration-testing)
+- [Security Considerations](#-security-considerations)
+  - [API Key Management](#1-api-key-management)
+  - [Input Validation](#2-input-validation)
+- [Performance Optimization](#-performance-optimization)
+  - [Caching Strategy](#1-caching-strategy)
+  - [Parallel Processing](#2-parallel-processing)
+- [Troubleshooting](#-troubleshooting)
+- [Additional Resources](#-additional-resources)
+- [Contributing](#-contributing-to-agent-infrastructure)
+
+---
+
 ## 🤖 Overview
 
 EffectTalk provides a complete AI agent infrastructure built on functional programming principles with Effect.js. This document covers the architecture, patterns, and implementation details for building sophisticated AI-powered applications.

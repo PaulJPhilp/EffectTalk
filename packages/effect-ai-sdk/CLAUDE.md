@@ -2,6 +2,27 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📖 Table of Contents
+
+- [Build, Test, and Development Commands](#build-test-and-development-commands)
+- [Architecture Overview](#architecture-overview)
+- [Supported AI Providers](#supported-ai-providers)
+- [Global Model Types (types/models.ts)](#global-model-types-typesmodelsts)
+- [Zod Usage Policy](#zod-usage-policy)
+- [Code Quality & Standards](#code-quality--standards)
+- [Testing](#testing)
+- [Key Implementation Details](#key-implementation-details)
+- [Integration with Other McLuhan Packages](#integration-with-other-mcluhan-packages)
+- [Known Issues and Limitations](#known-issues-and-limitations)
+- [Future Enhancements](#future-enhancements)
+- [Performance Considerations](#performance-considerations)
+- [Security Considerations](#security-considerations)
+- [Contributing](#contributing)
+- [Version History](#version-history)
+- [References](#references)
+
+---
+
 ## Build, Test, and Development Commands
 
 All commands use **Bun** as the package manager.

@@ -1,3 +1,18 @@
+# GEMINI - Your AI Assistant's Guide to `effect-supermemory`
+
+This document provides context for AI assistants to understand and interact with the `effect-supermemory` project.
+
+## 📖 Table of Contents
+
+- [Project Overview](#project-overview)
+- [Building and Running](#building-and-running)
+  - [Build](#build)
+  - [Testing](#testing)
+  - [Linting and Formatting](#linting-and-formatting)
+- [Development Conventions](#development-conventions)
+
+---
+
 ## Project Overview
 
 This is a TypeScript library that provides a client for the Supermemory API. It is built using the `effect-ts` library and provides a functional, type-safe, and composable interface for interacting with the Supermemory service.

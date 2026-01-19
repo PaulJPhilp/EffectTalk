@@ -2,6 +2,14 @@
 
 This document provides context for AI assistants to understand and interact with the `effect-actor` project.
 
+## 📖 Table of Contents
+
+- [Project Overview](#project-overview)
+- [Building and Running](#building-and-running)
+- [Development Conventions](#development-conventions)
+
+---
+
 ## Project Overview
 
 `effect-actor` is a powerful, type-safe actor orchestration framework built natively for the [Effect](https://effect.website/) ecosystem. It brings the proven statechart model of [xState](https://xstate.js.org/) to Effect with zero external dependencies.

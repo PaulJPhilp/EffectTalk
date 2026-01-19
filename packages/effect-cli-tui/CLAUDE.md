@@ -2,6 +2,30 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📖 Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Quick Commands](#quick-commands)
+- [Code Style and Best Practices](#code-style-and-best-practices)
+- [Project Structure](#project-structure)
+- [Architecture Overview](#architecture-overview)
+- [Dependencies & Key Libraries](#dependencies--key-libraries)
+- [Testing Strategy](#testing-strategy)
+- [Public API Exports](#public-api-exports)
+- [Effect Service Pattern (Required)](#effect-service-pattern-required)
+- [Common Development Patterns](#common-development-patterns)
+- [TypeScript Configuration](#typescript-configuration)
+- [TypeScript Rules & Effect-TS Patterns](#typescript-rules--effect-ts-patterns)
+- [Deployment & Publishing](#deployment--publishing)
+- [Important Implementation Details](#important-implementation-details)
+- [Code Validation Rules (MANDATORY)](#code-validation-rules-mandatory)
+- [Effect Patterns Reference](#effect-patterns-reference)
+- [No Configuration Currently Used](#no-configuration-currently-used)
+- [Typical Workflow](#typical-workflow)
+- [Troubleshooting](#troubleshooting)
+
+---
+
 ## Prerequisites
 
 **`bun` is required** to work with this codebase.

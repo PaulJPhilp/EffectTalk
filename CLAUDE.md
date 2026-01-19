@@ -2,6 +2,30 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📖 Table of Contents
+
+- [EffectTalk Monorepo Overview](#effecttalk-monorepo-overview)
+- [Essential Commands](#essential-commands)
+- [Project Structure](#project-structure)
+- [Architecture & Patterns](#architecture--patterns)
+- [Layer 2: McLuhan (Agent Infrastructure)](#layer-2-mcluhan-agent-infrastructure)
+- [Layer 1: Hume (Data Foundation)](#layer-1-hume-data-foundation)
+- [TypeScript Configuration](#typescript-configuration)
+- [Code Quality Standards](#code-quality-standards)
+- [Dependency Management](#dependency-management)
+- [File Organization](#file-organization)
+- [Git Workflow](#git-workflow)
+- [Effect.js Debugging Patterns](#effectjs-debugging-patterns)
+- [Common Mistakes to Avoid](#common-mistakes-to-avoid)
+- [Technology Stack](#technology-stack)
+- [Key Package References](#key-package-references)
+- [Troubleshooting](#troubleshooting)
+- [Documentation](#documentation)
+- [External Resources](#external-resources)
+- [Summary](#summary)
+
+---
+
 ## EffectTalk Monorepo Overview
 
 **EffectTalk** is a unified, Effect-native monorepo for building AI-powered applications. It combines agent infrastructure and data foundation into 28 coordinated packages with strict architectural boundaries.
