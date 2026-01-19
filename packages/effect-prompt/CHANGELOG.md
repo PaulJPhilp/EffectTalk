@@ -1,17 +1,40 @@
 # Changelog
 
+## 0.6.1
+
+### Patch Changes
+
+- [`6412d74`](https://github.com/PaulJPhilp/EffectTalk/commit/6412d7433d0efb905f75f9e2cc319bf3a2ae4239) Thanks [@PaulJPhilp](https://github.com/PaulJPhilp)! - Monorepo consistency and quality remediation patch release
+
+  - Removed all merge artifacts (15+ files)
+  - Modernized all Effect.Service patterns to use Effect.fn()
+  - Standardized API interfaces to use interface keyword
+  - Fixed TypeScript configuration inheritance
+  - Updated documentation with accurate package count
+  - Architecture validation: 0 violations
+
+  All packages are compatible and ready for use.
+
+- Updated dependencies [[`6b108e2`](https://github.com/PaulJPhilp/EffectTalk/commit/6b108e26e2fc49a0bff06dd4d756f2755a92ced9), [`6412d74`](https://github.com/PaulJPhilp/EffectTalk/commit/6412d7433d0efb905f75f9e2cc319bf3a2ae4239), [`5b1785a`](https://github.com/PaulJPhilp/EffectTalk/commit/5b1785acda26b7e88f45da4859d2c7c0602b11c4)]:
+  - effect-json@0.6.1
+  - effect-env@0.6.1
+  - effect-liquid@0.6.1
+  - effect-storage@0.6.1
+
 ## [0.1.0] - 2024-12-21
 
 ### Added
 
 - Initial release of `effect-prompt`
 - **Core Services**:
+
   - `PromptService` - Main orchestration service for rendering and validating prompts
   - `PromptStorageService` - File-based storage for `.liquid` templates and `.meta.json` metadata
   - `ValidationService` - Schema-based variable validation using Effect Schema
   - `PromptConfig` - Environment-based configuration
 
 - **AI-Specific Filters**:
+
   - `tokenCount` - Approximate token counting (word-based approximation)
   - `sanitize` - Remove control characters and normalize whitespace
   - `truncateToTokens` - Truncate text to token budget with binary search
@@ -21,15 +44,18 @@
   - `toBulletedList` - Convert arrays to bulleted lists
 
 - **Conversation Filters**:
+
   - `formatConversation` - Format conversations for OpenAI, Anthropic, or plain formats
   - `filterByRole` - Extract messages by role
   - `conversationTokens` - Count tokens in conversations
 
 - **Composition Tags**:
+
   - `{% extends %}` - Template inheritance from parent templates
   - `{% include %}` - Include other templates with variable context
 
 - **Error Types**:
+
   - `PromptNotFoundError` - When prompt template is not found
   - `VariableValidationError` - When variable validation fails
   - `PromptRenderError` - When rendering fails
@@ -39,6 +65,7 @@
   - `VersionConflictError` - When version conflicts occur
 
 - **Type Definitions**:
+
   - `PromptTemplate` - Template with content and metadata
   - `PromptMetadata` - Version, tags, author, extends, maxTokens
   - `ValidatedPrompt` - Template with validated variables
@@ -48,6 +75,7 @@
   - `ValidationResult` - Schema validation results
 
 - **Effect Schemas**:
+
   - `PromptTemplateSchema`
   - `PromptMetadataSchema`
   - `ConversationMessageSchema`
@@ -55,16 +83,19 @@
   - `CommonVariableSchemas` - Reusable schemas (text, number, email, url, json, stringArray)
 
 - **Storage Format**:
+
   - `.liquid` files for template content
   - `.meta.json` files for metadata (version, tags, author, created, updated, extends, maxTokens)
 
 - **Configuration**:
+
   - `PROMPTS_DIR` - Custom prompts directory
   - `DEFAULT_MAX_TOKENS` - Default token limit (4000)
   - `ENABLE_PROMPT_CACHING` - Enable/disable caching
   - `PROMPT_CACHE_TTL` - Cache TTL in seconds (3600)
 
 - **Public API**:
+
   - Convenience functions: `renderPrompt()`, `validateVariables()`, `renderConversation()`
   - Full service exports for advanced usage
   - Filter and tag exports for extensibility

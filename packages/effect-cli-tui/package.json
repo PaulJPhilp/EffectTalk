@@ -1,6 +1,6 @@
 {
   "name": "effect-cli-tui",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Effect-native CLI wrapper with interactive prompts and Ink components for terminal UIs",
   "keywords": [
     "effect",

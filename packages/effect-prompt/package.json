@@ -1,6 +1,6 @@
 {
 	"name": "effect-prompt",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"type": "module",
 	"description": "Type-safe AI prompt management system with templating, validation, and composition",
 	"license": "MIT",

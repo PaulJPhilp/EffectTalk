@@ -1,6 +1,6 @@
 {
   "name": "effect-storage",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Type-safe, schema-driven file storage with content + metadata support for Effect",
   "type": "module",
   "main": "./dist/index.js",
