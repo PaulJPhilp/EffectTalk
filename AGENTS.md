@@ -10,7 +10,7 @@ EffectTalk provides a complete AI agent infrastructure built on functional progr
 
 ### Core Agent Components
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    AI Application Layer                   │
 │              (Your Agent Implementation)                    │
@@ -1126,7 +1126,7 @@ class AgentDebugger extends Effect.Service<AgentDebugger>()("AgentDebugger", {
 
 ### Documentation
 
-- **Effect.js Documentation** - https://effect.website
+- **Effect.js Documentation** - <https://effect.website>
 - **Agent Architecture Guide** - `docs/agent-architecture.md`
 - **State Machine Patterns** - `docs/state-machines.md`
 - **Service Patterns** - `docs/service-patterns.md`
@@ -1140,8 +1140,8 @@ class AgentDebugger extends Effect.Service<AgentDebugger>()("AgentDebugger", {
 
 ### Community
 
-- **Effect Discord** - https://discord.gg/effect-ts
-- **GitHub Discussions** - https://github.com/PaulJPhilp/EffectTalk/discussions
+- **Effect Discord** - <https://discord.gg/effect-ts>
+- **GitHub Discussions** - <https://github.com/PaulJPhilp/EffectTalk/discussions>
 - **Agent Development Channel** - Discord #agent-development
 
 ---
@@ -1162,7 +1162,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 **Status:** ✅ Active Development  
 **Last Updated:** January 2026  
-**Repository:** https://github.com/PaulJPhilp/EffectTalk
+**Repository:** <https://github.com/PaulJPhilp/EffectTalk>
 
 ---
 
