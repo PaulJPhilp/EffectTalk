@@ -65,19 +65,19 @@ const validateChoice = (field: TemplateField, value: string) =>
  *
  * @param fields - Template field definitions
  * @param responses - User responses to validate
- * @returns Effect with validation result or error message
+ * @returns Effect with validation result (true if all valid) or error message
  */
 export const validateResponses = (
   fields: readonly TemplateField[],
   responses: UserResponses
-): Effect.Effect<UserResponses, string> =>
+): Effect.Effect<true, string> =>
   Effect.gen(function* () {
     for (const field of fields) {
       const value = responses[field.name];
       yield* validateField(field, value);
     }
 
-    return responses;
+    return true as const;
   });
 
 /**
@@ -131,20 +131,28 @@ export const createInputValidator = (
  * Validate a generated prompt text
  *
  * Checks:
- * - Non-empty string
+ * - Non-empty string (at least 3 characters for meaningful content)
  * - Reasonable length (max 10000 characters)
  *
  * @param promptText - The text to validate
- * @returns Effect with validated text or error
+ * @returns Effect with validation result (true if valid) or error
  */
 export const validateGeneratedPrompt = (
   promptText: string
-): Effect.Effect<string, Error> =>
+): Effect.Effect<true, Error> =>
   Effect.gen(function* () {
     if (!promptText || promptText.length === 0) {
       return yield* Effect.fail(
         new Error(
           "Unable to generate prompt: The generated prompt is empty. Please check your template and responses."
+        )
+      );
+    }
+
+    if (promptText.length < 3) {
+      return yield* Effect.fail(
+        new Error(
+          "Unable to generate prompt: The generated prompt is too short (minimum 3 characters required). Please provide more detailed input."
         )
       );
     }
@@ -157,5 +165,5 @@ export const validateGeneratedPrompt = (
       );
     }
 
-    return promptText;
+    return true as const;
   });

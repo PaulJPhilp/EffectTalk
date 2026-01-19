@@ -1,6 +1,6 @@
 {
   "name": "effect-env",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Typed, testable, policy-aware env management for Effect apps",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,7 +10,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
@@ -38,7 +39,7 @@
   },
   "homepage": "https://github.com/PaulJPhilp/hume#readme",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
@@ -50,12 +51,14 @@
   "dependencies": {
     "dotenv": "^16.6.1",
     "effect-json": "workspace:*",
+    "effect-schema-utils": "workspace:*",
     "effect": "^3.19.14"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.7",
     "@effect/vitest": "^0.25.1",
     "@types/node": "^20.19.25",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
     "ultracite": "^6.5.0",
     "vitest": "^4.0.15"

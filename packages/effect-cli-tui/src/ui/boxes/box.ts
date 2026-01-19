@@ -1,8 +1,11 @@
 import { applyChalkStyle } from "@core/colors.js";
+import { getDisplayColor } from "@core/icons.js";
+import { BOX_STYLES } from "@/constants.js";
 import chalk from "chalk";
 import { Console, Effect } from "effect";
 import stringWidth from "string-width";
 import type { ChalkColor } from "@/types.js";
+import type { DisplayType } from "@services/display/types.js";
 import type { BoxStyle } from "./box-style.js";
 import { initializeBoxStyling } from "./box-style.js";
 
@@ -108,7 +111,7 @@ function buildBoxLines(
     };
     title?: string;
     padding: number;
-    typeColor: string;
+    displayType: DisplayType;
   }
 ): string[] {
   const lines = content.split("\n");
@@ -116,9 +119,12 @@ function buildBoxLines(
   const boxWidth = calculateBoxWidth(contentWidth, styling.padding);
   const outputLines: string[] = [];
 
+  // Convert DisplayType to ChalkColor
+  const typeColor = getDisplayColor(styling.displayType) as ChalkColor;
+
   // Top border
   outputLines.push(
-    renderTopBorder(styling.style, boxWidth, styling.title, styling.typeColor)
+    renderTopBorder(styling.style, boxWidth, styling.title, typeColor)
   );
 
   // Top padding
@@ -182,28 +188,30 @@ export function displayBox(
   options?: BoxStyle
 ): Effect.Effect<void> {
   return Effect.gen(function* () {
-    // Initialize styling - handle title validation gracefully
-    // If title validation fails (e.g., too long), use the original title string
-    const styling = yield* Effect.try({
-      try: () => initializeBoxStyling(options),
-      catch: () => {
-        // If title validation fails, create styling with unvalidated title
-        // This allows long titles to be displayed even if they exceed limits
-        if (options?.title) {
-          const { title, ...restOptions } = options;
-          const baseStyling = initializeBoxStyling(restOptions);
-          // Override with unvalidated title
-          // We bypass Title validation to allow long titles
-          return {
-            ...baseStyling,
-            title: title as unknown as typeof baseStyling.title,
-          } as ReturnType<typeof initializeBoxStyling>;
-        }
-        return initializeBoxStyling(options);
-      },
-    }).pipe(
-      Effect.catchAll((fallbackStyling) => Effect.succeed(fallbackStyling))
-    );
+    // Initialize styling - always succeed by truncating long titles
+    const styling = (() => {
+      const borderStyle = (options?.borderStyle || "rounded") as keyof typeof BOX_STYLES;
+      const style = BOX_STYLES[borderStyle] || BOX_STYLES.rounded;
+      const displayType = (options?.type || "info") as DisplayType;
+      const padding = options?.padding || 0;
+      
+      // For titles that fail validation, truncate instead of failing
+      let title: string | undefined;
+      if (options?.title) {
+        const maxLen = 50; // Reasonable max for box titles
+        title = options.title.length > maxLen 
+          ? options.title.substring(0, maxLen - 3) + "..." 
+          : options.title;
+      }
+      
+      return {
+        borderStyle,
+        style,
+        displayType,
+        padding,
+        ...(title !== undefined ? { title } : {}),
+      };
+    })();
 
     // Build box lines
     const boxLines = buildBoxLines(content, styling);

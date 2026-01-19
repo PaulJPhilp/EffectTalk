@@ -1,6 +1,6 @@
 {
   "name": "effect-artifact",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Type-safe AI artifact management with versioning, type detection, and rendering hints",
   "type": "module",
   "main": "./dist/index.js",

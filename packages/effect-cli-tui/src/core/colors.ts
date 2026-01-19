@@ -3,6 +3,11 @@ import chalk from "chalk";
 import { Effect } from "effect";
 import { DEFAULT_DISPLAY_TYPE } from "@/constants.js";
 import type { ChalkBgColor, ChalkColor } from "@/types.js";
+import { getDisplayColor } from "./icons.js";
+
+// Chalk 5.x is ESM-only and exports directly as default
+// No need for CJS interop - chalk works correctly in both Node and test environments
+const safeChalk = chalk;
 
 import { display } from "./display.js";
 import {
@@ -14,6 +19,10 @@ import {
 
 /**
  * Apply chalk styling based on color options
+ *
+ * Validates color names against supported chalk colors before applying them.
+ * Valid colors: "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "gray"
+ * Valid background colors: "bgBlack", "bgRed", "bgGreen", "bgYellow", "bgBlue", "bgMagenta", "bgCyan", "bgWhite"
  */
 export function applyChalkStyle(
   text: string,
@@ -34,32 +43,46 @@ export function applyChalkStyle(
 
   let styled = text;
 
-  // Apply color
+  // Apply color with validation
   if (options.color) {
-    styled = chalk[options.color](styled);
+    if (typeof safeChalk[options.color] === "function") {
+      styled = safeChalk[options.color](styled);
+    } else {
+      console.warn(
+        `[applyChalkStyle] Invalid color: ${options.color}. Supported colors: black, red, green, yellow, blue, magenta, cyan, white, gray`
+      );
+    }
   }
+
+  // Apply background color with validation
   if (options.bgColor) {
-    styled = chalk[options.bgColor](styled);
+    if (typeof safeChalk[options.bgColor] === "function") {
+      styled = safeChalk[options.bgColor](styled);
+    } else {
+      console.warn(
+        `[applyChalkStyle] Invalid background color: ${options.bgColor}. Supported colors: bgBlack, bgRed, bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan, bgWhite`
+      );
+    }
   }
 
   // Apply text styles
   if (options.bold) {
-    styled = chalk.bold(styled);
+    styled = safeChalk.bold(styled);
   }
   if (options.dim) {
-    styled = chalk.dim(styled);
+    styled = safeChalk.dim(styled);
   }
   if (options.italic) {
-    styled = chalk.italic(styled);
+    styled = safeChalk.italic(styled);
   }
   if (options.underline) {
-    styled = chalk.underline(styled);
+    styled = safeChalk.underline(styled);
   }
   if (options.inverse) {
-    styled = chalk.inverse(styled);
+    styled = safeChalk.inverse(styled);
   }
   if (options.strikethrough) {
-    styled = chalk.strikethrough(styled);
+    styled = safeChalk.strikethrough(styled);
   }
 
   return styled;

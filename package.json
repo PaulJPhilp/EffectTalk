@@ -1,6 +1,6 @@
 {
   "name": "effecttalk",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "private": true,
   "description": "EffectTalk: Unified Effect-native monorepo for AI agent infrastructure and data foundation",
   "type": "module",

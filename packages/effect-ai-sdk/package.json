@@ -1,6 +1,6 @@
 {
   "name": "effect-ai-sdk",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Effect-native wrapper around Vercel AI SDK v5 for type-safe AI operations",
   "private": true,
   "type": "module",
@@ -43,7 +43,10 @@
     "@ai-sdk/provider": "^3.0.1",
     "@ai-sdk/xai": "^3.0.3",
     "ai": "^6.0.27",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "effect-json": "workspace:*",
+    "effect-telemetry": "workspace:*",
+    "effect": "^3.19.14"
   },
   "devDependencies": {
     "@ai-sdk/codemod": "^3.0.1",

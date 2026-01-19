@@ -1,6 +1,6 @@
 {
   "name": "effect-supermemory",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Effect-native client abstractions for Supermemory long-term memory API",
   "private": false,
   "type": "module",
@@ -52,7 +52,6 @@
     "@effect/platform": "^0.93.8",
     "@effect/schema": "^0.75.5",
     "effect-env": "workspace:*",
-    "effect-json": "workspace:*",
-    "jsonc-parser": "^3.3.1"
+    "effect-json": "workspace:*"
   }
 }
