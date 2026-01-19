@@ -16,7 +16,7 @@ Built on [Effect.js](https://effect.website), EffectTalk provides functional pro
 
 ### Core Layers
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │  Your AI Applications & Agents                          │
 └────────────────────┬────────────────────────────────────┘
@@ -95,7 +95,7 @@ Built on [Effect.js](https://effect.website), EffectTalk provides functional pro
 
 ### Prerequisites
 
-- **Bun 1.1.33+** (https://bun.sh)
+- **Bun 1.1.33+** (<https://bun.sh>)
 - **Node.js 18.18+** (for development)
 - **Git** (for cloning)
 
@@ -323,7 +323,7 @@ Effect.runPromise(configProgram)
 
 ## 📁 Project Structure
 
-```
+```text
 EffectTalk/
 ├── packages/                    # 28 workspace packages
 │   ├── McLuhan/ (Agent Infrastructure - 5 packages)
@@ -424,7 +424,7 @@ EffectTalk/
 
 ### Dependency Graph
 
-```
+```typescript
 Your App
   ↓
 effect-cockpit → effect-actor, effect-cli-tui
@@ -536,7 +536,7 @@ docs:      # Documentation
 
 Example:
 
-```
+```typescript
 feat: Add semantic search to effect-supermemory
 
 - Implement vector search with reranking
@@ -802,10 +802,10 @@ bun run build
 
 ### Official Documentation
 
-- **Effect.js** — https://effect.website
-- **Biome** — https://biomejs.dev
-- **Bun** — https://bun.sh
-- **TypeScript** — https://www.typescriptlang.org
+- **Effect.js** — <https://effect.website>
+- **Biome** — <https://biomejs.dev>
+- **Bun** — <https://bun.sh>
+- **TypeScript** — <https://www.typescriptlang.org>
 
 ### Architectural Guides
 
@@ -815,9 +815,9 @@ bun run build
 
 ### Community
 
-- **Effect Discord** — https://discord.gg/effect-ts
-- **GitHub Issues** — https://github.com/PaulJPhilp/EffectTalk/issues
-- **Discussions** — https://github.com/PaulJPhilp/EffectTalk/discussions
+- **Effect Discord** — <https://discord.gg/effect-ts>
+- **GitHub Issues** — <https://github.com/PaulJPhilp/EffectTalk/issues>
+- **Discussions** — <https://github.com/PaulJPhilp/EffectTalk/discussions>
 
 ---
 
@@ -883,7 +883,7 @@ EffectTalk is licensed under the [MIT License](LICENSE).
 
 **Status:** ✅ v0.5.0-beta (Active Development)
 **Last Updated:** January 2026
-**Repository:** https://github.com/PaulJPhilp/EffectTalk
+**Repository:** <https://github.com/PaulJPhilp/EffectTalk>
 
 ---
 

@@ -631,7 +631,7 @@ graph TB
 
 **Status:** ✅ Active Development  
 **Last Updated:** January 2026  
-**Repository:** https://github.com/PaulJPhilp/EffectTalk
+**Repository:** <https://github.com/PaulJPhilp/EffectTalk>
 
 ---
 
