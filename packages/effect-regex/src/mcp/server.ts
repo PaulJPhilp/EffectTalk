@@ -30,7 +30,7 @@ import {
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
 import { Effect } from "effect";
-import { ALL_TOOLS } from "@/effect-regex/mcp/schemas.js";
+import { ALL_TOOLS } from "./schemas.js";
 import {
   handleBuildRegex,
   handleConvertRegex,
@@ -39,7 +39,7 @@ import {
   handleLintRegex,
   handleOptimizePattern,
   handleTestRegex,
-} from "@/effect-regex/mcp/tools/index.js";
+} from "./tools/index.js";
 
 /**
  * Create and configure the MCP server
@@ -53,7 +53,7 @@ const server = new Server(
     capabilities: {
       tools: {},
     },
-  }
+  },
 );
 
 /**
@@ -77,6 +77,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
  */
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
+  // biome-ignore lint/suspicious/noExplicitAny: any type necessary for dynamic MCP tool arguments
   const toolArgs = (args ?? {}) as any;
 
   try {
@@ -125,7 +126,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
     throw new McpError(
       ErrorCode.InternalError,
-      `Tool execution failed: ${(error as Error).message}`
+      `Tool execution failed: ${(error as Error).message}`,
     );
   }
 });
